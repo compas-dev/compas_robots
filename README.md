@@ -2,7 +2,6 @@
 
 Basic infrastructure for working with robots in COMPAS.
 
-
 ## Getting started with this project
 
 ### Setup code editor
@@ -68,19 +67,6 @@ Tests are written using the [pytest](https://docs.pytest.org/) framework
         invoke test
 
 2. Or run them from VS Code from the `Testing` tab
-
-
-### Developing Grasshopper components
-
-We use [Grasshopper Componentizer](https://github.com/compas-dev/compas-actions.ghpython_components) to develop Python components that can be stored and edited on git.
-
-1. Build components
-
-        invoke build-ghuser-components
-
-2. Install components on Rhino
-
-        python -m compas_rhino.install
 
 
 ### Publish release
