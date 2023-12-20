@@ -6,12 +6,16 @@ compas_robots
 
 .. rst-class:: lead
 
-Modules
-=======
+This package provides classes for describing robots models.
 
-.. toctree::
-    :maxdepth: 1
-    :titlesonly:
+The root of a robot model is the :class:`RobotModel` class, which
+describes a robot consisting of a set of link elements, and a set of joint
+elements connecting the links together.
 
-    compas_robots.artists
-    compas_robots.robots
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    RobotModel
+    Configuration
+

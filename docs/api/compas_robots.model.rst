@@ -1,12 +1,8 @@
 ********************************************************************************
-compas_robots.robots
+compas_robots.model
 ********************************************************************************
 
-.. currentmodule:: compas_robots.robots
-
-.. warning::
-
-    Note that this package will be removed from :mod:`compas` and moved to a separate core extension, ``compas_robots``.
+.. currentmodule:: compas_robots.model
 
 .. rst-class:: lead
 
@@ -16,19 +12,15 @@ This package provides classes for describing robots, their components, and their
 Model
 =====
 
-The root of the model is the :class:`RobotModel` class, which
-describes a robot consisting of a set of link elements, and a set of joint
+A robot model consists of a set of link elements, and a set of joint
 elements connecting the links together.
 
 .. autosummary::
     :toctree: generated/
     :nosignatures:
 
-    RobotModel
     Joint
     Link
-    ToolModel
-    Configuration
 
 
 Geometric description
@@ -81,21 +73,3 @@ The joint describes the kinematics and dynamics of the robot's joint.
     Axis
     Mimic
     SafetyController
-
-
-Resources
-=========
-
-Model descriptions usually do not contain embedded geometry information but only
-descriptions, filenames or URLs for externally hosted resources.
-For that purpose, this package provides various loader classes that help automate
-the processing of these resources.
-
-.. autosummary::
-    :toctree: generated/
-    :nosignatures:
-
-    AbstractMeshLoader
-    DefaultMeshLoader
-    GithubPackageMeshLoader
-    LocalPackageMeshLoader
