@@ -3,8 +3,6 @@ from __future__ import division
 from __future__ import print_function
 
 from compas.data import Data
-from compas.files import URDFElement
-from compas.files import URDFParser
 from compas.geometry import Box
 from compas.geometry import Capsule
 from compas.geometry import Cylinder
@@ -12,10 +10,12 @@ from compas.geometry import Frame
 from compas.geometry import Sphere
 from compas.geometry import Transformation
 
+from compas_robots.files import URDFElement
+from compas_robots.files import URDFParser
+
 from .base import FrameProxy
 from .base import _attr_from_data
 from .base import _attr_to_data
-
 from .geometry import BoxProxy
 from .geometry import CapsuleProxy
 from .geometry import Color
@@ -254,8 +254,8 @@ class Visual(LinkItem, Data):
 
         Returns
         -------
-        list[float]
-            List of 4 floats (``0.0-1.0``) indicating RGB colors and Alpha channel.
+        :class:`~compas.colors.Color`
+            If the link has a material assigned, return its color.
 
         """
         if self.material:

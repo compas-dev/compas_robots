@@ -1,36 +1,34 @@
-from typing import Union
-from typing import Tuple
-from typing import Optional
 from typing import Any
 from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Union
 
 import bpy  # type: ignore
+import compas_blender
 import mathutils
-
+from compas.colors import Color
 from compas.datastructures import Mesh
 from compas.geometry import Transformation
+from compas_blender.scene import BlenderSceneObject
 
-import compas_blender
-from compas_blender.artists import BlenderArtist
-from compas_blender.utilities import RGBColor
-
-from compas_robots.artists import RobotModelArtist
-from compas_robots.robots import RobotModel
+from compas_robots import RobotModel
+from compas_robots.scene import BaseRobotModelObject
 
 
-class RobotModelArtist(BlenderArtist, RobotModelArtist):
-    """Artist for drawing robot models in Blender.
+class RobotModelObject(BlenderSceneObject, BaseRobotModelObject):
+    """Scene object for drawing robot models in Blender.
 
     Parameters
     ----------
-    model : :class:`~compas.robots.RobotModel`
+    model : :class:`~compas_robots.RobotModel`
         Robot model.
     collection : str | :blender:`bpy.types.Collection`
-        The Blender scene collection the object(s) created by this artist belong to.
+        The Blender scene collection to which the object(s) created by this scene object belong to.
     **kwargs : dict, optional
         Additional keyword arguments.
         For more info,
-        see :class:`~compas_blender.artists.BlenderArtist` and :class:`~compas.artists.RobotModelArtist`.
+        see :class:`~compas_blender.scene.BlenderSceneObject` and :class:`~compas_robots.scene.BaseRobotModelObject`.
 
     """
 
@@ -63,7 +61,7 @@ class RobotModelArtist(BlenderArtist, RobotModelArtist):
         self,
         geometry: Mesh,
         name: str = None,
-        color: Union[RGBColor, Tuple[int, int, int, int], Tuple[float, float, float, float]] = None,
+        color: Color = None,
     ) -> bpy.types.Object:
         """Create the scene objecy representing the robot geometry.
 
@@ -73,7 +71,7 @@ class RobotModelArtist(BlenderArtist, RobotModelArtist):
             The geometry representing the robot.
         name : str, optional
             A name for the scene object.
-        color : tuple[int, int, int] or tuple[float, float, float], optional
+        color : :class:`~compas.colors.Color`
             The color of the object.
 
         Returns
@@ -81,6 +79,9 @@ class RobotModelArtist(BlenderArtist, RobotModelArtist):
         bpy.types.Object
 
         """
+        if color and isinstance(Color, color):
+            color = color.rgb
+
         # Imported colors take priority over a the parameter color
         if "mesh_color.diffuse" in geometry.attributes:
             color = geometry.attributes["mesh_color.diffuse"]
@@ -128,7 +129,7 @@ class RobotModelArtist(BlenderArtist, RobotModelArtist):
 
         """
         self._ensure_geometry()
-        visuals = super(RobotModelArtist, self).draw_visual()
+        visuals = super(RobotModelObject, self).draw_visual()
         for visual in visuals:
             visual.hide_set(False)
         return visuals
@@ -142,7 +143,7 @@ class RobotModelArtist(BlenderArtist, RobotModelArtist):
 
         """
         self._ensure_geometry()
-        collisions = super(RobotModelArtist, self).draw_collision()
+        collisions = super(RobotModelObject, self).draw_collision()
         for collision in collisions:
             collision.hide_set(False)
         return collisions
@@ -156,7 +157,7 @@ class RobotModelArtist(BlenderArtist, RobotModelArtist):
 
         """
         self._ensure_geometry()
-        meshes = super(RobotModelArtist, self).draw_attached_meshes()
+        meshes = super(RobotModelRobotModelObjectArtist, self).draw_attached_meshes()
         for mesh in meshes:
             mesh.hide_set(False)
         return meshes

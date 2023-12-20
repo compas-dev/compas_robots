@@ -5,11 +5,11 @@ from __future__ import print_function
 import compas
 import compas.colors
 import compas.geometry
-
 from compas.data import Data
 from compas.datastructures import Mesh
-from compas.files import URDFElement
 from compas.geometry import Frame
+
+from compas_robots.files import URDFElement
 
 from .base import ProxyObject
 from .base import _attr_from_data
@@ -29,8 +29,8 @@ class BoxProxy(ProxyObject):
 
     @classmethod
     def from_urdf(cls, attributes, elements=None, text=None):
-        size = _parse_floats(attributes["size"])
-        return cls(compas.geometry.Box(Frame.worldXY(), *size))
+        xsize, ysize, zsize = _parse_floats(attributes["size"])
+        return cls(compas.geometry.Box(xsize, ysize, zsize, Frame.worldXY()))
 
     @property
     def meshes(self):
@@ -56,7 +56,7 @@ class CylinderProxy(ProxyObject):
         radius = float(attributes["radius"])
         length = float(attributes["length"])
         frame = compas.geometry.Frame.worldXY()
-        return cls(compas.geometry.Cylinder(frame, radius=radius, height=length))
+        return cls(compas.geometry.Cylinder(radius=radius, height=length, frame=frame))
 
     @property
     def meshes(self):
@@ -80,7 +80,7 @@ class SphereProxy(ProxyObject):
     @classmethod
     def from_urdf(cls, attributes, elements=None, text=None):
         radius = float(attributes["radius"])
-        return cls(compas.geometry.Sphere(compas.geometry.Frame.worldXY(), radius))
+        return cls(compas.geometry.Sphere(radius, frame=compas.geometry.Frame.worldXY()))
 
     @property
     def meshes(self):
@@ -102,7 +102,7 @@ class CapsuleProxy(ProxyObject):
         radius = float(attributes["radius"])
         length = float(attributes["length"])
         frame = compas.geometry.Frame.worldXY()
-        return cls(compas.geometry.Capsule(frame, radius=radius, height=length))
+        return cls(compas.geometry.Capsule(radius=radius, height=length, frame=frame))
 
     @property
     def meshes(self):
@@ -273,9 +273,9 @@ class Material(Data):
     ----------
     name : str
         The name of the material.
-    color : :class:`~compas.robots.Color`, optional
+    color : :class:`~compas_robots.robots.Color`, optional
         The color of the material.
-    texture : :class:`~compas.robots.Texture`, optional
+    texture : :class:`~compas_robots.model.Texture`, optional
         The filename of the texture.
 
     Examples
@@ -285,7 +285,7 @@ class Material(Data):
 
     >>> material = Material('aqua')
     >>> material.get_color()
-    (0.0, 1.0, 1.0, 1.0)
+    Color(0.0, 1.0, 1.0, alpha=1.0)
 
     """
 
@@ -319,24 +319,26 @@ class Material(Data):
 
         Returns
         -------
-        [float, float, float, float]
-            List of 4 floats (``0.0-1.0``) indicating RGB colors and Alpha channel of the material.
+        :class:`~compas.colors.Color`
+            Color of the material.
 
         Examples
         --------
         >>> material = Material('aqua')
         >>> material.get_color()
-        (0.0, 1.0, 1.0, 1.0)
+        Color(0.0, 1.0, 1.0, alpha=1.0)
 
         """
         if self.name:
             try:
                 color = compas.colors.Color.from_name(self.name)
-                return color.rgba
+                return color
             except ValueError:
                 pass
+
         if self.color:
-            return self.color.rgba
+            return compas.colors.Color(self.color.rgba)
+
         return None
 
 
@@ -381,7 +383,7 @@ class Geometry(Data):
         A sphere shape primitive.
     capsule : :class:`~compas.geometry.Capsule`, optional
         A capsule shape primitive.
-    mesh : :class:`~compas.robots.MeshDescriptor`, optional
+    mesh : :class:`~compas_robots.model.MeshDescriptor`, optional
         A descriptor of a mesh.
     **kwargs : dict[str, Any], optional
         The keyword arguments (kwargs) collected in a dict.
@@ -396,7 +398,7 @@ class Geometry(Data):
 
     Examples
     --------
-    >>> box = compas.geometry.Box(Frame.worldXY(), 1, 1, 1)
+    >>> box = compas.geometry.Box(1)
     >>> geo = Geometry(box=box)
 
     """

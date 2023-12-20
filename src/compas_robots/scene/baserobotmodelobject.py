@@ -7,14 +7,15 @@ import itertools
 from compas.geometry import Frame
 from compas.geometry import Scale
 from compas.geometry import Transformation
+from compas.scene import SceneObject
 
-from compas.artists import Artist
-
-from compas_robots.robots import Geometry
-from compas_robots.robots.model.link import LinkItem
+from compas_robots.model import Geometry
+from compas_robots.model.link import LinkItem
 
 
-class AbstractRobotModelArtist(object):
+class AbstractRobotModelObject(object):
+    """Defines the interface for robot model scene objects."""
+
     def transform(self, geometry, transformation):
         """Transforms a CAD-specific geometry using a Transformation.
 
@@ -51,10 +52,10 @@ class AbstractRobotModelArtist(object):
         raise NotImplementedError
 
 
-class RobotModelArtist(AbstractRobotModelArtist, Artist):
-    """Provides common functionality to most robot model artist implementations.
+class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
+    """Provides common functionality to most robot model scene object implementations.
 
-    In COMPAS, "artists" are classes that assist with the visualization of
+    In COMPAS, "SceneObjects" are classes that assist with the visualization of
     datastructures and models, in a way that maintains the data separated from the
     specific CAD interfaces, while providing a way to leverage native performance
     of the CAD environment.
@@ -66,13 +67,13 @@ class RobotModelArtist(AbstractRobotModelArtist, Artist):
 
     Attributes
     ----------
-    model : :class:`~compas.robots.RobotModel`
+    model : :class:`~compas_robots.robots.RobotModel`
         Instance of a robot model.
 
     """
 
     def __init__(self, model, **kwargs):
-        super(RobotModelArtist, self).__init__(item=model, **kwargs)
+        super(BaseRobotModelObject, self).__init__(item=model, **kwargs)
         self.model = model
         self.create()
         self.scale_factor = 1.0
@@ -88,7 +89,7 @@ class RobotModelArtist(AbstractRobotModelArtist, Artist):
 
         Returns
         -------
-        :class: `~compas.robots.model.ToolModel`
+        :class: `~compas_robots.robots.model.ToolModel`
 
         """
         tool_model = None
@@ -98,11 +99,11 @@ class RobotModelArtist(AbstractRobotModelArtist, Artist):
         return tool_model
 
     def attach_tool_model(self, tool_model):
-        """Attach a tool to the robot artist for visualization.
+        """Attach a tool to the robot scene object for visualization.
 
         Parameters
         ----------
-        tool_model : :class:`~compas.robots.ToolModel`
+        tool_model : :class:`~compas_robots.robots.ToolModel`
             The tool that should be attached to the robot's flange.
 
         """
@@ -140,7 +141,7 @@ class RobotModelArtist(AbstractRobotModelArtist, Artist):
 
         Parameters
         ----------
-        tool_model : :class:`~compas.robots.ToolModel`
+        tool_model : :class:`~compas_robots.robots.ToolModel`
             The tool that should be detached from the robot's flange.
             If None, all attached tools tools are removed.
         """
@@ -158,7 +159,7 @@ class RobotModelArtist(AbstractRobotModelArtist, Artist):
             The mesh to attach to the robot model.
         name : str
             The identifier of the mesh.
-        link : :class:`~compas.robots.Link`
+        link : :class:`~compas_robots.robots.Link`
             The link within the robot model or tool model to attach the mesh to. Optional.
             Defaults to the model's end effector link.
         frame : :class:`~compas.geometry.Frame`
@@ -215,7 +216,7 @@ class RobotModelArtist(AbstractRobotModelArtist, Artist):
 
         Parameters
         ----------
-        link : :class:`~compas.robots.Link`, optional
+        link : :class:`~compas_robots.robots.Link`, optional
             Link instance to create. Defaults to the robot model's root.
         context : str, optional
             Subdomain identifier to insert in the mesh names.
@@ -234,7 +235,7 @@ class RobotModelArtist(AbstractRobotModelArtist, Artist):
             if meshes:
                 is_visual = hasattr(item, "get_color")
                 color = item.get_color() if is_visual else None
-
+                print(color)
                 native_geometry = []
                 for i, mesh in enumerate(meshes):
                     mesh_type = "visual" if is_visual else "collision"
@@ -271,7 +272,7 @@ class RobotModelArtist(AbstractRobotModelArtist, Artist):
 
         Parameters
         ----------
-        link : :class:`~compas.robots.Link`, optional
+        link : :class:`~compas_robots.robots.Link`, optional
             Base link instance.
             Defaults to the robot model's root.
         visual : bool, optional
@@ -331,7 +332,7 @@ class RobotModelArtist(AbstractRobotModelArtist, Artist):
 
         Parameters
         ----------
-        link : :class:`~compas.robots.Link`
+        link : :class:`~compas_robots.robots.Link`
             A link.
         transformation : :class:`~compas.geometry.Transformation`
             A transformation to apply to th link's geometry.
@@ -365,7 +366,7 @@ class RobotModelArtist(AbstractRobotModelArtist, Artist):
 
         Parameters
         ----------
-        item: :class:`~compas.robots.Visual` | :class:`~compas.robots.Collision`
+        item: :class:`~compas_robots.robots.Visual` | :class:`~compas_robots.robots.Collision`
             The visual or collidable object of a link.
         transformation: :class:`~compas.geometry.Transformation`
             The (absolute) transformation to apply onto the link's geometry.
@@ -388,7 +389,7 @@ class RobotModelArtist(AbstractRobotModelArtist, Artist):
 
         Parameters
         ----------
-        joint_state : :class:`~compas.robots.Configuration` | dict[str, float]
+        joint_state : :class:`~compas_robots.robots.Configuration` | dict[str, float]
             A dictionary with joint names as keys and joint positions as values.
         visual : bool, optional
             If True, the visual geometry will also be updated.
@@ -439,7 +440,7 @@ class RobotModelArtist(AbstractRobotModelArtist, Artist):
 
         Parameters
         ----------
-        joint_state : :class:`~compas.robots.Configuration` | dict[str, float], optional
+        joint_state : :class:`~compas_robots.robots.Configuration` | dict[str, float], optional
             A dictionary with joint names as keys and joint positions as values.
             Defaults to an empty dictionary.
         transformation : :class:`~compas.geometry.Transformation`, optional

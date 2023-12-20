@@ -4,35 +4,35 @@ from __future__ import print_function
 
 import time
 
+import compas_rhino
 import Rhino.Geometry  # type: ignore
 import scriptcontext as sc  # type: ignore
-from System.Drawing import Color  # type: ignore
-from Rhino.DocObjects.ObjectColorSource import ColorFromObject  # type: ignore
+import System.Drawing  # type: ignore
+from compas.colors import Color
+from compas_rhino.conversions import transformation_to_rhino
+from compas_rhino.scene import RhinoSceneObject
 from Rhino.DocObjects.ObjectColorSource import ColorFromLayer  # type: ignore
+from Rhino.DocObjects.ObjectColorSource import ColorFromObject  # type: ignore
 from Rhino.DocObjects.ObjectMaterialSource import MaterialFromObject  # type: ignore
 
-import compas_rhino
-from compas_rhino.artists import RhinoArtist
-from compas_rhino.conversions import transformation_to_rhino
-
-from compas_robots.artists import RobotModelArtist as BaseArtist
+from compas_robots.scene import BaseRobotModelObject
 
 
-class RobotModelArtist(RhinoArtist, BaseArtist):
-    """Artist for drawing robot models.
+class RobotModelObject(RhinoSceneObject, BaseRobotModelObject):
+    """Scene object for drawing robot models.
 
     Parameters
     ----------
-    model : :class:`~compas.robots.RobotModel`
+    model : :class:`~compas_robots.RobotModel`
         Robot model.
     **kwargs : dict, optional
         Additional keyword arguments.
-        For more info, see :class:`RhinoArtist` and :class:`RobotModelArtist`.
+        For more info, see :class:`RhinoSceneObject` and :class:`RobotModelObject`.
 
     """
 
     def __init__(self, model, **kwargs):
-        super(RobotModelArtist, self).__init__(model=model, **kwargs)
+        super(RobotModelObject, self).__init__(model=model, **kwargs)
 
     def transform(self, native_mesh, transformation):
         T = transformation_to_rhino(transformation)
@@ -47,14 +47,17 @@ class RobotModelArtist(RhinoArtist, BaseArtist):
             A COMPAS mesh data structure.
         name : str, optional
             Name of the mesh object.
-        color : tuple[int, int, int], optional
-            Color of the mesh object.
+        color : :class:`~compas.colors.Color`
+            The color of the object.
 
         Returns
         -------
         :rhino:`Rhino.Geometry.Mesh`
 
         """
+        if color and isinstance(Color, color):
+            color = color.rgba
+
         # Imported colors take priority over a the parameter color
         if "mesh_color.diffuse" in geometry.attributes:
             color = geometry.attributes["mesh_color.diffuse"]
@@ -112,7 +115,7 @@ class RobotModelArtist(RhinoArtist, BaseArtist):
             The GUIDs of the created Rhino objects.
 
         """
-        collisions = super(RobotModelArtist, self).draw_collision()
+        collisions = super(RobotModelObject, self).draw_collision()
         self._enter_layer()
 
         new_guids = []
@@ -132,7 +135,7 @@ class RobotModelArtist(RhinoArtist, BaseArtist):
             The GUIDs of the created Rhino objects.
 
         """
-        visuals = super(RobotModelArtist, self).draw_visual()
+        visuals = super(RobotModelObject, self).draw_visual()
         self._enter_layer()
 
         new_guids = []
@@ -152,7 +155,7 @@ class RobotModelArtist(RhinoArtist, BaseArtist):
             The GUIDs of the created Rhino objects.
 
         """
-        acms = super(RobotModelArtist, self).draw_attached_meshes()
+        acms = super(RobotModelObject, self).draw_attached_meshes()
         self._enter_layer()
 
         new_guids = []
@@ -180,7 +183,7 @@ class RobotModelArtist(RhinoArtist, BaseArtist):
         Parameters
         ----------
         timeout : float, optional
-            The amount of time the artist waits before updating the Rhino view.
+            The amount of time the scene object waits before updating the Rhino view.
             The time should be specified in seconds.
 
         Returns
@@ -195,7 +198,7 @@ class RobotModelArtist(RhinoArtist, BaseArtist):
         compas_rhino.rs.Redraw()
 
     def clear_layer(self):
-        """Clear the main layer of the artist.
+        """Clear the main layer of the scene object.
 
         Returns
         -------
@@ -226,10 +229,10 @@ class RobotModelArtist(RhinoArtist, BaseArtist):
             attr = obj.Attributes
             if color:
                 r, g, b, a = [i * 255 for i in color]
-                attr.ObjectColor = Color.FromArgb(a, r, g, b)
+                attr.ObjectColor = System.Drawing.Color.FromArgb(a, r, g, b)
                 attr.ColorSource = ColorFromObject
 
-                material_name = "robotmodelartist.{:.2f}_{:.2f}_{:.2f}_{:.2f}".format(r, g, b, a)
+                material_name = "robotmodelobject.{:.2f}_{:.2f}_{:.2f}_{:.2f}".format(r, g, b, a)
                 material_index = sc.doc.Materials.Find(material_name, True)
 
                 # Material does not exist, create it

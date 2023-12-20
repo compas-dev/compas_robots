@@ -3,14 +3,15 @@ from __future__ import division
 from __future__ import print_function
 
 from compas.data import Data
-from compas.files import URDFElement
-from compas.files import URDFParser
 from compas.geometry import Frame
 from compas.geometry import Rotation
 from compas.geometry import Transformation
 from compas.geometry import Translation
 from compas.geometry import Vector
 from compas.geometry import transform_vectors
+
+from compas_robots.files import URDFElement
+from compas_robots.files import URDFParser
 
 from .base import FrameProxy
 from .base import _attr_from_data

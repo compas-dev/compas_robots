@@ -2,29 +2,27 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from compas.utilities import rgb_to_rgb
-
 import compas_ghpython
-from compas_ghpython.artists import GHArtist
+from compas_ghpython.scene import GHSceneObject
 
-from compas_robots.artists import RobotModelArtist
+from compas_robots.scene import BaseRobotModelObject
 
 
-class RobotModelArtist(GHArtist, RobotModelArtist):
-    """Artist for drawing robot models.
+class RobotModelObject(GHSceneObject, BaseRobotModelObject):
+    """Scene object for drawing robot models.
 
     Parameters
     ----------
-    model : :class:`~compas.robots.RobotModel`
+    model : :class:`~compas_robots.RobotModel`
         Robot model.
     **kwargs : dict, optional
         Additional keyword arguments.
-        See :class:`~compas_ghpython.artists.GHArtist` and :class:`~compas.artists.RobotModelArtist` for more info.
+        See :class:`~compas_ghpython.scene.GHSceneObject` and :class:`~compas_robots.scene.BaseRobotModelObject` for more info.
 
     """
 
     def __init__(self, model, **kwargs):
-        super(RobotModelArtist, self).__init__(model=model, **kwargs)
+        super(RobotModelObject, self).__init__(model=model, **kwargs)
 
     # # again not really sure why this is here
     # def transform(self, native_mesh, transformation):
@@ -33,15 +31,14 @@ class RobotModelArtist(GHArtist, RobotModelArtist):
     # same here
     # there is no reference to self...
     def create_geometry(self, geometry, name=None, color=None):
-        if color:
-            color = rgb_to_rgb(color[0], color[1], color[2])
-
+        print("Creating geometry", name, color)
         vertices, faces = geometry.to_vertices_and_faces(triangulated=False)
 
         mesh = compas_ghpython.draw_mesh(vertices, faces, color=color)
         # Try to fix invalid meshes
         if not mesh.IsValid:
             mesh.FillHoles()
+        print("mesh", mesh)
         return mesh
 
     def draw(self):

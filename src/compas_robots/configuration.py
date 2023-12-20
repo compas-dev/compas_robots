@@ -2,8 +2,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from math import pi
 from copy import deepcopy
+from math import pi
 
 from compas.data import Data
 
@@ -101,8 +101,8 @@ class Configuration(Data):
     joint_values : list of float
         Joint values expressed in radians or meters, depending on the respective
         type.
-    joint_types : list of :attr:`compas.robots.Joint.SUPPORTED_TYPES`
-        Joint types, e.g. a list of :attr:`compas.robots.Joint.REVOLUTE` for
+    joint_types : list of :attr:`compas_robots.model.Joint.SUPPORTED_TYPES`
+        Joint types, e.g. a list of :attr:`compas_robots.model.Joint.REVOLUTE` for
         revolute joints.
     joint_names : list[str], optional
         List of joint names.
@@ -112,8 +112,8 @@ class Configuration(Data):
     joint_values : list of float
         Joint values expressed in radians or meters, depending on the respective
         type.
-    joint_types : list of :attr:`compas.robots.Joint.SUPPORTED_TYPES`
-        Joint types, e.g. a list of :attr:`compas.robots.Joint.REVOLUTE` for
+    joint_types : list of :attr:`compas_robots.model.Joint.SUPPORTED_TYPES`
+        Joint types, e.g. a list of :attr:`compas_robots.model.Joint.REVOLUTE` for
         revolute joints.
     joint_names : list[str]
         List of joint names.
@@ -134,7 +134,7 @@ class Configuration(Data):
     >>> str(config)
     'Configuration((8.312, 1.571, 0.000, 0.000, 0.000, 6.283, 0.800), (2, 0, 0, 0, 0, 0, 0))'
 
-    >>> from compas.robots import Joint
+    >>> from compas_robots.model import Joint
     >>> config = Configuration([math.pi/2, 3., 0.1], [Joint.REVOLUTE, Joint.PRISMATIC, Joint.PLANAR])
     >>> str(config)
     'Configuration((1.571, 3.000, 0.100), (0, 2, 5))'
@@ -190,12 +190,12 @@ class Configuration(Data):
 
     @property
     def joint_types(self):
-        """Joint joint_types, e.g. a list of :attr:`compas.robots.Joint.REVOLUTE` for
+        """Joint joint_types, e.g. a list of :attr:`compas_robots.model.Joint.REVOLUTE` for
         revolute joints.
 
         Returns
         -------
-        list of :attr:`compas.robots.Joint.SUPPORTED_TYPES`
+        list of :attr:`compas_robots.model.Joint.SUPPORTED_TYPES`
         """
         return self._joint_types
 
@@ -343,14 +343,11 @@ class Configuration(Data):
         )
 
     @property
-    def data(self):
-        """dict : The data representing the configuration.
+    def dtype(self):
+        return "compas_robots/Configuration"
 
-        By assigning a data dictionary to this property, the current data of
-        the configuration will be replaced by the data in the dict. The
-        data getter and setter should always be used in combination with each
-        other.
-        """
+    @property
+    def data(self):
         return {
             "joint_values": self.joint_values,
             "joint_types": self.joint_types,

@@ -55,11 +55,11 @@ class ToolModel(RobotModel):
 
     @classmethod
     def from_robot_model(cls, robot, frame_in_tool0_frame, link_name=None):
-        """Creates a ``ToolModel`` from a :class:`~compas.robots.RobotModel` instance.
+        """Creates a ``ToolModel`` from a :class:`~compas_robots.robots.RobotModel` instance.
 
         Parameters
         ----------
-        robot : :class:`~compas.robots.RobotModel`
+        robot : :class:`~compas_robots.robots.RobotModel`
         frame_in_tool0_frame : str
             The frame of the tool in tool0 frame.
         link_name : str
@@ -73,6 +73,10 @@ class ToolModel(RobotModel):
         return cls.from_data(data)
 
     @property
+    def dtype(self):
+        return "compas_robots/ToolModel"
+
+    @property
     def data(self):
         """Returns the data dictionary that represents the tool.
 
@@ -82,23 +86,10 @@ class ToolModel(RobotModel):
             The tool data.
 
         """
-        return self._get_data()
-
-    def _get_data(self):
-        data = super(ToolModel, self)._get_data()
+        data = super(ToolModel, self).data.fget(self)
         data["frame"] = self.frame.data
         data["link_name"] = self.link_name
         return data
-
-    @data.setter
-    def data(self, data):
-        self._set_data(data)
-
-    def _set_data(self, data):
-        super(ToolModel, self)._set_data(data)
-        self.frame = Frame.from_data(data["frame"])
-        self.name = self.name or "attached_tool"
-        self.link_name = data["link_name"] if "link_name" in data else None
 
     @classmethod
     def from_data(cls, data):
@@ -117,8 +108,10 @@ class ToolModel(RobotModel):
             The constructed `ToolModel`.
 
         """
-        tool = cls(None, None)
-        tool.data = data
+        tool = super(ToolModel, cls).from_data(data)
+        tool.name = tool.name or "attached_tool"
+        tool.frame = Frame.from_data(data["frame"])
+        tool.link_name = data["link_name"] if "link_name" in data else None
         return tool
 
     def from_tcf_to_t0cf(self, frames_tcf):

@@ -92,24 +92,6 @@ class GithubPackageMeshLoader(AbstractMeshLoader):
         """
         return url.startswith(self.schema_prefix)
 
-    def load_mesh(self, url):
-        """Loads a mesh from a Github repository URL.
-
-        .. deprecated:: 1.13.3
-            Use :meth:`load_meshes` instead.
-
-        Parameters
-        ----------
-        url : str
-            Mesh location
-
-        Returns
-        -------
-        :class:`~compas.datastructures.Mesh`
-            Instance of a mesh.
-        """
-        return self.load_meshes(url)[0]
-
     def load_meshes(self, url):
         """Load meshes from the given URL.
 
