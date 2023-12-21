@@ -9,7 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Update all artists to the new `SceneObject` system.
+
 ### Changed
+
+* Changed minimum requirements to `COMPAS 2.x`.
+* Moved `RobotModel`, `ToolModel` and `Configuration` to the top-level package of this library.
+* Moved `URDF` parsing from core into this library.
 
 ### Removed
 
+* Removed deprecated aliases `Origin`, `Cylinder`, `Box`, `Sphere`, `Capsule`.
+* Removed deprecated method `load_mesh` of resource loaders.
