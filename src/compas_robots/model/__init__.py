@@ -1,14 +1,13 @@
 from __future__ import absolute_import
 
-from .geometry import Box
-from .geometry import Capsule
+from .geometry import BoxProxy
+from .geometry import CapsuleProxy
 from .geometry import Color
-from .geometry import Cylinder
+from .geometry import CylinderProxy
 from .geometry import Geometry
 from .geometry import Material
 from .geometry import MeshDescriptor
-from .geometry import Origin
-from .geometry import Sphere
+from .geometry import SphereProxy
 from .geometry import Texture
 from .joint import Axis
 from .joint import Calibration
@@ -47,10 +46,8 @@ __all__ = [
     "Collision",
     "Mass",
     "Inertia",
-    # Deprecated aliases
-    "Origin",
-    "Box",
-    "Capsule",
-    "Cylinder",
-    "Sphere",
+    "CylinderProxy",
+    "BoxProxy",
+    "SphereProxy",
+    "CapsuleProxy",
 ]

@@ -467,11 +467,3 @@ class Geometry(Data):
                 meshes = (meshes,)
 
         return meshes
-
-
-# Deprecated: this are aliases for backwards compatibility, but need to be removed on 2.x
-Origin = Frame
-Cylinder = CylinderProxy
-Box = BoxProxy
-Sphere = SphereProxy
-Capsule = CapsuleProxy
