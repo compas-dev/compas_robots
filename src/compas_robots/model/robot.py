@@ -886,8 +886,12 @@ class RobotModel(Data):
         >>> config['shoulder_pan_joint'] = 1.2
         >>> config['wrist_2_joint'] = 0.5
         >>> ft = robot.transformed_frames(config)
-        >>> ft[1]
-        Frame(Point(0.000, 0.000, 0.089), Vector(0.362, 0.932, 0.000), Vector(-0.932, 0.362, 0.000))
+        >>> ft[1].point
+        Point(x=0.000, y=0.000, z=0.089)
+        >>> ft[1].xaxis
+        Vector(x=0.362, y=0.932, z=0.000)
+        >>> ft[1].yaxis
+        Vector(x=-0.932, y=0.362, z=0.000)
 
         """
         transformations = self.compute_transformations(joint_state)
@@ -914,7 +918,7 @@ class RobotModel(Data):
         >>> config['wrist_2_joint'] = 0.5
         >>> at = robot.transformed_axes(config)
         >>> at[3]
-        Vector(-0.932, 0.362, 0.000)
+        Vector(x=-0.932, y=0.362, z=0.000)
 
         """
         transformations = self.compute_transformations(joint_state)
@@ -945,8 +949,13 @@ class RobotModel(Data):
         --------
         >>> robot = RobotModel.ur5()
         >>> config = robot.zero_configuration()
-        >>> robot.forward_kinematics(config)
-        Frame(Point(0.817, 0.191, -0.005), Vector(-0.000, 1.000, 0.000), Vector(1.000, 0.000, 0.000))
+        >>> frame = robot.forward_kinematics(config)
+        >>> frame.point
+        Point(x=0.817, y=0.191, z=-0.005)
+        >>> frame.xaxis
+        Vector(x=-0.000, y=1.000, z=0.000)
+        >>> frame.yaxis
+        Vector(x=1.000, y=0.000, z=0.000)
 
         """
         if link_name is None:

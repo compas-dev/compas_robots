@@ -136,8 +136,13 @@ class ToolModel(RobotModel):
         >>> frame = Frame([0.14, 0, 0], [0, 1, 0], [0, 0, 1])
         >>> tool = ToolModel(mesh, frame)
         >>> frames_tcf = [Frame((-0.309, -0.046, -0.266), (0.276, 0.926, -0.256), (0.879, -0.136, 0.456))]
-        >>> tool.from_tcf_to_t0cf(frames_tcf)
-        [Frame(Point(-0.363, 0.003, -0.147), Vector(0.388, -0.351, -0.852), Vector(0.276, 0.926, -0.256))]
+        >>> t0cf_frame = tool.from_tcf_to_t0cf(frames_tcf)[0]
+        >>> t0cf_frame.point
+        Point(x=-0.363, y=0.003, z=-0.147)
+        >>> t0cf_frame.xaxis
+        Vector(x=0.388, y=-0.351, z=-0.852)
+        >>> t0cf_frame.yaxis
+        Vector(x=0.276, y=0.926, z=-0.256)
 
         """
         Te = Transformation.from_frame_to_frame(self.frame, Frame.worldXY())
@@ -165,8 +170,13 @@ class ToolModel(RobotModel):
         >>> frame = Frame([0.14, 0, 0], [0, 1, 0], [0, 0, 1])
         >>> tool = ToolModel(mesh, frame)
         >>> frames_t0cf = [Frame((-0.363, 0.003, -0.147), (0.388, -0.351, -0.852), (0.276, 0.926, -0.256))]
-        >>> tool.from_t0cf_to_tcf(frames_t0cf)
-        [Frame(Point(-0.309, -0.046, -0.266), Vector(0.276, 0.926, -0.256), Vector(0.879, -0.136, 0.456))]
+        >>> tcf_frame = tool.from_t0cf_to_tcf(frames_t0cf)[0]
+        >>> tcf_frame.point
+        Point(x=-0.309, y=-0.046, z=-0.266)
+        >>> tcf_frame.xaxis
+        Vector(x=0.276, y=0.926, z=-0.256)
+        >>> tcf_frame.yaxis
+        Vector(x=0.879, y=-0.136, z=0.456)
 
         """
         Te = Transformation.from_frame_to_frame(Frame.worldXY(), self.frame)

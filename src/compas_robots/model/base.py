@@ -90,8 +90,12 @@ class FrameProxy(ProxyObject):
         --------
         >>> attributes = {'rpy': '0.0 1.57 0.0', 'xyz': '0.0 0.13 0.0'}
         >>> f = FrameProxy.from_urdf(attributes, [], None)
-        >>> f
-        Frame(Point(0.000, 0.130, 0.000), Vector(0.001, 0.000, -1.000), Vector(0.000, 1.000, 0.000))
+        >>> f.point
+        Point(x=0.000, y=0.130, z=0.000)
+        >>> f.xaxis
+        Vector(x=0.001, y=0.000, z=-1.000)
+        >>> f.yaxis
+        Vector(x=0.000, y=1.000, z=0.000)
 
         """
         xyz = _parse_floats(attributes.get("xyz", "0 0 0"))
