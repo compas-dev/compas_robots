@@ -16,6 +16,7 @@ elements connecting the links together.
     :toctree: generated/
     :nosignatures:
 
-    RobotModel
     Configuration
+    RobotModel
+    ToolModel
 
