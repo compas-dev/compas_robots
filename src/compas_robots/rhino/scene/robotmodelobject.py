@@ -44,19 +44,19 @@ class RobotModelObject(RhinoSceneObject, BaseRobotModelObject):
         Parameters
         ----------
         geometry : :class:`~compas.datastructures.Mesh`
-            A COMPAS mesh data structure.
+            Instance of a mesh data structure
         name : str, optional
-            Name of the mesh object.
+            The name of the mesh to draw.
         color : :class:`~compas.colors.Color`
-            The color of the object.
+            The color of the object.`
+
 
         Returns
         -------
         :rhino:`Rhino.Geometry.Mesh`
 
         """
-        if color and isinstance(Color, color):
-            color = color.rgba
+        color = color.rgba if color else None
 
         # Imported colors take priority over a the parameter color
         if "mesh_color.diffuse" in geometry.attributes:

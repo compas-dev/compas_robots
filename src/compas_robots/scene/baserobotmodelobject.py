@@ -38,6 +38,8 @@ class AbstractRobotModelObject(object):
             Instance of a mesh data structure
         name : str, optional
             The name of the mesh to draw.
+        color : :class:`~compas.colors.Color`
+            The color of the object.`
 
         Returns
         -------
@@ -235,7 +237,7 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
             if meshes:
                 is_visual = hasattr(item, "get_color")
                 color = item.get_color() if is_visual else None
-                print(color)
+
                 native_geometry = []
                 for i, mesh in enumerate(meshes):
                     mesh_type = "visual" if is_visual else "collision"

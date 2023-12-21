@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import compas_ghpython
 from compas_ghpython.scene import GHSceneObject
+from compas_rhino.conversions import transformation_to_rhino
 
 from compas_robots.scene import BaseRobotModelObject
 
@@ -24,21 +25,35 @@ class RobotModelObject(GHSceneObject, BaseRobotModelObject):
     def __init__(self, model, **kwargs):
         super(RobotModelObject, self).__init__(model=model, **kwargs)
 
-    # # again not really sure why this is here
-    # def transform(self, native_mesh, transformation):
-    #     xtransform(native_mesh, transformation)
+    def transform(self, native_mesh, transformation):
+        T = transformation_to_rhino(transformation)
+        native_mesh.Transform(T)
 
-    # same here
-    # there is no reference to self...
     def create_geometry(self, geometry, name=None, color=None):
-        print("Creating geometry", name, color)
-        vertices, faces = geometry.to_vertices_and_faces(triangulated=False)
+        """Create the scene objecy representing the robot geometry.
 
+        Parameters
+        ----------
+        geometry : :class:`~compas.datastructures.Mesh`
+            Instance of a mesh data structure
+        name : str, optional
+            The name of the mesh to draw.
+        color : :class:`~compas.colors.Color`
+            The color of the object.`
+
+        Returns
+        -------
+        :rhino:`Rhino.Geometry.Mesh`
+        """
+        color = color.rgba255 if color else None
+
+        vertices, faces = geometry.to_vertices_and_faces(triangulated=False)
         mesh = compas_ghpython.draw_mesh(vertices, faces, color=color)
+
         # Try to fix invalid meshes
         if not mesh.IsValid:
             mesh.FillHoles()
-        print("mesh", mesh)
+
         return mesh
 
     def draw(self):

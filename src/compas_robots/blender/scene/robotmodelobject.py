@@ -35,8 +35,6 @@ class RobotModelObject(BlenderSceneObject, BaseRobotModelObject):
     def __init__(self, model: RobotModel, collection: Optional[Union[str, bpy.types.Collection]] = None, **kwargs: Any):
         super().__init__(model=model, collection=collection or model.name, **kwargs)
 
-    # this method should not be here
-    # it has nothing to do with the current object
     def transform(self, native_mesh: bpy.types.Object, transformation: Transformation) -> None:
         """Transform the mesh of a robot model.
 
@@ -54,33 +52,29 @@ class RobotModelObject(BlenderSceneObject, BaseRobotModelObject):
         """
         native_mesh.matrix_world = mathutils.Matrix(transformation.matrix) @ native_mesh.matrix_world
 
-    # again
-    # doesn't make sense to me that there is no reference to self (except for the collection)
-    # suggests that this method shouldn't be here
     def create_geometry(
         self,
         geometry: Mesh,
         name: str = None,
         color: Color = None,
     ) -> bpy.types.Object:
-        """Create the scene objecy representing the robot geometry.
+        """Create the scene object representing the robot geometry.
 
         Parameters
         ----------
         geometry : :class:`~compas.datastructures.Mesh`
-            The geometry representing the robot.
+            Instance of a mesh data structure
         name : str, optional
-            A name for the scene object.
+            The name of the mesh to draw.
         color : :class:`~compas.colors.Color`
-            The color of the object.
+            The color of the object.`
 
         Returns
         -------
         bpy.types.Object
 
         """
-        if color and isinstance(Color, color):
-            color = color.rgb
+        color = color.rgb if color else None
 
         # Imported colors take priority over a the parameter color
         if "mesh_color.diffuse" in geometry.attributes:
