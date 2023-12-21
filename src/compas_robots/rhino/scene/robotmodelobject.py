@@ -8,7 +8,6 @@ import compas_rhino
 import Rhino.Geometry  # type: ignore
 import scriptcontext as sc  # type: ignore
 import System.Drawing  # type: ignore
-from compas.colors import Color
 from compas_rhino.conversions import transformation_to_rhino
 from compas_rhino.scene import RhinoSceneObject
 from Rhino.DocObjects.ObjectColorSource import ColorFromLayer  # type: ignore

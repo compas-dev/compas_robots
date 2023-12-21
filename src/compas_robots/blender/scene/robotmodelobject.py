@@ -1,7 +1,6 @@
 from typing import Any
 from typing import List
 from typing import Optional
-from typing import Tuple
 from typing import Union
 
 import bpy  # type: ignore
@@ -151,7 +150,7 @@ class RobotModelObject(BlenderSceneObject, BaseRobotModelObject):
 
         """
         self._ensure_geometry()
-        meshes = super(RobotModelRobotModelObjectArtist, self).draw_attached_meshes()
+        meshes = super(RobotModelObject, self).draw_attached_meshes()
         for mesh in meshes:
             mesh.hide_set(False)
         return meshes

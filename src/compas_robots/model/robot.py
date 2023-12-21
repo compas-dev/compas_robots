@@ -19,7 +19,7 @@ from compas_robots.files import URDFParser
 from compas_robots.resources import DefaultMeshLoader
 from compas_robots.resources import LocalPackageMeshLoader
 
-from .base import _attr_from_data
+# from .base import _attr_from_data
 from .base import _attr_to_data
 from .geometry import Color
 from .geometry import Geometry
