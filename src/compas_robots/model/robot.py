@@ -5,6 +5,7 @@ from __future__ import print_function
 import itertools
 import random
 
+from compas.colors import Color
 from compas.data import Data
 from compas.datastructures import Mesh
 from compas.geometry import Frame
@@ -19,9 +20,9 @@ from compas_robots.files import URDFParser
 from compas_robots.resources import DefaultMeshLoader
 from compas_robots.resources import LocalPackageMeshLoader
 
-# from .base import _attr_from_data
+from .base import ColorProxy
+from .base import _attr_from_data
 from .base import _attr_to_data
-from .geometry import Color
 from .geometry import Geometry
 from .geometry import Material
 from .geometry import MeshDescriptor
@@ -1038,7 +1039,7 @@ class RobotModel(Data):
                 v.geometry.shape.meshes = [visual]
             else:
                 v = Visual.from_primitive(visual)
-            v.material = Material(color=Color("%f %f %f 1" % visual_color))
+            v.material = Material(color=Color(visual_color[0], visual_color[1], visual_color[2]))
             visuals.append(v)
 
         for collision in collision_meshes:  # use visual_mesh as collision_mesh if none passed?
@@ -1182,5 +1183,5 @@ class RobotModel(Data):
 
 URDFParser.install_parser(RobotModel, "robot")
 URDFParser.install_parser(Material, "robot/material")
-URDFParser.install_parser(Color, "robot/material/color")
+URDFParser.install_parser(Color, "robot/material/color", proxy_type=ColorProxy)
 URDFParser.install_parser(Texture, "robot/material/texture")

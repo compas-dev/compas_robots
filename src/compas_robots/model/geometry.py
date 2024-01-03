@@ -3,8 +3,8 @@ from __future__ import division
 from __future__ import print_function
 
 import compas
-import compas.colors
 import compas.geometry
+from compas.colors import Color
 from compas.data import Data
 from compas.datastructures import Mesh
 from compas.geometry import Frame
@@ -164,64 +164,20 @@ class MeshDescriptor(Data):
             "meshes": self.meshes,
         }
 
-    @data.setter
-    def data(self, data):
-        self.filename = data["filename"]
-        self.scale = data["scale"]
-        self.attr = _attr_from_data(data["attr"]) if "attr" in data else {}
-        self.meshes = data["meshes"]
-
     @classmethod
     def from_data(cls, data):
-        md = cls("")
-        md.data = data
+        attr = _attr_from_data(data["attr"]) if "attr" in data else {}
+        md = cls(
+            data["filename"],
+            scale="{} {} {}".format(
+                data["scale"][0],
+                data["scale"][1],
+                data["scale"][2],
+            ),
+            **attr
+        )
+        md.meshes = data["meshes"]
         return md
-
-
-class Color(Data):
-    """Color represented in RGBA.
-
-    Parameters
-    ----------
-    rgba : str
-        Color values as string.
-
-    Attributes
-    ----------
-    rgba : [float, float, float, float]
-        Color values as list of float
-
-    Examples
-    --------
-    >>> c = Color('1 0 0')
-    >>> c.rgba
-    [1.0, 0.0, 0.0]
-
-    """
-
-    def __init__(self, rgba):
-        super(Color, self).__init__()
-        self.rgba = _parse_floats(rgba)
-
-    def get_urdf_element(self):
-        attributes = {"rgba": "{} {} {} {}".format(*self.rgba)}
-        return URDFElement("color", attributes)
-
-    @property
-    def data(self):
-        return {
-            "rgba": self.rgba,
-        }
-
-    @data.setter
-    def data(self, data):
-        self.rgba = data["rgba"]
-
-    @classmethod
-    def from_data(cls, data):
-        color = cls("1 1 1")
-        color.data = data
-        return color
 
 
 class Texture(Data):
@@ -273,14 +229,14 @@ class Material(Data):
     ----------
     name : str
         The name of the material.
-    color : :class:`~compas_robots.robots.Color`, optional
+    color : :class:`~compas.colors.Color`, optional
         The color of the material.
     texture : :class:`~compas_robots.model.Texture`, optional
         The filename of the texture.
 
     Examples
     --------
-    >>> c = Color('1 0 0')
+    >>> c = Color(1, 0, 0)
     >>> material = Material('wood', c)
 
     >>> material = Material('aqua')
@@ -308,11 +264,13 @@ class Material(Data):
             "texture": self.texture.data if self.texture else None,
         }
 
-    @data.setter
-    def data(self, data):
-        self.name = data["name"]
-        self.color = Color.from_data(data["color"]) if data["color"] else None
-        self.texture = Texture.from_data(data["texture"]) if data["texture"] else None
+    @classmethod
+    def from_data(cls, data):
+        return cls(
+            name=data["name"],
+            color=Color.from_data(data["color"]) if data["color"] else None,
+            texture=Texture.from_data(data["texture"]) if data["texture"] else None,
+        )
 
     def get_color(self):
         """Get the RGBA color array of the material.
@@ -331,13 +289,12 @@ class Material(Data):
         """
         if self.name:
             try:
-                color = compas.colors.Color.from_name(self.name)
-                return color
+                return Color.from_name(self.name)
             except ValueError:
                 pass
 
         if self.color:
-            return compas.colors.Color(self.color.rgba)
+            return Color(self.color.rgba)
 
         return None
 

@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from .geometry import BoxProxy
 from .geometry import CapsuleProxy
-from .geometry import Color
+
 from .geometry import CylinderProxy
 from .geometry import Geometry
 from .geometry import Material
@@ -28,7 +28,6 @@ from .link import Visual
 __all__ = [
     "Geometry",
     "MeshDescriptor",
-    "Color",
     "Texture",
     "Material",
     "Joint",

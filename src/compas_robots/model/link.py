@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+from compas.colors import Color
 from compas.data import Data
 from compas.geometry import Box
 from compas.geometry import Capsule
@@ -13,12 +14,12 @@ from compas.geometry import Transformation
 from compas_robots.files import URDFElement
 from compas_robots.files import URDFParser
 
+from .base import ColorProxy
 from .base import FrameProxy
 from .base import _attr_from_data
 from .base import _attr_to_data
 from .geometry import BoxProxy
 from .geometry import CapsuleProxy
-from .geometry import Color
 from .geometry import CylinderProxy
 from .geometry import Geometry
 from .geometry import Material
@@ -508,5 +509,5 @@ URDFParser.install_parser(
 )
 
 URDFParser.install_parser(Material, "robot/link/visual/material")
-URDFParser.install_parser(Color, "robot/link/visual/material/color")
+URDFParser.install_parser(Color, "robot/link/visual/material/color", proxy_type=ColorProxy)
 URDFParser.install_parser(Texture, "robot/link/visual/material/texture")

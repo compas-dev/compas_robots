@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+from compas.colors import Color
 from compas.geometry import Frame
 
 from compas_robots.files import URDFElement
@@ -121,3 +122,19 @@ class FrameProxy(ProxyObject):
 
         """
         self.point = self.point * factor
+
+
+class ColorProxy(ProxyObject):
+    """Proxy class that adds URDF functionality to an instance of :class:`Color`.
+
+    This class is internal and not intended to be referenced externally.
+    """
+
+    def get_urdf_element(self):
+        attributes = {"rgba": "{} {} {} {}".format(*self.rgba)}
+        return URDFElement("color", attributes)
+
+    @classmethod
+    def from_urdf(cls, attributes, elements=None, text=None):
+        rgba = _parse_floats(attributes.get("rgba", "0 0 0 0"))
+        return cls(Color(*rgba))

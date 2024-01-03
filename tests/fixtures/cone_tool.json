@@ -1258,12 +1258,10 @@
                         },
                         "material": {
                             "color": {
-                                "rgba": [
-                                    0.8,
-                                    0.8,
-                                    0.8,
-                                    1.0
-                                ]
+                                "red": 0.8,
+                                "green": 0.8,
+                                "blue": 0.8,
+                                "alpha": 1.0
                             },
                             "name": "Material",
                             "texture": null

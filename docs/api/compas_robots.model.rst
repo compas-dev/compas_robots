@@ -37,7 +37,6 @@ using the following classes.
     MeshDescriptor
     Material
     Texture
-    Color
 
 
 Link

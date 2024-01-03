@@ -285,7 +285,7 @@ def test_robot_material_attributes():
     r = RobotModel.from_urdf_string(
         """<?xml version="1.0" encoding="UTF-8"?><robot name="panda"><material name="LightGrey"><color rgba="0.7 0.7 0.7 1.0"/></material></robot>"""
     )
-    assert r.materials[0].color.rgba == [0.7, 0.7, 0.7, 1.0]
+    assert r.materials[0].color.rgba == (0.7, 0.7, 0.7, 1.0)
 
 
 def test_robot_material_conversion_from_name():
@@ -301,7 +301,7 @@ def test_robot_material_attributes_to_string():
     )
     urdf = URDF.from_robot(r_original)
     r = RobotModel.from_urdf_string(urdf.to_string())
-    assert r.materials[0].color.rgba == [0.7, 0.7, 0.7, 1.0]
+    assert r.materials[0].color.rgba == (0.7, 0.7, 0.7, 1.0)
 
 
 def test_unknown_urdf_attributes():
