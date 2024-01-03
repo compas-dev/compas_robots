@@ -617,6 +617,21 @@ def test_iter_link_chain_defaults(urdf_file):
     assert names == expected_chain
 
 
+def test_unknown_joint_attribute(urdf_with_unknown_attr):
+    r = RobotModel.from_data(RobotModel.from_urdf_file(urdf_with_unknown_attr).to_data())
+    assert r.joints[0].attr["unknown"] == "unknown_too"
+
+
+def test_unknown_dynamics_attribute(urdf_with_unknown_attr):
+    r = RobotModel.from_data(RobotModel.from_urdf_file(urdf_with_unknown_attr).to_data())
+    assert r.joints[0].dynamics.attr["whatever"] == "random"
+
+
+def test_unknown_limit_attribute(urdf_with_unknown_attr):
+    r = RobotModel.from_data(RobotModel.from_urdf_file(urdf_with_unknown_attr).to_data())
+    assert r.joints[0].limit.attr["xxxx"] == "123"
+
+
 def test_unknown_axis_attribute(urdf_with_unknown_attr):
     r = RobotModel.from_urdf_file(urdf_with_unknown_attr)
     assert r.joints[0].axis.attr["rpy"] == "0 0 0"

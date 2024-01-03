@@ -109,7 +109,7 @@ class RobotModel(Data):
             joints=[Joint.from_data(d) for d in data.get("joints", [])],
             links=[Link.from_data(d) for d in data.get("links", [])],
             materials=[Material.from_data(d) for d in data.get("materials", [])],
-            **_attr_from_data(data.get("attr", {}))
+            **_attr_from_data(data.get("attr", {})),
         )
         model._scale_factor = data.get("_scale_factor", 1.0)
 

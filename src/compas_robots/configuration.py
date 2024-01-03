@@ -354,11 +354,13 @@ class Configuration(Data):
             "joint_names": self.joint_names,
         }
 
-    @data.setter
-    def data(self, data):
-        self._joint_values = FixedLengthList(data.get("joint_values") or data.get("values") or [])
-        self._joint_types = FixedLengthList(data.get("joint_types") or data.get("types") or [])
-        self._joint_names = FixedLengthList(data.get("joint_names") or [])
+    @classmethod
+    def from_data(cls, data):
+        return cls(
+            data.get("joint_values") or data.get("values") or [],
+            data.get("joint_types") or data.get("types") or [],
+            data.get("joint_names") or [],
+        )
 
     @property
     def prismatic_values(self):

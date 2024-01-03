@@ -166,7 +166,7 @@ class MeshDescriptor(Data):
 
     @classmethod
     def from_data(cls, data):
-        attr = _attr_from_data(data["attr"]) if "attr" in data else {}
+        attr = _attr_from_data(data.get("attr", {}))
         md = cls(
             data["filename"],
             scale="{} {} {}".format(
@@ -213,13 +213,9 @@ class Texture(Data):
             "filename": self.filename,
         }
 
-    @data.setter
-    def data(self, data):
-        self.filename = data["filename"]
-
     @classmethod
     def from_data(cls, data):
-        return cls(**data)
+        return cls(data["filename"])
 
 
 class Material(Data):
@@ -299,34 +295,6 @@ class Material(Data):
         return None
 
 
-TYPE_CLASS_ENUM = {
-    "box": compas.geometry.Box,
-    "cylinder": compas.geometry.Cylinder,
-    "sphere": compas.geometry.Sphere,
-    "capsule": compas.geometry.Capsule,
-    "mesh": MeshDescriptor,
-}
-
-# TYPE_CLASS_ENUM_BY_DATA = {
-#     ("frame", "xsize", "ysize", "zsize"): compas.geometry.Box,
-#     ("circle", "height"): compas.geometry.Cylinder,
-#     ("point", "radius"): compas.geometry.Sphere,
-#     ("line", "radius"): compas.geometry.Capsule,
-#     ("attr", "filename", "scale"): MeshDescriptor,
-#     ("attr", "filename", "meshes", "scale"): MeshDescriptor,
-# }
-
-
-# def _get_type_from_shape_data(data):
-#     # This is here only to support models serialized with older versions of COMPAS
-#     if "type" in data:
-#         return TYPE_CLASS_ENUM[data["type"]]
-
-#     # The current scenario is that we need to figure out the object type based on the DATASCHEMA
-#     keys = tuple(sorted(data.keys()))
-#     return TYPE_CLASS_ENUM_BY_DATA[keys]
-
-
 class Geometry(Data):
     """Geometrical description of the shape of a link.
 
@@ -401,17 +369,11 @@ class Geometry(Data):
             "attr": _attr_to_data(self.attr),
         }
 
-    @data.setter
-    def data(self, data):
-        # class_ = _get_type_from_shape_data(data["shape"])
-        self.shape = data["shape"]
-        self.attr = _attr_from_data(data["attr"])
-
     @classmethod
     def from_data(cls, data):
-        # class_ = _get_type_from_shape_data(data["shape"])
-        geo = cls(box=data["shape"])
-        geo.data = data
+        geo = cls(box=compas.geometry.Box(1))
+        geo.shape = data["shape"]
+        geo.attr = _attr_from_data(data["attr"])
         return geo
 
     @staticmethod

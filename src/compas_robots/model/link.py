@@ -46,13 +46,9 @@ class Mass(Data):
     def data(self):
         return {"value": self.value}
 
-    @data.setter
-    def data(self, data):
-        self.value = data["value"]
-
     @classmethod
     def from_data(cls, data):
-        return cls(**data)
+        return cls(data["value"])
 
 
 class Inertia(Data):
@@ -95,18 +91,16 @@ class Inertia(Data):
             "izz": self.izz,
         }
 
-    @data.setter
-    def data(self, data):
-        self.ixx = data.get("ixx", 0.0)
-        self.ixy = data.get("ixy", 0.0)
-        self.ixz = data.get("ixz", 0.0)
-        self.iyy = data.get("iyy", 0.0)
-        self.iyz = data.get("iyz", 0.0)
-        self.izz = data.get("izz", 0.0)
-
     @classmethod
     def from_data(cls, data):
-        return cls(**data)
+        return cls(
+            ixx=data.get("ixx", 0.0),
+            ixy=data.get("ixy", 0.0),
+            ixz=data.get("ixz", 0.0),
+            iyy=data.get("iyy", 0.0),
+            iyz=data.get("iyz", 0.0),
+            izz=data.get("izz", 0.0),
+        )
 
 
 class Inertial(Data):
@@ -150,11 +144,12 @@ class Inertial(Data):
             "inertia": self.inertia.data if self.inertia else None,
         }
 
-    @data.setter
-    def data(self, data):
-        self.origin = Frame.from_data(data["origin"]) if data["origin"] else None
-        self.mass = Mass.from_data(data["mass"]) if data["mass"] else None
-        self.inertia = Inertia.from_data(data["inertia"]) if data["inertia"] else None
+    @classmethod
+    def from_data(cls, data):
+        origin = Frame.from_data(data["origin"]) if data["origin"] else None
+        mass = Mass.from_data(data["mass"]) if data["mass"] else None
+        inertia = Inertia.from_data(data["inertia"]) if data["inertia"] else None
+        return cls(origin, mass, inertia)
 
 
 class LinkItem(object):
@@ -228,24 +223,19 @@ class Visual(LinkItem, Data):
             "current_transformation": self.current_transformation.data if self.current_transformation else None,
         }
 
-    @data.setter
-    def data(self, data):
-        self.geometry = Geometry.from_data(data["geometry"])
-        self.origin = Frame.from_data(data["origin"]) if data["origin"] else None
-        self.name = data["name"]
-        self.material = Material.from_data(data["material"]) if data["material"] else None
-        self.attr = _attr_from_data(data["attr"])
-        self.init_transformation = (
-            Transformation.from_data(data["init_transformation"]) if data["init_transformation"] else None
-        )
-        self.current_transformation = (
-            Transformation.from_data(data["current_transformation"]) if data["current_transformation"] else None
-        )
-
     @classmethod
     def from_data(cls, data):
-        visual = cls(Geometry.from_data(data["geometry"]))
-        visual.data = data
+        visual = cls(
+            geometry=Geometry.from_data(data["geometry"]),
+            origin=Frame.from_data(data["origin"]) if data["origin"] else None,
+            name=data["name"],
+            material=Material.from_data(data["material"]) if data["material"] else None,
+            **_attr_from_data(data["attr"]),
+        )
+        if data["init_transformation"]:
+            visual.init_transformation = Transformation.from_data(data["init_transformation"])
+        if data["current_transformation"]:
+            visual.current_transformation = Transformation.from_data(data["current_transformation"])
         return visual
 
     def get_color(self):
@@ -346,23 +336,21 @@ class Collision(LinkItem, Data):
             "current_transformation": self.current_transformation.data if self.current_transformation else None,
         }
 
-    @data.setter
-    def data(self, data):
-        self.geometry = Geometry.from_data(data["geometry"])
-        self.origin = Frame.from_data(data["origin"]) if data["origin"] else None
-        self.name = data["name"]
-        self.attr = _attr_from_data(data["attr"])
-        self.init_transformation = (
-            Transformation.from_data(data["init_transformation"]) if data["init_transformation"] else None
-        )
-        self.current_transformation = (
-            Transformation.from_data(data["current_transformation"]) if data["current_transformation"] else None
-        )
-
     @classmethod
     def from_data(cls, data):
-        collision = cls(Geometry.from_data(data["geometry"]))
-        collision.data = data
+        collision = cls(
+            geometry=Geometry.from_data(data["geometry"]),
+            origin=Frame.from_data(data["origin"]) if data["origin"] else None,
+            name=data["name"],
+            attr=_attr_from_data(data["attr"]),
+        )
+
+        if data["init_transformation"]:
+            collision.init_transformation = Transformation.from_data(data["init_transformation"])
+
+        if data["current_transformation"]:
+            collision.current_transformation = Transformation.from_data(data["current_transformation"])
+
         return collision
 
     @classmethod
@@ -443,22 +431,19 @@ class Link(Data):
             "joints": [joint.data for joint in self.joints],
         }
 
-    @data.setter
-    def data(self, data):
-        from .joint import Joint
-
-        self.name = data["name"]
-        self.type = data["type"]
-        self.visual = [Visual.from_data(d) for d in data["visual"]]
-        self.collision = [Collision.from_data(d) for d in data["collision"]]
-        self.inertial = Inertial.from_data(data["inertial"]) if data["inertial"] else None
-        self.attr = _attr_from_data(data["attr"])
-        self.joints = [Joint.from_data(d) for d in data["joints"]]
-
     @classmethod
     def from_data(cls, data):
-        link = cls(data["name"])
-        link.data = data
+        from .joint import Joint
+
+        link = cls(
+            name=data["name"],
+            type=data["type"],
+            visual=[Visual.from_data(d) for d in data["visual"]],
+            collision=[Collision.from_data(d) for d in data["collision"]],
+            inertial=Inertial.from_data(data["inertial"]) if data["inertial"] else None,
+            **_attr_from_data(data["attr"]),
+        )
+        link.joints = [Joint.from_data(d) for d in data["joints"]]
         return link
 
 

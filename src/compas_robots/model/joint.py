@@ -38,10 +38,6 @@ class ParentLink(Data):
             "link": self.link,
         }
 
-    @data.setter
-    def data(self, data):
-        self.link = data["link"]
-
     @classmethod
     def from_data(cls, data):
         return cls(data["link"])
@@ -65,10 +61,6 @@ class ChildLink(Data):
         return {
             "link": self.link,
         }
-
-    @data.setter
-    def data(self, data):
-        self.link = data["link"]
 
     @classmethod
     def from_data(cls, data):
@@ -101,11 +93,9 @@ class Calibration(Data):
             "reference_position": self.reference_position,
         }
 
-    @data.setter
-    def data(self, data):
-        self.rising = data["rising"]
-        self.falling = data["falling"]
-        self.reference_position = data["reference_position"]
+    @classmethod
+    def from_data(cls, data):
+        return cls(data["rising"], data["falling"], data["reference_position"])
 
 
 class Dynamics(Data):
@@ -133,11 +123,9 @@ class Dynamics(Data):
             "attr": _attr_to_data(self.attr),
         }
 
-    @data.setter
-    def data(self, data):
-        self.damping = data["damping"]
-        self.friction = data["friction"]
-        self.attr = _attr_from_data(data["attr"])
+    @classmethod
+    def from_data(cls, data):
+        return cls(data["damping"], data["friction"], **_attr_from_data(data["attr"]))
 
 
 class Limit(Data):
@@ -185,13 +173,9 @@ class Limit(Data):
             "attr": _attr_to_data(self.attr),
         }
 
-    @data.setter
-    def data(self, data):
-        self.effort = data["effort"]
-        self.velocity = data["velocity"]
-        self.lower = data["lower"]
-        self.upper = data["upper"]
-        self.attr = _attr_from_data(data["attr"])
+    @classmethod
+    def from_data(cls, data):
+        return cls(data["effort"], data["velocity"], data["lower"], data["upper"], **_attr_from_data(data["attr"]))
 
     def scale(self, factor):
         """Scale the upper and lower limits by a given factor.
@@ -235,17 +219,9 @@ class Mimic(Data):
             "offset": self.offset,
         }
 
-    @data.setter
-    def data(self, data):
-        self.joint = data["joint"]
-        self.multiplier = data["multiplier"]
-        self.offset = data["offset"]
-
     @classmethod
     def from_data(cls, data):
-        mimic = cls(data["joint"])
-        mimic.data = data
-        return mimic
+        return cls(data["joint"], data["multiplier"], data["offset"])
 
     def calculate_position(self, mimicked_joint_position):
         return self.multiplier * mimicked_joint_position + self.offset
@@ -280,18 +256,9 @@ class SafetyController(Data):
             "soft_upper_limit": self.soft_upper_limit,
         }
 
-    @data.setter
-    def data(self, data):
-        self.k_velocity = data["k_velocity"]
-        self.k_position = data["k_position"]
-        self.soft_lower_limit = data["soft_lower_limit"]
-        self.soft_upper_limit = data["soft_upper_limit"]
-
     @classmethod
     def from_data(cls, data):
-        sc = cls(data["k_velocity"])
-        sc.data = data
-        return sc
+        return cls(data["k_velocity"], data["k_position"], data["soft_lower_limit"], data["soft_upper_limit"])
 
 
 class Axis(Data):
@@ -337,12 +304,9 @@ class Axis(Data):
             "attr": _attr_to_data(self.attr),
         }
 
-    @data.setter
-    def data(self, data):
-        self.x = data["x"]
-        self.y = data["y"]
-        self.z = data["z"]
-        self.attr = _attr_from_data(data["attr"])
+    @classmethod
+    def from_data(cls, data):
+        return cls(xyz="{} {} {}".format(data["x"], data["y"], data["z"]), **_attr_from_data(data["attr"]))
 
     def copy(self):
         """Create a copy of the axis instance."""
@@ -557,33 +521,25 @@ class Joint(Data):
             "position": self.position,
         }
 
-    @data.setter
-    def data(self, data):
-        self.name = data["name"]
-        self.type = Joint.SUPPORTED_TYPES.index(data["type"])
-        self.parent = ParentLink.from_data(data["parent"])
-        self.child = ChildLink.from_data(data["child"])
-        self.origin = Frame.from_data(data["origin"]) if data["origin"] else None
-        self.axis = Axis.from_data(data["axis"]) if data["axis"] else None
-        self.calibration = Calibration.from_data(data["calibration"]) if data["calibration"] else None
-        self.dynamics = Dynamics.from_data(data["dynamics"]) if data["dynamics"] else None
-        self.limit = Limit.from_data(data["limit"]) if data["limit"] else None
-        self.safety_controller = (
-            SafetyController.from_data(data["safety_controller"]) if data["safety_controller"] else None
-        )
-        self.mimic = Mimic.from_data(data["mimic"]) if data["mimic"] else None
-        self.attr = _attr_from_data(data["attr"])
-        self.position = data["position"]
-
     @classmethod
     def from_data(cls, data):
         joint = cls(
-            data["name"],
-            data["type"],
-            ParentLink.from_data(data["parent"]),
-            ChildLink.from_data(data["child"]),
+            name=data["name"],
+            type=Joint.SUPPORTED_TYPES.index(data["type"]),
+            parent=ParentLink.from_data(data["parent"]),
+            child=ChildLink.from_data(data["child"]),
+            origin=Frame.from_data(data["origin"]) if data["origin"] else None,
+            axis=Axis.from_data(data["axis"]) if data["axis"] else None,
+            calibration=Calibration.from_data(data["calibration"]) if data["calibration"] else None,
+            dynamics=Dynamics.from_data(data["dynamics"]) if data["dynamics"] else None,
+            limit=Limit.from_data(data["limit"]) if data["limit"] else None,
+            safety_controller=SafetyController.from_data(data["safety_controller"])
+            if data["safety_controller"]
+            else None,
+            mimic=Mimic.from_data(data["mimic"]) if data["mimic"] else None,
+            **_attr_from_data(data["attr"])
         )
-        joint.data = data
+        joint.position = data["position"]
         return joint
 
     @property

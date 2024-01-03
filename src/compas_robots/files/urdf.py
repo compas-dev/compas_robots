@@ -375,12 +375,6 @@ class URDFGenericElement(Data):
             "text": self.text,
         }
 
-    @data.setter
-    def data(self, data):
-        self.attr = data["attr"]
-        self.elements = [URDFGenericElement.from_data(d) for d in data["elements"]]
-        self.text = data["text"]
-
     @classmethod
     def from_data(cls, data):
         generic = cls()

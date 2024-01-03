@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Changed urdf parsing to use `compas.colors.Color` instead of a robot-specific color class.
 * Changed `ToolModel.link_name` to `ToolModel.connected_to`.
 * Fixed data serialization for `RobotModel` and `ToolModel`.
+* Update all data serialization to `COMPAS 2.0` convention
 
 ### Removed
 
