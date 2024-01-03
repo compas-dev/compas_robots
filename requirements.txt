@@ -1,1 +1,1 @@
-compas >= 2
+compas
