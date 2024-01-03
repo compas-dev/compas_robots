@@ -7,11 +7,7 @@ compas_invocations
 doc8
 flake8
 invoke >=0.14
-ipykernel
-ipython >=5.8
 isort
-m2r2
-nbsphinx
 pydocstyle
 pytest >=3.2
 sphinx_compas2_theme
