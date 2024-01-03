@@ -69,7 +69,7 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
 
     Attributes
     ----------
-    model : :class:`~compas_robots.robots.RobotModel`
+    model : :class:`~compas_robots.RobotModel`
         Instance of a robot model.
 
     """
@@ -91,13 +91,13 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
 
         Returns
         -------
-        :class: `~compas_robots.robots.model.ToolModel`
+        :class: `~compas_robots.ToolModel`
 
         """
         tool_model = None
         if self.attached_tool_models:
-            link_name = self.model.get_end_effector_link()
-            tool_model = self.attached_tool_models.get(link_name) or list(self.attached_tool_models.values())[0]
+            connected_to = self.model.get_end_effector_link()
+            tool_model = self.attached_tool_models.get(connected_to) or list(self.attached_tool_models.values())[0]
         return tool_model
 
     def attach_tool_model(self, tool_model):
@@ -105,20 +105,20 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
 
         Parameters
         ----------
-        tool_model : :class:`~compas_robots.robots.ToolModel`
+        tool_model : :class:`~compas_robots.ToolModel`
             The tool that should be attached to the robot's flange.
 
         """
         self.create(tool_model.root, "attached_tool")
 
-        if not tool_model.link_name:
+        if not tool_model.connected_to:
             link = self.model.get_end_effector_link()
-            tool_model.link_name = link.name
+            tool_model.connected_to = link.name
         else:
-            link = self.model.get_link_by_name(tool_model.link_name)
+            link = self.model.get_link_by_name(tool_model.connected_to)
 
         # don't attach twice on the same link
-        self.attached_tool_models[tool_model.link_name] = tool_model
+        self.attached_tool_models[tool_model.connected_to] = tool_model
 
         ee_frame = link.parent_joint.origin.copy()
         initial_transformation = Transformation.from_frame_to_frame(Frame.worldXY(), ee_frame)
@@ -143,12 +143,12 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
 
         Parameters
         ----------
-        tool_model : :class:`~compas_robots.robots.ToolModel`
+        tool_model : :class:`~compas_robots.ToolModel`
             The tool that should be detached from the robot's flange.
             If None, all attached tools tools are removed.
         """
         if tool_model:
-            del self.attached_tool_models[tool_model.link_name]
+            del self.attached_tool_models[tool_model.connected_to]
         else:
             self.attached_tool_models.clear()
 
@@ -161,7 +161,7 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
             The mesh to attach to the robot model.
         name : str
             The identifier of the mesh.
-        link : :class:`~compas_robots.robots.Link`
+        link : :class:`~compas_robots.model.Link`
             The link within the robot model or tool model to attach the mesh to. Optional.
             Defaults to the model's end effector link.
         frame : :class:`~compas.geometry.Frame`
@@ -218,7 +218,7 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
 
         Parameters
         ----------
-        link : :class:`~compas_robots.robots.Link`, optional
+        link : :class:`~compas_robots.model.Link`, optional
             Link instance to create. Defaults to the robot model's root.
         context : str, optional
             Subdomain identifier to insert in the mesh names.
@@ -274,7 +274,7 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
 
         Parameters
         ----------
-        link : :class:`~compas_robots.robots.Link`, optional
+        link : :class:`~compas_robots.model.Link`, optional
             Base link instance.
             Defaults to the robot model's root.
         visual : bool, optional
@@ -334,7 +334,7 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
 
         Parameters
         ----------
-        link : :class:`~compas_robots.robots.Link`
+        link : :class:`~compas_robots.model.Link`
             A link.
         transformation : :class:`~compas.geometry.Transformation`
             A transformation to apply to th link's geometry.
@@ -368,7 +368,7 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
 
         Parameters
         ----------
-        item: :class:`~compas_robots.robots.Visual` | :class:`~compas_robots.robots.Collision`
+        item: :class:`~compas_robots.model.Visual` | :class:`~compas_robots.model.Collision`
             The visual or collidable object of a link.
         transformation: :class:`~compas.geometry.Transformation`
             The (absolute) transformation to apply onto the link's geometry.
@@ -391,7 +391,7 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
 
         Parameters
         ----------
-        joint_state : :class:`~compas_robots.robots.Configuration` | dict[str, float]
+        joint_state : :class:`~compas_robots.Configuration` | dict[str, float]
             A dictionary with joint names as keys and joint positions as values.
         visual : bool, optional
             If True, the visual geometry will also be updated.
@@ -405,7 +405,7 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
         """
         _ = self._update(self.model, joint_state, visual, collision)
         for tool in self.attached_tool_models.values():
-            frame = self.model.forward_kinematics(joint_state, link_name=tool.link_name)
+            frame = self.model.forward_kinematics(joint_state, link_name=tool.connected_to)
             self.update_tool(
                 tool=tool,
                 visual=visual,
@@ -442,7 +442,7 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
 
         Parameters
         ----------
-        joint_state : :class:`~compas_robots.robots.Configuration` | dict[str, float], optional
+        joint_state : :class:`~compas_robots.Configuration` | dict[str, float], optional
             A dictionary with joint names as keys and joint positions as values.
             Defaults to an empty dictionary.
         transformation : :class:`~compas.geometry.Transformation`, optional

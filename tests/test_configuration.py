@@ -79,7 +79,6 @@ def test_from_data():
 
 def test_to_data():
     config = Configuration.from_prismatic_and_revolute_values([8.312], [1.5, 0.0, 0.0, 0.0, 1.0, 0.8])
-    # joint_types=[Joint.PRISMATIC, Joint.REVOLUTE]))
     data = config.to_data()
 
     assert data["joint_values"] == [8.312, 1.5, 0.0, 0.0, 0.0, 1.0, 0.8]
