@@ -5,6 +5,9 @@ from __future__ import print_function
 from compas.geometry import Frame
 from compas.geometry import Transformation
 
+from .joint import Joint
+from .link import Link
+from .link import Material
 from .robot import RobotModel
 
 
@@ -13,16 +16,10 @@ class ToolModel(RobotModel):
 
     Attributes
     ----------
-    visual : :class:`~compas.datastructures.Mesh`
-        The visual mesh of the tool.
     frame : :class:`~compas.geometry.Frame`
-        The frame of the tool in tool0 frame.
-    collision : :class:`~compas.datastructures.Mesh`
-        The collision mesh representation of the tool.
-    name : str
-        The name of the `ToolModel`. Defaults to 'attached_tool'.
-    link_name : str
-        The name of the `Link` to which the tool is attached.  Defaults to ``None``.
+        The frame of the tool in reference to the tool0 frame.
+    connected_to : str
+        The name of the `Link` to which the tool is attached (ie. connected) to.  Defaults to ``None``.
 
     Examples
     --------
@@ -41,35 +38,36 @@ class ToolModel(RobotModel):
         frame_in_tool0_frame,
         collision=None,
         name="attached_tool",
-        link_name=None,
+        connected_to=None,
     ):
-        collision = collision or visual
         super(ToolModel, self).__init__(name)
-        self.add_link("attached_tool_link", visual_mesh=visual, collision_mesh=collision)
-
-        self._rebuild_tree()
-        self._create(self.root, Transformation())
-
         self.frame = frame_in_tool0_frame
-        self.link_name = link_name
+        self.connected_to = connected_to
+
+        if visual:
+            collision = collision or visual
+            self.add_link("attached_tool_link", visual_mesh=visual, collision_mesh=collision)
+
+            self._rebuild_tree()
+            self._create(self.root, Transformation())
 
     @classmethod
-    def from_robot_model(cls, robot, frame_in_tool0_frame, link_name=None):
-        """Creates a ``ToolModel`` from a :class:`~compas_robots.robots.RobotModel` instance.
+    def from_robot_model(cls, robot, frame_in_tool0_frame, connected_to=None):
+        """Creates a ``ToolModel`` from a :class:`~compas_robots.RobotModel` instance.
 
         Parameters
         ----------
-        robot : :class:`~compas_robots.robots.RobotModel`
+        robot : :class:`~compas_robots.RobotModel`
         frame_in_tool0_frame : str
             The frame of the tool in tool0 frame.
-        link_name : str
+        connected_to : str
             The name of the `Link` to which the tool is attached.
             Defaults to ``None``.
 
         """
         data = robot.data
         data["frame"] = frame_in_tool0_frame.data
-        data["link_name"] = link_name
+        data["connected_to"] = connected_to
         return cls.from_data(data)
 
     @property
@@ -86,9 +84,9 @@ class ToolModel(RobotModel):
             The tool data.
 
         """
-        data = super(ToolModel, self).data.fget(self)
+        data = RobotModel.data.fget(self)
         data["frame"] = self.frame.data
-        data["link_name"] = self.link_name
+        data["connected_to"] = self.connected_to
         return data
 
     @classmethod
@@ -108,10 +106,18 @@ class ToolModel(RobotModel):
             The constructed `ToolModel`.
 
         """
-        tool = super(ToolModel, cls).from_data(data)
-        tool.name = tool.name or "attached_tool"
-        tool.frame = Frame.from_data(data["frame"])
-        tool.link_name = data["link_name"] if "link_name" in data else None
+        tool = cls(
+            None,
+            frame_in_tool0_frame=Frame.from_data(data["frame"]),
+            name=data["name"],
+            connected_to=data.get("connected_to"),
+        )
+        tool.joints = [Joint.from_data(d) for d in data.get("joints", [])]
+        tool.links = [Link.from_data(d) for d in data.get("links", [])]
+        tool.materials = [Material.from_data(d) for d in data.get("materials", [])]
+        tool._rebuild_tree()
+        tool._create(tool.root, Transformation())
+
         return tool
 
     def from_tcf_to_t0cf(self, frames_tcf):

@@ -109,7 +109,7 @@ class RobotModel(Data):
             joints=[Joint.from_data(d) for d in data.get("joints", [])],
             links=[Link.from_data(d) for d in data.get("links", [])],
             materials=[Material.from_data(d) for d in data.get("materials", [])],
-            **data.get("attr", {})
+            **_attr_from_data(data.get("attr", {}))
         )
         model._scale_factor = data.get("_scale_factor", 1.0)
 
@@ -150,7 +150,7 @@ class RobotModel(Data):
 
         Returns
         -------
-        :class:`~compas_robots.robots.RobotModel`
+        :class:`~compas_robots.RobotModel`
             A robot model instance.
 
         Examples
@@ -190,7 +190,7 @@ class RobotModel(Data):
 
         Returns
         -------
-        :class:`~compas_robots.robots.RobotModel`
+        :class:`~compas_robots.RobotModel`
             A robot model instance.
 
         Examples
@@ -213,7 +213,7 @@ class RobotModel(Data):
 
         Returns
         -------
-        :class:`~compas_robots.robots.RobotModel`
+        :class:`~compas_robots.RobotModel`
             A robot model instance.
 
         """
@@ -253,12 +253,12 @@ class RobotModel(Data):
 
         Parameters
         ----------
-        link : :class:`~compas_robots.robots.Link`
+        link : :class:`~compas_robots.model.Link`
             The link of which we want to know the parent joint.
 
         Returns
         -------
-        :class:`~compas_robots.robots.Joint`
+        :class:`~compas_robots.model.Joint`
             The parent joint of the link.
 
         Examples
@@ -284,7 +284,7 @@ class RobotModel(Data):
 
         Returns
         -------
-        :class:`~compas_robots.robots.Link`
+        :class:`~compas_robots.model.Link`
             A link instance.
 
         Examples
@@ -485,7 +485,7 @@ class RobotModel(Data):
 
         Returns
         -------
-        list[:class:`~compas_robots.robots.Joint`]
+        list[:class:`~compas_robots.model.Joint`]
             List of configurable joints.
 
         Examples
@@ -527,7 +527,7 @@ class RobotModel(Data):
 
         Returns
         -------
-        list[:attr:`compas_robots.robots.Joint.SUPPORTED_TYPES`]
+        list[:attr:`compas_robots.model.Joint.SUPPORTED_TYPES`]
             List of joint types.
 
         """
@@ -556,7 +556,7 @@ class RobotModel(Data):
 
         Returns
         -------
-        :class:`~compas_robots.robots.Link`
+        :class:`~compas_robots.model.Link`
             Instance of the end effector link.
 
         Examples
@@ -641,7 +641,7 @@ class RobotModel(Data):
 
         Returns
         -------
-        :class:`~compas_robots.robots.Configuration`
+        :class:`~compas_robots.Configuration`
             Instance of a configuration with randomized joint values.
 
         Notes
@@ -665,9 +665,9 @@ class RobotModel(Data):
 
         Parameters
         ----------
-        resource_loaders : :class:`~compas_robots.robots.AbstractMeshLoader`
+        resource_loaders : :class:`~compas_robots.resources.AbstractMeshLoader`
             List of objects that implement the
-            resource loading interface (:class:`~compas_robots.robots.AbstractMeshLoader`)
+            resource loading interface (:class:`~compas_robots.resources.AbstractMeshLoader`)
             and can retrieve external geometry.
         force : bool
             True if it should force reloading even if the geometry
@@ -760,7 +760,7 @@ class RobotModel(Data):
 
         Parameters
         ----------
-        link : :class:`~compas_robots.robots.Link`
+        link : :class:`~compas_robots.model.Link`
             Link instance to create.
         parent_transformation : :class:`Transformation`
             Parent transformation to apply to the link when creating the structure.
@@ -789,7 +789,7 @@ class RobotModel(Data):
         ----------
         factor : float
             The factor to scale the robot with.
-        link : :class:`~compas_robots.robots.Link`, optional
+        link : :class:`~compas_robots.model.Link`, optional
             Starting link from which to start scaling.
             Defaults to root.
 
@@ -821,10 +821,10 @@ class RobotModel(Data):
 
         Parameters
         ----------
-        joint_state : :class:`~compas_robots.robots.Configuration` | dict[str, float]
+        joint_state : :class:`~compas_robots.Configuration` | dict[str, float]
             A configuration instance or a dictionary with joint names and joint values in radians and
             meters (depending on the joint type).
-        link : :class:`~compas_robots.robots.Link`, optional
+        link : :class:`~compas_robots.model.Link`, optional
             Link instance to calculate the child joint's transformation.
         parent_transformation : :class:`Transformation`, optional
             The transfomation of the parent joint.
@@ -872,7 +872,7 @@ class RobotModel(Data):
 
         Parameters
         ----------
-        joint_state : :class:`~compas_robots.robots.Configuration` | dict[str, float]
+        joint_state : :class:`~compas_robots.Configuration` | dict[str, float]
             A configuration instance or a dictionary with joint names and joint values in radians and
             meters (depending on the joint type).
 
@@ -903,7 +903,7 @@ class RobotModel(Data):
 
         Parameters
         ----------
-        joint_state : :class:`~compas_robots.robots.Configuration` | dict[str, float]
+        joint_state : :class:`~compas_robots.Configuration` | dict[str, float]
             A configuration instance or a dictionary with joint names and joint values in radians and
             meters (depending on the joint type).
 
@@ -934,7 +934,7 @@ class RobotModel(Data):
 
         Parameters
         ----------
-        joint_state : :class:`~compas_robots.robots.Configuration` | dict[str, float]
+        joint_state : :class:`~compas_robots.Configuration` | dict[str, float]
             A configuration instance or a dictionary with joint names and joint values in radians and
             meters (depending on the joint type).
         link_name : str, optional
