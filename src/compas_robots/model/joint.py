@@ -393,9 +393,6 @@ class Joint(Data):
         The current position of the joint. This depends on the
         joint type, i.e. for revolute joints, it will be the rotation angle
         in radians, for prismatic joints the translation in meters.
-
-    Class Attributes
-    ----------------
     REVOLUTE : int
         Revolute joint type.
     CONTINUOUS : int
