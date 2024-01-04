@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Update all artists to the new `SceneObject` system.
+* Added `precision` parameter to `load_geometry` method instead of relying exclusively on the global precision setting.
 
 ### Changed
 

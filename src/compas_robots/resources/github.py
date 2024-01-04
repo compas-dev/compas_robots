@@ -92,7 +92,7 @@ class GithubPackageMeshLoader(AbstractMeshLoader):
         """
         return url.startswith(self.schema_prefix)
 
-    def load_meshes(self, url):
+    def load_meshes(self, url, precision=None):
         """Load meshes from the given URL.
 
         A single mesh file can contain multiple meshes depending on the format.
@@ -101,6 +101,8 @@ class GithubPackageMeshLoader(AbstractMeshLoader):
         ----------
         url : str
             Mesh URL
+        precision: int, optional
+            The precision for parsing geometric data.
 
         Returns
         -------
@@ -110,4 +112,4 @@ class GithubPackageMeshLoader(AbstractMeshLoader):
         _prefix, path = url.split(self.schema_prefix)
         url = self.build_url(path)
 
-        return _mesh_import(url, url)
+        return _mesh_import(url, url, precision)

@@ -672,6 +672,8 @@ class RobotModel(Data):
         force : bool
             True if it should force reloading even if the geometry
             has been loaded already, otherwise False.
+        precision: int, optional
+            The precision for parsing geometric data.
 
 
         Examples
@@ -683,6 +685,7 @@ class RobotModel(Data):
 
         """
         force = kwargs.get("force", False)
+        precision = kwargs.get("precision")
 
         loaders = list(resource_loaders)
         loaders.insert(0, DefaultMeshLoader())
@@ -694,7 +697,7 @@ class RobotModel(Data):
                 if "filename" in dir(shape) and needs_reload:
                     for loader in loaders:
                         if loader.can_load_mesh(shape.filename):
-                            shape.meshes = loader.load_meshes(shape.filename)
+                            shape.meshes = loader.load_meshes(shape.filename, precision=precision)
                             break
 
                     if not shape.meshes:

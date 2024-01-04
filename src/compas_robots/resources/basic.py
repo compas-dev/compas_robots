@@ -32,7 +32,7 @@ class AbstractMeshLoader(object):
         """
         return NotImplementedError
 
-    def load_meshes(self, url):
+    def load_meshes(self, url, precision=None):
         """Load meshes from the given URL.
 
         A single mesh file can contain multiple meshes depending on the format.
@@ -41,6 +41,8 @@ class AbstractMeshLoader(object):
         ----------
         url : str
             Mesh URL
+        precision: int, optional
+            The precision for parsing geometric data.
 
         Returns
         -------
@@ -95,7 +97,7 @@ class DefaultMeshLoader(AbstractMeshLoader):
         is_obj = _get_file_format(url) == "obj"
         return scheme in ("http", "https") and is_obj
 
-    def load_meshes(self, url):
+    def load_meshes(self, url, precision=None):
         """Load meshes from the given URL.
 
         A single mesh file can contain multiple meshes depending on the format.
@@ -104,6 +106,8 @@ class DefaultMeshLoader(AbstractMeshLoader):
         ----------
         url : str
             Mesh URL
+        precision: int, optional
+            The precision for parsing geometric data.
 
         Returns
         -------
@@ -111,7 +115,7 @@ class DefaultMeshLoader(AbstractMeshLoader):
             List of meshes.
         """
         url = self._get_mesh_url(url)
-        return _mesh_import(url, url)
+        return _mesh_import(url, url, precision)
 
     def _get_mesh_url(self, url):
         """Concatenates basepath directory to URL only if defined in the keyword arguments.
@@ -211,7 +215,7 @@ class LocalPackageMeshLoader(AbstractMeshLoader):
         local_file = self._get_local_path(url)
         return os.path.isfile(local_file)
 
-    def load_meshes(self, url):
+    def load_meshes(self, url, precision=None):
         """Load meshes from the given URL.
 
         A single mesh file can contain multiple meshes depending on the format.
@@ -220,6 +224,8 @@ class LocalPackageMeshLoader(AbstractMeshLoader):
         ----------
         url : str
             Mesh URL
+        precision: int, optional
+            The precision for parsing geometric data.
 
         Returns
         -------
@@ -227,14 +233,14 @@ class LocalPackageMeshLoader(AbstractMeshLoader):
             List of meshes.
         """
         local_file = self._get_local_path(url)
-        return _mesh_import(url, local_file)
+        return _mesh_import(url, local_file, precision)
 
     def _get_local_path(self, url):
         _prefix, path = url.split(self.schema_prefix)
         return self.build_path(*path.split("/"))
 
 
-def _mesh_import(name, file):
+def _mesh_import(name, file, precision=None):
     """Internal function to load meshes using the correct loader.
 
     Name and file might be the same but not always, e.g. temp files."""
@@ -244,10 +250,10 @@ def _mesh_import(name, file):
         raise NotImplementedError("Mesh type not supported: {}".format(file_extension))
 
     if file_extension == "obj":
-        return [Mesh.from_obj(file)]
+        return [Mesh.from_obj(file, precision)]
     elif file_extension == "stl":
-        return [Mesh.from_stl(file)]
+        return [Mesh.from_stl(file, precision)]
     elif file_extension == "ply":
-        return [Mesh.from_ply(file)]
+        return [Mesh.from_ply(file, precision)]
 
     raise Exception
