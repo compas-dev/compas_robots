@@ -290,7 +290,7 @@ class Material(Data):
                 pass
 
         if self.color:
-            return Color(self.color.rgba)
+            return Color(*self.color.rgba)
 
         return None
 
