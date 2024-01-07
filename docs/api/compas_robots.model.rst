@@ -33,7 +33,7 @@ using the following classes.
     :toctree: generated/
     :nosignatures:
 
-    Geometry
+    LinkGeometry
     MeshDescriptor
     Material
     Texture

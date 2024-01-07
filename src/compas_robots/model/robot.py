@@ -23,7 +23,7 @@ from compas_robots.resources import LocalPackageMeshLoader
 from .base import ColorProxy
 from .base import _attr_from_data
 from .base import _attr_to_data
-from .geometry import Geometry
+from .geometry import LinkGeometry
 from .geometry import Material
 from .geometry import MeshDescriptor
 from .geometry import Texture
@@ -1038,7 +1038,7 @@ class RobotModel(Data):
 
         for visual in visual_meshes:
             if isinstance(visual, Mesh):
-                v = Visual(Geometry(MeshDescriptor("")))
+                v = Visual(LinkGeometry(MeshDescriptor("")))
                 v.geometry.shape.meshes = [visual]
             else:
                 v = Visual.from_primitive(visual)
@@ -1047,7 +1047,7 @@ class RobotModel(Data):
 
         for collision in collision_meshes:  # use visual_mesh as collision_mesh if none passed?
             if isinstance(collision, Mesh):
-                c = Collision(Geometry(MeshDescriptor("")))
+                c = Collision(LinkGeometry(MeshDescriptor("")))
                 c.geometry.shape.meshes = [collision]
             else:
                 c = Collision.from_primitive(collision)

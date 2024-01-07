@@ -21,7 +21,7 @@ from .base import _attr_to_data
 from .geometry import BoxProxy
 from .geometry import CapsuleProxy
 from .geometry import CylinderProxy
-from .geometry import Geometry
+from .geometry import LinkGeometry
 from .geometry import Material
 from .geometry import MeshDescriptor
 from .geometry import SphereProxy
@@ -226,7 +226,7 @@ class Visual(LinkItem, Data):
     @classmethod
     def from_data(cls, data):
         visual = cls(
-            geometry=Geometry.from_data(data["geometry"]),
+            geometry=LinkGeometry.from_data(data["geometry"]),
             origin=Frame.from_data(data["origin"]) if data["origin"] else None,
             name=data["name"],
             material=Material.from_data(data["material"]) if data["material"] else None,
@@ -271,7 +271,7 @@ class Visual(LinkItem, Data):
         :class:`~compas.datastructures.Mesh`
             A visual description object.
         """
-        geometry = Geometry()
+        geometry = LinkGeometry()
         geometry.shape = primitive
         return cls(geometry, **kwargs)
 
@@ -339,7 +339,7 @@ class Collision(LinkItem, Data):
     @classmethod
     def from_data(cls, data):
         collision = cls(
-            geometry=Geometry.from_data(data["geometry"]),
+            geometry=LinkGeometry.from_data(data["geometry"]),
             origin=Frame.from_data(data["origin"]) if data["origin"] else None,
             name=data["name"],
             attr=_attr_from_data(data["attr"]),
@@ -370,7 +370,7 @@ class Collision(LinkItem, Data):
         :class:`~compas.datastructures.Mesh`
             A collision description object.
         """
-        geometry = Geometry()
+        geometry = LinkGeometry()
         geometry.shape = primitive
         return cls(geometry, **kwargs)
 
@@ -462,7 +462,7 @@ URDFParser.install_parser(
     "robot/link/collision/origin",
     proxy_type=FrameProxy,
 )
-URDFParser.install_parser(Geometry, "robot/link/visual/geometry", "robot/link/collision/geometry")
+URDFParser.install_parser(LinkGeometry, "robot/link/visual/geometry", "robot/link/collision/geometry")
 URDFParser.install_parser(
     MeshDescriptor,
     "robot/link/visual/geometry/mesh",

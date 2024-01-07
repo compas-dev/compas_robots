@@ -9,7 +9,7 @@ from compas.geometry import Scale
 from compas.geometry import Transformation
 from compas.scene import SceneObject
 
-from compas_robots.model import Geometry
+from compas_robots.model import LinkGeometry
 from compas_robots.model.link import LinkItem
 
 
@@ -232,7 +232,7 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
             link = self.model.root
 
         for item in itertools.chain(link.visual, link.collision):
-            meshes = Geometry._get_item_meshes(item)
+            meshes = LinkGeometry._get_item_meshes(item)
 
             if meshes:
                 is_visual = hasattr(item, "get_color")
@@ -301,7 +301,7 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
         if attached_meshes:
             items += list(self.attached_items.get(link.name, {}).values())
         for item in items:
-            new_meshes = Geometry._get_item_meshes(item)
+            new_meshes = LinkGeometry._get_item_meshes(item)
             for mesh in new_meshes:
                 mesh.transform(item.current_transformation)
             meshes += new_meshes

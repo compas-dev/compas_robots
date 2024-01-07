@@ -2,9 +2,8 @@ from __future__ import absolute_import
 
 from .geometry import BoxProxy
 from .geometry import CapsuleProxy
-
 from .geometry import CylinderProxy
-from .geometry import Geometry
+from .geometry import LinkGeometry
 from .geometry import Material
 from .geometry import MeshDescriptor
 from .geometry import SphereProxy
@@ -26,27 +25,27 @@ from .link import Mass
 from .link import Visual
 
 __all__ = [
-    "Geometry",
-    "MeshDescriptor",
-    "Texture",
-    "Material",
-    "Joint",
-    "ParentLink",
-    "ChildLink",
-    "Calibration",
-    "Dynamics",
-    "Limit",
-    "Axis",
-    "Mimic",
-    "SafetyController",
-    "Link",
-    "Inertial",
-    "Visual",
-    "Collision",
-    "Mass",
-    "Inertia",
-    "CylinderProxy",
     "BoxProxy",
-    "SphereProxy",
     "CapsuleProxy",
+    "CylinderProxy",
+    "LinkGeometry",
+    "Material",
+    "MeshDescriptor",
+    "SphereProxy",
+    "Texture",
+    "Axis",
+    "Calibration",
+    "ChildLink",
+    "Dynamics",
+    "Joint",
+    "Limit",
+    "Mimic",
+    "ParentLink",
+    "SafetyController",
+    "Collision",
+    "Inertia",
+    "Inertial",
+    "Link",
+    "Mass",
+    "Visual",
 ]

@@ -295,7 +295,7 @@ class Material(Data):
         return None
 
 
-class Geometry(Data):
+class LinkGeometry(Data):
     """Geometrical description of the shape of a link.
 
     Parameters
@@ -324,12 +324,12 @@ class Geometry(Data):
     Examples
     --------
     >>> box = compas.geometry.Box(1)
-    >>> geo = Geometry(box=box)
+    >>> geo = LinkGeometry(box=box)
 
     """
 
     def __init__(self, box=None, cylinder=None, sphere=None, capsule=None, mesh=None, **kwargs):
-        super(Geometry, self).__init__()
+        super(LinkGeometry, self).__init__()
         self.shape = box or cylinder or sphere or capsule or mesh
         self.attr = kwargs
 
