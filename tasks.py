@@ -17,7 +17,6 @@ ns = Collection(
     docs.linkcheck,
     tests.test,
     tests.testdocs,
-    build.build_ghuser_components,
     build.prepare_changelog,
     build.clean,
     build.release,
@@ -25,9 +24,5 @@ ns = Collection(
 ns.configure(
     {
         "base_folder": os.path.dirname(__file__),
-        "ghuser": {
-            "source_dir": "src/compas_robots/ghpython/components",
-            "target_dir": "src/compas_robots/ghpython/components/ghuser",
-        },
     }
 )

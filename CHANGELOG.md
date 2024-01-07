@@ -9,7 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Update all artists to the new `SceneObject` system.
+* Added `precision` parameter to `load_geometry` method instead of relying exclusively on the global precision setting.
+* Use `compas.tolerance` to format `Configuration` values.
+
 ### Changed
+
+* Changed minimum requirements to `COMPAS 2.x`.
+* Moved `RobotModel`, `ToolModel` and `Configuration` to the top-level package of this library.
+* Moved `URDF` parsing from core into this library.
+* Changed urdf parsing to use `compas.colors.Color` instead of a robot-specific color class.
+* Changed `ToolModel.link_name` to `ToolModel.connected_to`.
+* Fixed data serialization for `RobotModel` and `ToolModel`.
+* Update all data serialization to `COMPAS 2.0` convention.
+* Renamed `Geometry` in robot model to `LinkGeometry`.
 
 ### Removed
 
+* Removed deprecated aliases `Origin`, `Cylinder`, `Box`, `Sphere`, `Capsule`.
+* Removed deprecated method `load_mesh` of resource loaders.
+* Removed deprecated support for `values` and `types` keys in `Configuration` serialization.

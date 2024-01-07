@@ -16,27 +16,35 @@ from __future__ import print_function
 
 import os
 
-
 __author__ = ["Gonzalo Casas"]
-__copyright__ = "compas-dev"
+__copyright__ = "COMPAS Association"
 __license__ = "MIT License"
 __email__ = "casas@arch.ethz.ch"
 __version__ = "0.1.0"
 
 
+from .configuration import Configuration
+from .model.robot import RobotModel
+from .model.tool import ToolModel
+
 HERE = os.path.dirname(__file__)
-
-HOME = os.path.abspath(os.path.join(HERE, "../../"))
-DATA = os.path.abspath(os.path.join(HOME, "data"))
-DOCS = os.path.abspath(os.path.join(HOME, "docs"))
-TEMP = os.path.abspath(os.path.join(HOME, "temp"))
+DATA = os.path.abspath(os.path.join(HERE, "data"))
 
 
-__all__ = ["HOME", "DATA", "DOCS", "TEMP"]
+def _find_resource(filename):
+    filename = filename.strip("/")
+    return os.path.abspath(os.path.join(DATA, filename))
 
+
+def get(filename):
+    return _find_resource(filename)
+
+
+__all__ = ["Configuration", "RobotModel", "ToolModel", "get"]
 
 __all_plugins__ = [
-    "compas_robots.blender.artists",
-    "compas_robots.ghpython.artists",
-    "compas_robots.rhino.artists",
+    "compas_robots.blender.scene",
+    "compas_robots.ghpython.scene",
+    "compas_robots.rhino.scene",
+    "compas_robots.rhino.install",
 ]
