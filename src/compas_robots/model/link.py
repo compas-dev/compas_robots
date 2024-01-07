@@ -46,10 +46,6 @@ class Mass(Data):
     def data(self):
         return {"value": self.value}
 
-    @classmethod
-    def from_data(cls, data):
-        return cls(data["value"])
-
 
 class Inertia(Data):
     """Rotational inertia matrix (3x3) represented in the inertia frame.

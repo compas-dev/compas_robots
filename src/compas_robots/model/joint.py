@@ -93,10 +93,6 @@ class Calibration(Data):
             "reference_position": self.reference_position,
         }
 
-    @classmethod
-    def from_data(cls, data):
-        return cls(data["rising"], data["falling"], data["reference_position"])
-
 
 class Dynamics(Data):
     """Physical properties of the joint used for simulation of dynamics."""
@@ -219,10 +215,6 @@ class Mimic(Data):
             "offset": self.offset,
         }
 
-    @classmethod
-    def from_data(cls, data):
-        return cls(data["joint"], data["multiplier"], data["offset"])
-
     def calculate_position(self, mimicked_joint_position):
         return self.multiplier * mimicked_joint_position + self.offset
 
@@ -255,10 +247,6 @@ class SafetyController(Data):
             "soft_lower_limit": self.soft_lower_limit,
             "soft_upper_limit": self.soft_upper_limit,
         }
-
-    @classmethod
-    def from_data(cls, data):
-        return cls(data["k_velocity"], data["k_position"], data["soft_lower_limit"], data["soft_upper_limit"])
 
 
 class Axis(Data):
