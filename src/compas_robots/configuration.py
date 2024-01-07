@@ -229,12 +229,12 @@ class Configuration(Data):
 
     def __str__(self):
         """Return a human-readable string representation of the instance."""
-        values_string = ", ".join([TOL.format_number(v) for v in self.joint_values])
+        values_string = ", ".join((TOL.format_number(v) for v in self.joint_values))
 
         if len(self.joint_names):
-            return "Configuration({}, {}, {})".format(values_string, tuple(self.joint_types), tuple(self.joint_names))
+            return "Configuration(({}), {}, {})".format(values_string, tuple(self.joint_types), tuple(self.joint_names))
         else:
-            return "Configuration({}, {})".format(values_string, tuple(self.joint_types))
+            return "Configuration(({}), {})".format(values_string, tuple(self.joint_types))
 
     def __repr__(self):
         """Printable representation of :class:`Configuration`."""
