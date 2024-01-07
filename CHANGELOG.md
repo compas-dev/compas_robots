@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Update all artists to the new `SceneObject` system.
 * Added `precision` parameter to `load_geometry` method instead of relying exclusively on the global precision setting.
+* Use `compas.tolerance` to format `Configuration` values.
 
 ### Changed
 

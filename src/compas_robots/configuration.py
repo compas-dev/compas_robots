@@ -6,6 +6,7 @@ from copy import deepcopy
 from math import pi
 
 from compas.data import Data
+from compas.tolerance import TOL
 
 # These joint types known to configuration are a match
 # to the ones defined in `Joint` class, but we redefine here
@@ -162,7 +163,6 @@ class Configuration(Data):
                 )
             )
 
-        self._precision = "3f"
         self._joint_values = joint_values
         self._joint_types = joint_types
         self._joint_names = joint_names
@@ -229,11 +229,12 @@ class Configuration(Data):
 
     def __str__(self):
         """Return a human-readable string representation of the instance."""
-        v_str = ("(" + ", ".join(["%." + self._precision] * len(self.joint_values)) + ")") % tuple(self.joint_values)
+        values_string = ", ".join([TOL.format_number(v) for v in self.joint_values])
+
         if len(self.joint_names):
-            return "Configuration({}, {}, {})".format(v_str, tuple(self.joint_types), tuple(self.joint_names))
+            return "Configuration({}, {}, {})".format(values_string, tuple(self.joint_types), tuple(self.joint_names))
         else:
-            return "Configuration({}, {})".format(v_str, tuple(self.joint_types))
+            return "Configuration({}, {})".format(values_string, tuple(self.joint_types))
 
     def __repr__(self):
         """Printable representation of :class:`Configuration`."""
