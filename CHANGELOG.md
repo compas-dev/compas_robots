@@ -27,3 +27,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Removed deprecated aliases `Origin`, `Cylinder`, `Box`, `Sphere`, `Capsule`.
 * Removed deprecated method `load_mesh` of resource loaders.
+* Removed deprecated support for `values` and `types` keys in `Configuration` serialization.

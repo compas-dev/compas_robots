@@ -358,8 +358,8 @@ class Configuration(Data):
     @classmethod
     def from_data(cls, data):
         return cls(
-            data.get("joint_values") or data.get("values") or [],
-            data.get("joint_types") or data.get("types") or [],
+            data.get("joint_values") or [],
+            data.get("joint_types") or [],
             data.get("joint_names") or [],
         )
 
