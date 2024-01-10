@@ -355,14 +355,6 @@ class Configuration(Data):
             "joint_names": self.joint_names,
         }
 
-    @classmethod
-    def from_data(cls, data):
-        return cls(
-            data.get("joint_values") or [],
-            data.get("joint_types") or [],
-            data.get("joint_names") or [],
-        )
-
     @property
     def prismatic_values(self):
         """list of float : Prismatic joint values in meters.
