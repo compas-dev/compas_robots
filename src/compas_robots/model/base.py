@@ -15,13 +15,13 @@ def _parse_floats(values):
 
 def _generic_from_data_or_data(data):
     try:
-        data = URDFGenericElement.from_data(data)
+        data = URDFGenericElement.__from_data__(data)
     finally:
         return data
 
 
 def _attr_to_data(attr):
-    return {k: v.data if hasattr(v, "data") else v for k, v in attr.items()}
+    return {k: v.__data__ if hasattr(v, "__data__") else v for k, v in attr.items()}
 
 
 def _attr_from_data(data):

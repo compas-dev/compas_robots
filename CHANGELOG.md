@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed data serialization for `RobotModel` and `ToolModel`.
 * Update all data serialization to `COMPAS 2.0` convention.
 * Renamed `Geometry` in robot model to `LinkGeometry`.
+* Fixed `data` serialization API to comply with `COMPAS 2.0` private data API.
 
 ### Removed
 

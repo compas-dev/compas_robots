@@ -5,7 +5,6 @@ from __future__ import print_function
 import inspect
 import sys
 
-import compas
 from compas.data import Data
 from compas.files.xml import XML
 from compas.files.xml import XMLElement
@@ -368,31 +367,28 @@ class URDFGenericElement(Data):
         return el
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "attr": self.attr,
-            "elements": [d.data for d in self.elements],
+            "elements": [d.__data__ for d in self.elements],
             "text": self.text,
         }
 
     @classmethod
-    def from_data(cls, data):
+    def __from_data__(cls, data):
         generic = cls()
         generic.attr = data["attr"]
-        generic.elements = [cls.from_data(d) for d in data["elements"]]
+        generic.elements = [cls.__from_data__(d) for d in data["elements"]]
         generic.text = data["text"]
         return generic
 
-    def to_data(self):
-        return self.data
+    # @classmethod
+    # def from_json(cls, filepath):
+    #     data = compas.json_load(filepath)
+    #     return cls.__from_data__(data)
 
-    @classmethod
-    def from_json(cls, filepath):
-        data = compas.json_load(filepath)
-        return cls.from_data(data)
-
-    def to_json(self, filepath):
-        compas.json_dump(self.data, filepath)
+    # def to_json(self, filepath):
+    #     compas.json_dump(self.__data__, filepath)
 
 
 class URDFElement(XMLElement):
