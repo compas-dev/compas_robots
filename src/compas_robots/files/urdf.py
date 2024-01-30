@@ -5,7 +5,6 @@ from __future__ import print_function
 import inspect
 import sys
 
-import compas
 from compas.data import Data
 from compas.files.xml import XML
 from compas.files.xml import XMLElement
