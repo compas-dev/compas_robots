@@ -6,6 +6,7 @@ import pytest
 from compas.colors import Color
 from compas.geometry import Box
 from compas.geometry import Cylinder
+from compas.geometry import Frame
 from compas.geometry import Sphere
 
 from compas_robots import RobotModel
@@ -84,6 +85,17 @@ def test_programmatic_robot_model():
     robot.remove_link("link2")
     robot.remove_joint("joint2")
     assert ["link0", "joint1", "link1"] == list(robot.iter_chain())
+
+
+def test_programmatic_robot_model_with_geometry():
+    robot = RobotModel("robot")
+    geo0 = Box(1, 1, 1, Frame.worldXY())
+    link0 = robot.add_link("link0", visual_meshes=[geo0])
+    geo1 = Cylinder(1, 1, Frame.worldXY())
+    link1 = robot.add_link("link1", visual_meshes=[geo1])
+    robot.add_joint("joint1", Joint.CONTINUOUS, link0, link1)
+    urdf = URDF.from_robot(robot)
+    robot_reincarnated = RobotModel.from_urdf_string(urdf.to_string())
 
 
 def test_remove_joint(urdf_file):
