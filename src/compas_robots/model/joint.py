@@ -510,9 +510,9 @@ class Joint(Data):
             calibration=Calibration.__from_data__(data["calibration"]) if data["calibration"] else None,
             dynamics=Dynamics.__from_data__(data["dynamics"]) if data["dynamics"] else None,
             limit=Limit.__from_data__(data["limit"]) if data["limit"] else None,
-            safety_controller=SafetyController.__from_data__(data["safety_controller"])
-            if data["safety_controller"]
-            else None,
+            safety_controller=(
+                SafetyController.__from_data__(data["safety_controller"]) if data["safety_controller"] else None
+            ),
             mimic=Mimic.__from_data__(data["mimic"]) if data["mimic"] else None,
             **_attr_from_data(data["attr"])
         )
