@@ -48,8 +48,8 @@ class ToolModel(RobotModel):
             collision = collision or visual
             self.add_link("attached_tool_link", visual_mesh=visual, collision_mesh=collision)
 
-            self._rebuild_tree()
-            self._create(self.root, Transformation())
+        self._rebuild_tree()
+        self._create(self.root, Transformation())
 
     @classmethod
     def from_robot_model(cls, robot, frame_in_tool0_frame, connected_to=None):
