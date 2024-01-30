@@ -334,6 +334,9 @@ class RobotModel(Data):
         ['world', 'base_link', 'shoulder_link', 'upper_arm_link', 'forearm_link', 'wrist_1_link', 'wrist_2_link', 'wrist_3_link', 'ee_link', 'tool0', 'base']
 
         """
+        # Return empty iterator if no root is found
+        if not self.root:
+            return iter([])
 
         def func(cjoints, links):
             for j in cjoints:
