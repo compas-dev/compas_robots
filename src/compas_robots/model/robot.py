@@ -80,11 +80,11 @@ class RobotModel(Data):
         return URDFElement("robot", attributes, elements)
 
     @property
-    def dtype(self):
+    def __dtype__(self):
         return "compas_robots/RobotModel"
 
     @property
-    def data(self):
+    def __data__(self):
         """Returns the data dictionary that represents the :class:`RobotModel`.
 
         Returns
@@ -95,20 +95,20 @@ class RobotModel(Data):
         """
         return {
             "name": self.name,
-            "joints": [joint.data for joint in self.joints],
-            "links": [link.data for link in self.links],
-            "materials": [material.data for material in self.materials],
+            "joints": [joint.__data__ for joint in self.joints],
+            "links": [link.__data__ for link in self.links],
+            "materials": [material.__data__ for material in self.materials],
             "attr": _attr_to_data(self.attr),
             "_scale_factor": self._scale_factor,
         }
 
     @classmethod
-    def from_data(cls, data):
+    def __from_data__(cls, data):
         model = cls(
             name=data.get("name", ""),
-            joints=[Joint.from_data(d) for d in data.get("joints", [])],
-            links=[Link.from_data(d) for d in data.get("links", [])],
-            materials=[Material.from_data(d) for d in data.get("materials", [])],
+            joints=[Joint.__from_data__(d) for d in data.get("joints", [])],
+            links=[Link.__from_data__(d) for d in data.get("links", [])],
+            materials=[Material.__from_data__(d) for d in data.get("materials", [])],
             **_attr_from_data(data.get("attr", {})),
         )
         model._scale_factor = data.get("_scale_factor", 1.0)

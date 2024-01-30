@@ -303,7 +303,7 @@ class Configuration(Data):
         """
         values = list(values)
         joint_names = list(joint_names or [])
-        return cls.from_data(
+        return cls.__from_data__(
             {
                 "joint_values": values,
                 "joint_types": [_JOINT_REVOLUTE] * len(values),
@@ -335,7 +335,7 @@ class Configuration(Data):
         joint_names = list(joint_names or [])
         values = prismatic_values + revolute_values
         joint_types = [_JOINT_PRISMATIC] * len(prismatic_values) + [_JOINT_REVOLUTE] * len(revolute_values)
-        return cls.from_data(
+        return cls.__from_data__(
             {
                 "joint_values": values,
                 "joint_types": joint_types,
@@ -344,11 +344,11 @@ class Configuration(Data):
         )
 
     @property
-    def dtype(self):
+    def __dtype__(self):
         return "compas_robots/Configuration"
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "joint_values": self.joint_values,
             "joint_types": self.joint_types,
