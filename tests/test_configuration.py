@@ -73,13 +73,13 @@ def test_cast_to_str():
 
 
 def test_from_data():
-    config = Configuration.from_data(dict(joint_values=[8.312, 1.5], joint_types=[Joint.PRISMATIC, Joint.REVOLUTE]))
+    config = Configuration.__from_data__(dict(joint_values=[8.312, 1.5], joint_types=[Joint.PRISMATIC, Joint.REVOLUTE]))
     assert str(config) == "Configuration((8.312, 1.500), (2, 0))"
 
 
 def test_to_data():
     config = Configuration.from_prismatic_and_revolute_values([8.312], [1.5, 0.0, 0.0, 0.0, 1.0, 0.8])
-    data = config.to_data()
+    data = config.__data__
 
     assert data["joint_values"] == [8.312, 1.5, 0.0, 0.0, 0.0, 1.0, 0.8]
     assert data["joint_types"] == [Joint.PRISMATIC] + [Joint.REVOLUTE] * 6

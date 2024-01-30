@@ -65,17 +65,17 @@ class ToolModel(RobotModel):
             Defaults to ``None``.
 
         """
-        data = robot.data
-        data["frame"] = frame_in_tool0_frame.data
+        data = robot.__data__
+        data["frame"] = frame_in_tool0_frame.__data__
         data["connected_to"] = connected_to
-        return cls.from_data(data)
+        return cls.__from_data__(data)
 
     @property
-    def dtype(self):
+    def __dtype__(self):
         return "compas_robots/ToolModel"
 
     @property
-    def data(self):
+    def __data__(self):
         """Returns the data dictionary that represents the tool.
 
         Returns
@@ -84,13 +84,13 @@ class ToolModel(RobotModel):
             The tool data.
 
         """
-        data = RobotModel.data.fget(self)
-        data["frame"] = self.frame.data
+        data = RobotModel.__data__.fget(self)
+        data["frame"] = self.frame.__data__
         data["connected_to"] = self.connected_to
         return data
 
     @classmethod
-    def from_data(cls, data):
+    def __from_data__(cls, data):
         """Construct a `ToolModel` from its data representation.
 
         To be used in conjunction with the :meth:`to_data` method.
@@ -108,13 +108,13 @@ class ToolModel(RobotModel):
         """
         tool = cls(
             None,
-            frame_in_tool0_frame=Frame.from_data(data["frame"]),
+            frame_in_tool0_frame=Frame.__from_data__(data["frame"]),
             name=data["name"],
             connected_to=data.get("connected_to"),
         )
-        tool.joints = [Joint.from_data(d) for d in data.get("joints", [])]
-        tool.links = [Link.from_data(d) for d in data.get("links", [])]
-        tool.materials = [Material.from_data(d) for d in data.get("materials", [])]
+        tool.joints = [Joint.__from_data__(d) for d in data.get("joints", [])]
+        tool.links = [Link.__from_data__(d) for d in data.get("links", [])]
+        tool.materials = [Material.__from_data__(d) for d in data.get("materials", [])]
         tool._rebuild_tree()
         tool._create(tool.root, Transformation())
 

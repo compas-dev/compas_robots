@@ -156,7 +156,7 @@ class MeshDescriptor(Data):
         return URDFElement("mesh", attributes)
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "filename": self.filename,
             "scale": self.scale,
@@ -165,7 +165,7 @@ class MeshDescriptor(Data):
         }
 
     @classmethod
-    def from_data(cls, data):
+    def __from_data__(cls, data):
         attr = _attr_from_data(data.get("attr", {}))
         md = cls(
             data["filename"],
@@ -208,14 +208,10 @@ class Texture(Data):
         return URDFElement("texture", attributes)
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "filename": self.filename,
         }
-
-    @classmethod
-    def from_data(cls, data):
-        return cls(data["filename"])
 
 
 class Material(Data):
@@ -253,19 +249,19 @@ class Material(Data):
         return URDFElement("material", attributes, elements)
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "name": self.name,
-            "color": self.color.data if self.color else None,
-            "texture": self.texture.data if self.texture else None,
+            "color": self.color.__data__ if self.color else None,
+            "texture": self.texture.__data__ if self.texture else None,
         }
 
     @classmethod
-    def from_data(cls, data):
+    def __from_data__(cls, data):
         return cls(
             name=data["name"],
-            color=Color.from_data(data["color"]) if data["color"] else None,
-            texture=Texture.from_data(data["texture"]) if data["texture"] else None,
+            color=Color.__from_data__(data["color"]) if data["color"] else None,
+            texture=Texture.__from_data__(data["texture"]) if data["texture"] else None,
         )
 
     def get_color(self):
@@ -363,14 +359,14 @@ class LinkGeometry(Data):
         return URDFElement("geometry", attributes, elements)
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "shape": self.shape,  # type: ignore
             "attr": _attr_to_data(self.attr),
         }
 
     @classmethod
-    def from_data(cls, data):
+    def __from_data__(cls, data):
         geo = cls(box=compas.geometry.Box(1))
         geo.shape = data["shape"]
         geo.attr = _attr_from_data(data["attr"])

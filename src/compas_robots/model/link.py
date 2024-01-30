@@ -43,7 +43,7 @@ class Mass(Data):
         return URDFElement("mass", attributes)
 
     @property
-    def data(self):
+    def __data__(self):
         return {"value": self.value}
 
 
@@ -77,7 +77,7 @@ class Inertia(Data):
         return URDFElement("inertia", attributes)
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "ixx": self.ixx,
             "ixy": self.ixy,
@@ -88,7 +88,7 @@ class Inertia(Data):
         }
 
     @classmethod
-    def from_data(cls, data):
+    def __from_data__(cls, data):
         return cls(
             ixx=data.get("ixx", 0.0),
             ixy=data.get("ixy", 0.0),
@@ -133,18 +133,18 @@ class Inertial(Data):
         return URDFElement("inertial", elements=elements)
 
     @property
-    def data(self):
+    def __data__(self):
         return {
-            "origin": self.origin.data if self.origin else None,
-            "mass": self.mass.data if self.mass else None,
-            "inertia": self.inertia.data if self.inertia else None,
+            "origin": self.origin.__data__ if self.origin else None,
+            "mass": self.mass.__data__ if self.mass else None,
+            "inertia": self.inertia.__data__ if self.inertia else None,
         }
 
     @classmethod
-    def from_data(cls, data):
-        origin = Frame.from_data(data["origin"]) if data["origin"] else None
-        mass = Mass.from_data(data["mass"]) if data["mass"] else None
-        inertia = Inertia.from_data(data["inertia"]) if data["inertia"] else None
+    def __from_data__(cls, data):
+        origin = Frame.__from_data__(data["origin"]) if data["origin"] else None
+        mass = Mass.__from_data__(data["mass"]) if data["mass"] else None
+        inertia = Inertia.__from_data__(data["inertia"]) if data["inertia"] else None
         return cls(origin, mass, inertia)
 
 
@@ -208,30 +208,30 @@ class Visual(LinkItem, Data):
         self._name = name
 
     @property
-    def data(self):
+    def __data__(self):
         return {
-            "geometry": self.geometry.data,
-            "origin": self.origin.data if self.origin else None,
+            "geometry": self.geometry.__data__,
+            "origin": self.origin.__data__ if self.origin else None,
             "name": self.name,
-            "material": self.material.data if self.material else None,
+            "material": self.material.__data__ if self.material else None,
             "attr": _attr_to_data(self.attr),
-            "init_transformation": self.init_transformation.data if self.init_transformation else None,
-            "current_transformation": self.current_transformation.data if self.current_transformation else None,
+            "init_transformation": self.init_transformation.__data__ if self.init_transformation else None,
+            "current_transformation": self.current_transformation.__data__ if self.current_transformation else None,
         }
 
     @classmethod
-    def from_data(cls, data):
+    def __from_data__(cls, data):
         visual = cls(
-            geometry=LinkGeometry.from_data(data["geometry"]),
-            origin=Frame.from_data(data["origin"]) if data["origin"] else None,
+            geometry=LinkGeometry.__from_data__(data["geometry"]),
+            origin=Frame.__from_data__(data["origin"]) if data["origin"] else None,
             name=data["name"],
-            material=Material.from_data(data["material"]) if data["material"] else None,
+            material=Material.__from_data__(data["material"]) if data["material"] else None,
             **_attr_from_data(data["attr"]),
         )
         if data["init_transformation"]:
-            visual.init_transformation = Transformation.from_data(data["init_transformation"])
+            visual.init_transformation = Transformation.__from_data__(data["init_transformation"])
         if data["current_transformation"]:
-            visual.current_transformation = Transformation.from_data(data["current_transformation"])
+            visual.current_transformation = Transformation.__from_data__(data["current_transformation"])
         return visual
 
     def get_color(self):
@@ -322,30 +322,30 @@ class Collision(LinkItem, Data):
         self._name = name
 
     @property
-    def data(self):
+    def __data__(self):
         return {
-            "geometry": self.geometry.data,
-            "origin": self.origin.data if self.origin else None,
+            "geometry": self.geometry.__data__,
+            "origin": self.origin.__data__ if self.origin else None,
             "name": self.name,
             "attr": _attr_to_data(self.attr),
-            "init_transformation": self.init_transformation.data if self.init_transformation else None,
-            "current_transformation": self.current_transformation.data if self.current_transformation else None,
+            "init_transformation": self.init_transformation.__data__ if self.init_transformation else None,
+            "current_transformation": self.current_transformation.__data__ if self.current_transformation else None,
         }
 
     @classmethod
-    def from_data(cls, data):
+    def __from_data__(cls, data):
         collision = cls(
-            geometry=LinkGeometry.from_data(data["geometry"]),
-            origin=Frame.from_data(data["origin"]) if data["origin"] else None,
+            geometry=LinkGeometry.__from_data__(data["geometry"]),
+            origin=Frame.__from_data__(data["origin"]) if data["origin"] else None,
             name=data["name"],
             attr=_attr_from_data(data["attr"]),
         )
 
         if data["init_transformation"]:
-            collision.init_transformation = Transformation.from_data(data["init_transformation"])
+            collision.init_transformation = Transformation.__from_data__(data["init_transformation"])
 
         if data["current_transformation"]:
-            collision.current_transformation = Transformation.from_data(data["current_transformation"])
+            collision.current_transformation = Transformation.__from_data__(data["current_transformation"])
 
         return collision
 
@@ -416,30 +416,30 @@ class Link(Data):
         return URDFElement("link", attributes, elements)
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "name": self.name,
             "type": self.type,
-            "visual": [visual.data for visual in self.visual],
-            "collision": [collision.data for collision in self.collision],
-            "inertial": self.inertial.data if self.inertial else None,
+            "visual": [visual.__data__ for visual in self.visual],
+            "collision": [collision.__data__ for collision in self.collision],
+            "inertial": self.inertial.__data__ if self.inertial else None,
             "attr": _attr_to_data(self.attr),
-            "joints": [joint.data for joint in self.joints],
+            "joints": [joint.__data__ for joint in self.joints],
         }
 
     @classmethod
-    def from_data(cls, data):
+    def __from_data__(cls, data):
         from .joint import Joint
 
         link = cls(
             name=data["name"],
             type=data["type"],
-            visual=[Visual.from_data(d) for d in data["visual"]],
-            collision=[Collision.from_data(d) for d in data["collision"]],
-            inertial=Inertial.from_data(data["inertial"]) if data["inertial"] else None,
+            visual=[Visual.__from_data__(d) for d in data["visual"]],
+            collision=[Collision.__from_data__(d) for d in data["collision"]],
+            inertial=Inertial.__from_data__(data["inertial"]) if data["inertial"] else None,
             **_attr_from_data(data["attr"]),
         )
-        link.joints = [Joint.from_data(d) for d in data["joints"]]
+        link.joints = [Joint.__from_data__(d) for d in data["joints"]]
         return link
 
 

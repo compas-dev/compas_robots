@@ -33,14 +33,10 @@ class ParentLink(Data):
         return URDFElement("parent", {"link": self.link})
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "link": self.link,
         }
-
-    @classmethod
-    def from_data(cls, data):
-        return cls(data["link"])
 
 
 class ChildLink(Data):
@@ -57,14 +53,10 @@ class ChildLink(Data):
         return URDFElement("child", {"link": self.link})
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "link": self.link,
         }
-
-    @classmethod
-    def from_data(cls, data):
-        return cls(data["link"])
 
 
 class Calibration(Data):
@@ -86,7 +78,7 @@ class Calibration(Data):
         return URDFElement("calibration", attributes)
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "rising": self.rising,
             "falling": self.falling,
@@ -112,7 +104,7 @@ class Dynamics(Data):
         return URDFElement("dynamics", attributes)
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "damping": self.damping,
             "friction": self.friction,
@@ -120,7 +112,7 @@ class Dynamics(Data):
         }
 
     @classmethod
-    def from_data(cls, data):
+    def __from_data__(cls, data):
         return cls(data["damping"], data["friction"], **_attr_from_data(data["attr"]))
 
 
@@ -160,7 +152,7 @@ class Limit(Data):
         return URDFElement("limit", attributes)
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "effort": self.effort,
             "velocity": self.velocity,
@@ -170,7 +162,7 @@ class Limit(Data):
         }
 
     @classmethod
-    def from_data(cls, data):
+    def __from_data__(cls, data):
         return cls(data["effort"], data["velocity"], data["lower"], data["upper"], **_attr_from_data(data["attr"]))
 
     def scale(self, factor):
@@ -208,7 +200,7 @@ class Mimic(Data):
         return URDFElement("mimic", attributes)
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "joint": self.joint,
             "multiplier": self.multiplier,
@@ -240,7 +232,7 @@ class SafetyController(Data):
         return URDFElement("safety_controller", attributes)
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "k_velocity": self.k_velocity,
             "k_position": self.k_position,
@@ -284,7 +276,7 @@ class Axis(Data):
         return URDFElement("axis", attributes)
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "x": self.x,
             "y": self.y,
@@ -293,7 +285,7 @@ class Axis(Data):
         }
 
     @classmethod
-    def from_data(cls, data):
+    def __from_data__(cls, data):
         return cls(xyz="{} {} {}".format(data["x"], data["y"], data["z"]), **_attr_from_data(data["attr"]))
 
     def copy(self):
@@ -489,39 +481,39 @@ class Joint(Data):
         return URDFElement("joint", attributes, elements)
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "name": self.name,
             "type": self.SUPPORTED_TYPES[self.type],
-            "parent": self.parent.data,
-            "child": self.child.data,
-            "origin": self.origin.data if self.origin else None,
-            "axis": self.axis.data if self.axis else None,
-            "calibration": self.calibration.data if self.calibration else None,
-            "dynamics": self.dynamics.data if self.dynamics else None,
-            "limit": self.limit.data if self.limit else None,
-            "safety_controller": self.safety_controller.data if self.safety_controller else None,
-            "mimic": self.mimic.data if self.mimic else None,
+            "parent": self.parent.__data__,
+            "child": self.child.__data__,
+            "origin": self.origin.__data__ if self.origin else None,
+            "axis": self.axis.__data__ if self.axis else None,
+            "calibration": self.calibration.__data__ if self.calibration else None,
+            "dynamics": self.dynamics.__data__ if self.dynamics else None,
+            "limit": self.limit.__data__ if self.limit else None,
+            "safety_controller": self.safety_controller.__data__ if self.safety_controller else None,
+            "mimic": self.mimic.__data__ if self.mimic else None,
             "attr": _attr_to_data(self.attr),
             "position": self.position,
         }
 
     @classmethod
-    def from_data(cls, data):
+    def __from_data__(cls, data):
         joint = cls(
             name=data["name"],
             type=Joint.SUPPORTED_TYPES.index(data["type"]),
-            parent=ParentLink.from_data(data["parent"]),
-            child=ChildLink.from_data(data["child"]),
-            origin=Frame.from_data(data["origin"]) if data["origin"] else None,
-            axis=Axis.from_data(data["axis"]) if data["axis"] else None,
-            calibration=Calibration.from_data(data["calibration"]) if data["calibration"] else None,
-            dynamics=Dynamics.from_data(data["dynamics"]) if data["dynamics"] else None,
-            limit=Limit.from_data(data["limit"]) if data["limit"] else None,
-            safety_controller=SafetyController.from_data(data["safety_controller"])
+            parent=ParentLink.__from_data__(data["parent"]),
+            child=ChildLink.__from_data__(data["child"]),
+            origin=Frame.__from_data__(data["origin"]) if data["origin"] else None,
+            axis=Axis.__from_data__(data["axis"]) if data["axis"] else None,
+            calibration=Calibration.__from_data__(data["calibration"]) if data["calibration"] else None,
+            dynamics=Dynamics.__from_data__(data["dynamics"]) if data["dynamics"] else None,
+            limit=Limit.__from_data__(data["limit"]) if data["limit"] else None,
+            safety_controller=SafetyController.__from_data__(data["safety_controller"])
             if data["safety_controller"]
             else None,
-            mimic=Mimic.from_data(data["mimic"]) if data["mimic"] else None,
+            mimic=Mimic.__from_data__(data["mimic"]) if data["mimic"] else None,
             **_attr_from_data(data["attr"])
         )
         joint.position = data["position"]

@@ -149,7 +149,7 @@ def test_ur5_urdf_to_string(ur5_file):
 
 def test_ur5_urdf_data(ur5_file):
     r_original = RobotModel.from_urdf_file(ur5_file)
-    r = RobotModel.from_data(r_original.data)
+    r = RobotModel.__from_data__(r_original.__data__)
     assert r.name == "ur5"
     assert len(list(filter(lambda i: i.type == Joint.REVOLUTE, r.joints))) == 6
 
@@ -325,7 +325,7 @@ def test_unknown_urdf_attributes_data():
     r_original = RobotModel.from_urdf_string(
         """<?xml version="1.0" encoding="UTF-8"?><robot name="panda" some_random_attr="1337"></robot>"""
     )
-    r = RobotModel.from_data(r_original.data)
+    r = RobotModel.__from_data__(r_original.__data__)
     assert r.name == "panda"
     assert r.attr["some_random_attr"] == "1337"
 
@@ -338,7 +338,7 @@ def test_parse_from_file(urdf_file):
 
 def test_parse_from_file_data(urdf_file):
     r_original = RobotModel.from_urdf_file(urdf_file)
-    r = RobotModel.from_data(r_original.data)
+    r = RobotModel.__from_data__(r_original.__data__)
     assert r is not None
     assert r.name == "panda"
 
@@ -363,7 +363,7 @@ def test_inertial_parser_to_string(urdf_file):
 
 def test_inertial_parser_data(urdf_file):
     r_original = RobotModel.from_urdf_file(urdf_file)
-    r = RobotModel.from_data(r_original.data)
+    r = RobotModel.__from_data__(r_original.__data__)
     assert r.links[0].inertial.origin is not None
     assert r.links[0].inertial.origin.point == [0.0, 0.0, 0.5]
     assert r.links[0].inertial.mass.value == 1.0
@@ -398,7 +398,7 @@ def test_link_parser_to_string(urdf_file):
 
 def test_link_parser_data(urdf_file):
     r_original = RobotModel.from_urdf_file(urdf_file)
-    r = RobotModel.from_data(r_original.data)
+    r = RobotModel.__from_data__(r_original.__data__)
 
     assert r.links[0].name == "panda_link0"
     assert r.links[1].name == "panda_link1"
@@ -447,7 +447,7 @@ def test_geometry_parser_to_string(urdf_file_with_shapes):
 
 def test_geometry_parser_data(urdf_file_with_shapes):
     r_original = RobotModel.from_urdf_file(urdf_file_with_shapes)
-    r = RobotModel.from_data(r_original.data)
+    r = RobotModel.__from_data__(r_original.__data__)
 
     assert r.links[0].visual[0].geometry.shape.filename == "package://franka_description/meshes/visual/link0.dae"
     assert r.links[0].visual[0].geometry.shape.scale == [1.0, 1.0, 1.0]
@@ -470,7 +470,7 @@ def test_root(urdf_file):
 
 def test_root_data(urdf_file):
     r_original = RobotModel.from_urdf_file(urdf_file)
-    r = RobotModel.from_data(r_original.data)
+    r = RobotModel.__from_data__(r_original.__data__)
     assert "panda_link0" == r.root.name
 
 
@@ -618,17 +618,17 @@ def test_iter_link_chain_defaults(urdf_file):
 
 
 def test_unknown_joint_attribute(urdf_with_unknown_attr):
-    r = RobotModel.from_data(RobotModel.from_urdf_file(urdf_with_unknown_attr).to_data())
+    r = RobotModel.__from_data__(RobotModel.from_urdf_file(urdf_with_unknown_attr).__data__)
     assert r.joints[0].attr["unknown"] == "unknown_too"
 
 
 def test_unknown_dynamics_attribute(urdf_with_unknown_attr):
-    r = RobotModel.from_data(RobotModel.from_urdf_file(urdf_with_unknown_attr).to_data())
+    r = RobotModel.__from_data__(RobotModel.from_urdf_file(urdf_with_unknown_attr).__data__)
     assert r.joints[0].dynamics.attr["whatever"] == "random"
 
 
 def test_unknown_limit_attribute(urdf_with_unknown_attr):
-    r = RobotModel.from_data(RobotModel.from_urdf_file(urdf_with_unknown_attr).to_data())
+    r = RobotModel.__from_data__(RobotModel.from_urdf_file(urdf_with_unknown_attr).__data__)
     assert r.joints[0].limit.attr["xxxx"] == "123"
 
 
@@ -649,7 +649,7 @@ def test_unknown_axis_attribute_to_string(urdf_with_unknown_attr):
 
 def test_unknown_axis_attribute_data(urdf_with_unknown_attr):
     r_original = RobotModel.from_urdf_file(urdf_with_unknown_attr)
-    r = RobotModel.from_data(r_original.data)
+    r = RobotModel.__from_data__(r_original.__data__)
     assert r.joints[0].axis.attr["rpy"] == "0 0 0"
 
 
