@@ -59,7 +59,7 @@
         </script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="ToolModel.from_data" href="compas_robots.ToolModel.from_data.html" />
+    <link rel="next" title="ToolModel.from_robot_model" href="compas_robots.ToolModel.from_robot_model.html" />
     <link rel="prev" title="RobotModel.validate_data" href="compas_robots.RobotModel.validate_data.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -560,7 +560,7 @@ document.write(`
 <h1>ToolModel</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_robots.ToolModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_robots.</span></span><span class="sig-name descname"><span class="pre">ToolModel</span></span><a class="reference external" href="https://github.com/compas-dev/compas_robots/blob/68e642b/src/compas_robots/model/tool.py#L14"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_robots.</span></span><span class="sig-name descname"><span class="pre">ToolModel</span></span><a class="reference external" href="https://github.com/compas-dev/compas_robots/blob/1a80a3a/src/compas_robots/model/tool.py#L14"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="compas_robots.RobotModel.html#compas_robots.RobotModel" title="compas_robots.model.robot.RobotModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">RobotModel</span></code></a></p>
 <p>Represents a tool to be attached to the robot’s flange.</p>
 <p class="rubric">Examples</p>
@@ -585,16 +585,13 @@ document.write(`
 <p class="rubric">Methods</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.ToolModel.from_data.html#compas_robots.ToolModel.from_data" title="compas_robots.ToolModel.from_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_data</span></code></a></p></td>
-<td><p>Construct a <cite>ToolModel</cite> from its data representation.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.ToolModel.from_robot_model.html#compas_robots.ToolModel.from_robot_model" title="compas_robots.ToolModel.from_robot_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_robot_model</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.ToolModel.from_robot_model.html#compas_robots.ToolModel.from_robot_model" title="compas_robots.ToolModel.from_robot_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_robot_model</span></code></a></p></td>
 <td><p>Creates a <code class="docutils literal notranslate"><span class="pre">ToolModel</span></code> from a <a class="reference internal" href="compas_robots.RobotModel.html#compas_robots.RobotModel" title="compas_robots.RobotModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">RobotModel</span></code></a> instance.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.ToolModel.from_t0cf_to_tcf.html#compas_robots.ToolModel.from_t0cf_to_tcf" title="compas_robots.ToolModel.from_t0cf_to_tcf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_t0cf_to_tcf</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.ToolModel.from_t0cf_to_tcf.html#compas_robots.ToolModel.from_t0cf_to_tcf" title="compas_robots.ToolModel.from_t0cf_to_tcf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_t0cf_to_tcf</span></code></a></p></td>
 <td><p>Converts frames at the robot's flange (tool0 frame) to frames at the robot's tool tip (tcf frame).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.ToolModel.from_tcf_to_t0cf.html#compas_robots.ToolModel.from_tcf_to_t0cf" title="compas_robots.ToolModel.from_tcf_to_t0cf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_tcf_to_t0cf</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.ToolModel.from_tcf_to_t0cf.html#compas_robots.ToolModel.from_tcf_to_t0cf" title="compas_robots.ToolModel.from_tcf_to_t0cf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_tcf_to_t0cf</span></code></a></p></td>
 <td><p>Converts a list of frames at the robot's tool tip (tcf frame) to frames at the robot's flange (tool0 frame).</p></td>
 </tr>
 </tbody>
