@@ -50,4 +50,4 @@ model.add_joint("hat_joint", Joint.FIXED, head_link, hat_link, origin=hat_joint_
 
 scene = Scene()
 scene.add(model)
-scene.redraw()
+scene.draw()
