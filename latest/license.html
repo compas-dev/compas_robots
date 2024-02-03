@@ -147,7 +147,7 @@
     <div class="me-auto navbar-header-items__center">
       
         <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
+  <!-- <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
      aria-label="Site Navigation">
@@ -211,7 +211,7 @@
                 </div>
             </div>
             
-  </ul>
+  </ul> -->
 </nav></div>
       
     </div>
@@ -331,7 +331,7 @@ document.write(`
       <div class="sidebar-header-items__center">
         
           <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
+  <!-- <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
      aria-label="Site Navigation">
@@ -395,7 +395,7 @@ document.write(`
                 </div>
             </div>
             
-  </ul>
+  </ul> -->
 </nav></div>
         
       </div>
@@ -475,11 +475,27 @@ document.write(`
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <!-- <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p> -->
-  <div class="bd-toc-item navbar-nav"></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/index.html">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">License</a></li>
+</ul>
+
+    </div>
 </nav></div>
+        <div class="sidebar-primary-item"><div class="sidebar-primary-item">
+    <a href="https://compas.dev" target="_blank">
+        COMPAS.dev <i class="fa fa-external-link" aria-hidden="true"></i>
+    </a>
+</div></div>
     </div>
   
   
