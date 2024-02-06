@@ -204,7 +204,7 @@ class RobotModel(Data):
 
     @classmethod
     def ur5(cls, load_geometry=False):
-        """ "Construct a UR5 robot model.
+        """Construct a UR5 robot model.
 
         Parameters
         ----------

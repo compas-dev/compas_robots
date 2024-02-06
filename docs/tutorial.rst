@@ -167,7 +167,7 @@ The procedure is the same in any of the CAD software. Below you can find
 
             scene = Scene()
             scene.add(model)
-            scene.redraw()
+            scene.draw()
 
     .. tab-item:: Blender
 
@@ -183,7 +183,7 @@ The procedure is the same in any of the CAD software. Below you can find
             # Load the robot geometry into the blender scene
             scene = Scene()
             scene.add(model)
-            scene.redraw()
+            scene.draw()
 
 
 See below for a complete example of how to programmatically create a robot model.
@@ -256,7 +256,7 @@ and is useful, outside of a CAD environment.
 
     scene = Scene()
     scene.add(model)
-    scene.redraw()
+    scene.draw()
 
 
 .. figure:: files/boxy_1.png
@@ -287,7 +287,7 @@ of the box.  The box is also shifted slightly forward in the y-direction:
 
     scene = Scene()
     scene.add(model)
-    scene.redraw()
+    scene.draw()
 
 .. figure:: files/boxy_2.png
     :figclass: figure
@@ -309,7 +309,7 @@ there is a stack of two boxes:
 
     scene = Scene()
     scene.add(model)
-    scene.redraw()
+    scene.draw()
 
 .. figure:: files/boxy_3.png
     :figclass: figure
@@ -351,7 +351,7 @@ a cylindrical second link as well as a joint connecting the two.
 
     scene = Scene()
     scene.add(model)
-    scene.redraw()
+    scene.draw()
 
 
 .. figure:: files/jointy.png
