@@ -96,6 +96,7 @@ def test_programmatic_robot_model_with_geometry():
     robot.add_joint("joint1", Joint.CONTINUOUS, link0, link1)
     urdf = URDF.from_robot(robot)
     robot_reincarnated = RobotModel.from_urdf_string(urdf.to_string())
+    assert ["link0", "joint1", "link1"] == list(robot_reincarnated.iter_chain())
 
 
 def test_remove_joint(urdf_file):
