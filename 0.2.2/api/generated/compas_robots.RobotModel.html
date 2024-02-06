@@ -1,0 +1,809 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="../../_static/compas.ico" type="image/x-icon">
+    <title>RobotModel &#8212; COMPAS Robots</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/compas.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/tabs.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/compas_robots.RobotModel';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/compas-dev/compas_robots/gh-pages/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.2';
+        </script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="RobotModel.add_joint" href="compas_robots.RobotModel.add_joint.html" />
+    <link rel="prev" title="Configuration.validate_data" href="compas_robots.Configuration.validate_data.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/compas_icon_white.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/compas_icon_white.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+    <p class="title logo__title">COMPAS docs</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <!-- <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../index.html">
+                        Introduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../installation.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorial.html">
+                        Tutorial
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../examples.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../api.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../license.html">
+                        License
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://compas.dev">
+                    COMPAS Framework
+                  </a>
+                </li>
+                
+                </div>
+            </div>
+            
+  </ul> -->
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
+      0.2  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/compas-dev/compas_robots" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://forum.compas-framework.org/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/compas_robots/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python"></i></span>
+            <label class="sr-only">PyPI</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <!-- <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../index.html">
+                        Introduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../installation.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorial.html">
+                        Tutorial
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../examples.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../api.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../license.html">
+                        License
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://compas.dev">
+                    COMPAS Framework
+                  </a>
+                </li>
+                
+                </div>
+            </div>
+            
+  </ul> -->
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
+      0.2  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/compas-dev/compas_robots" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://forum.compas-framework.org/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/compas_robots/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python"></i></span>
+            <label class="sr-only">PyPI</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../api.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active"><a class="reference internal" href="../index.html">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="sidebar-primary-item"><div class="sidebar-primary-item">
+    <a href="https://compas.dev" target="_blank">
+        COMPAS.dev <i class="fa fa-external-link" aria-hidden="true"></i>
+    </a>
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../api.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><i class="fa-solid fa-ellipsis"></i></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../compas_robots.html" class="nav-link">compas_robots</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">RobotModel</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="robotmodel">
+<h1>RobotModel</h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="compas_robots.RobotModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_robots.</span></span><span class="sig-name descname"><span class="pre">RobotModel</span></span><a class="reference external" href="https://github.com/compas-dev/compas_robots/blob/b8fc5c6/src/compas_robots/model/robot.py#L38"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.data.Data.html" title="(in COMPAS vlatest)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
+<p>RobotModel is the root element of the model.</p>
+<p>Instances of this class represent an entire robot as defined in an URDF
+structure.</p>
+<p>In line with URDF limitations, only tree structures can be represented by
+this model, ruling out all parallel robots.</p>
+<dl class="field-list">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Unique name of the robot.</p>
+</dd>
+<dt><strong>joints</strong><span class="classifier">list[<a class="reference internal" href="compas_robots.model.Joint.html#compas_robots.model.Joint" title="compas_robots.model.Joint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Joint</span></code></a>]</span></dt><dd><p>List of joint elements.</p>
+</dd>
+<dt><strong>links</strong><span class="classifier">list[<a class="reference internal" href="compas_robots.model.Link.html#compas_robots.model.Link" title="compas_robots.model.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a>]</span></dt><dd><p>List of links of the robot.</p>
+</dd>
+<dt><strong>materials</strong><span class="classifier">list[<a class="reference internal" href="compas_robots.model.Material.html#compas_robots.model.Material" title="compas_robots.model.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>]</span></dt><dd><p>List of global materials.</p>
+</dd>
+<dt><strong>root</strong><span class="classifier"><a class="reference internal" href="compas_robots.model.Link.html#compas_robots.model.Link" title="compas_robots.model.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a></span></dt><dd><p>Root link of the model.</p>
+</dd>
+<dt><strong>attr</strong><span class="classifier">dict</span></dt><dd><p>Non-standard attributes.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.add_joint.html#compas_robots.RobotModel.add_joint" title="compas_robots.RobotModel.add_joint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_joint</span></code></a></p></td>
+<td><p>Adds a joint to the robot model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.add_link.html#compas_robots.RobotModel.add_link" title="compas_robots.RobotModel.add_link"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_link</span></code></a></p></td>
+<td><p>Adds a link to the robot model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.compute_transformations.html#compas_robots.RobotModel.compute_transformations" title="compas_robots.RobotModel.compute_transformations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_transformations</span></code></a></p></td>
+<td><p>Recursive function to calculate the transformations of each joint.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.ensure_geometry.html#compas_robots.RobotModel.ensure_geometry" title="compas_robots.RobotModel.ensure_geometry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_geometry</span></code></a></p></td>
+<td><p>Check if geometry has been loaded.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.find_children_joints.html#compas_robots.RobotModel.find_children_joints" title="compas_robots.RobotModel.find_children_joints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_children_joints</span></code></a></p></td>
+<td><p>Returns a list of all children joints of the link.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.find_parent_joint.html#compas_robots.RobotModel.find_parent_joint" title="compas_robots.RobotModel.find_parent_joint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_parent_joint</span></code></a></p></td>
+<td><p>Returns the parent joint of the link or None if not found.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.forward_kinematics.html#compas_robots.RobotModel.forward_kinematics" title="compas_robots.RobotModel.forward_kinematics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward_kinematics</span></code></a></p></td>
+<td><p>Calculate the robot's forward kinematic.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.from_urdf_file.html#compas_robots.RobotModel.from_urdf_file" title="compas_robots.RobotModel.from_urdf_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_urdf_file</span></code></a></p></td>
+<td><p>Construct a robot model from a URDF file model description.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.from_urdf_string.html#compas_robots.RobotModel.from_urdf_string" title="compas_robots.RobotModel.from_urdf_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_urdf_string</span></code></a></p></td>
+<td><p>Construct a robot model from a URDF description as string.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.get_base_link_name.html#compas_robots.RobotModel.get_base_link_name" title="compas_robots.RobotModel.get_base_link_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_base_link_name</span></code></a></p></td>
+<td><p>Returns the name of the base link.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.get_configurable_joint_names.html#compas_robots.RobotModel.get_configurable_joint_names" title="compas_robots.RobotModel.get_configurable_joint_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_configurable_joint_names</span></code></a></p></td>
+<td><p>Returns the configurable joint names.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.get_configurable_joints.html#compas_robots.RobotModel.get_configurable_joints" title="compas_robots.RobotModel.get_configurable_joints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_configurable_joints</span></code></a></p></td>
+<td><p>Returns the configurable joints.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.get_end_effector_link.html#compas_robots.RobotModel.get_end_effector_link" title="compas_robots.RobotModel.get_end_effector_link"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_end_effector_link</span></code></a></p></td>
+<td><p>Returns the end effector link.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.get_end_effector_link_name.html#compas_robots.RobotModel.get_end_effector_link_name" title="compas_robots.RobotModel.get_end_effector_link_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_end_effector_link_name</span></code></a></p></td>
+<td><p>Returns the name of the end effector link.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.get_joint_by_name.html#compas_robots.RobotModel.get_joint_by_name" title="compas_robots.RobotModel.get_joint_by_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_joint_by_name</span></code></a></p></td>
+<td><p>Get a joint in a robot model matching by its name.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.get_joint_types.html#compas_robots.RobotModel.get_joint_types" title="compas_robots.RobotModel.get_joint_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_joint_types</span></code></a></p></td>
+<td><p>Returns the joint types of the configurable joints.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.get_joint_types_by_names.html#compas_robots.RobotModel.get_joint_types_by_names" title="compas_robots.RobotModel.get_joint_types_by_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_joint_types_by_names</span></code></a></p></td>
+<td><p>Get a list of joint types given a list of joint names.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.get_link_by_name.html#compas_robots.RobotModel.get_link_by_name" title="compas_robots.RobotModel.get_link_by_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_link_by_name</span></code></a></p></td>
+<td><p>Get a link in a robot model matching by its name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.get_urdf_element.html#compas_robots.RobotModel.get_urdf_element" title="compas_robots.RobotModel.get_urdf_element"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_urdf_element</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.iter_chain.html#compas_robots.RobotModel.iter_chain" title="compas_robots.RobotModel.iter_chain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_chain</span></code></a></p></td>
+<td><p>Iterator over the chain of all elements between a pair of start and end elements.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.iter_joint_chain.html#compas_robots.RobotModel.iter_joint_chain" title="compas_robots.RobotModel.iter_joint_chain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_joint_chain</span></code></a></p></td>
+<td><p>Iterator over the chain of joints between a pair of start and end links.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.iter_joints.html#compas_robots.RobotModel.iter_joints" title="compas_robots.RobotModel.iter_joints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_joints</span></code></a></p></td>
+<td><p>Iterator over the joints that starts with the root link's children joints.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.iter_link_chain.html#compas_robots.RobotModel.iter_link_chain" title="compas_robots.RobotModel.iter_link_chain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_link_chain</span></code></a></p></td>
+<td><p>Iterator over the chain of links between a pair of start and end links.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.iter_links.html#compas_robots.RobotModel.iter_links" title="compas_robots.RobotModel.iter_links"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_links</span></code></a></p></td>
+<td><p>Iterator over the links that starts with the root link.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.load_geometry.html#compas_robots.RobotModel.load_geometry" title="compas_robots.RobotModel.load_geometry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_geometry</span></code></a></p></td>
+<td><p>Load external geometry resources, such as meshes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.random_configuration.html#compas_robots.RobotModel.random_configuration" title="compas_robots.RobotModel.random_configuration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">random_configuration</span></code></a></p></td>
+<td><p>Get a random configuration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.remove_joint.html#compas_robots.RobotModel.remove_joint" title="compas_robots.RobotModel.remove_joint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_joint</span></code></a></p></td>
+<td><p>Removes a joint to the robot model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.remove_link.html#compas_robots.RobotModel.remove_link" title="compas_robots.RobotModel.remove_link"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_link</span></code></a></p></td>
+<td><p>Removes a link to the robot model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.scale.html#compas_robots.RobotModel.scale" title="compas_robots.RobotModel.scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale</span></code></a></p></td>
+<td><p>Scales the robot by factor (absolute).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.to_urdf_file.html#compas_robots.RobotModel.to_urdf_file" title="compas_robots.RobotModel.to_urdf_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_urdf_file</span></code></a></p></td>
+<td><p>Construct a URDF file model description from a robot model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.to_urdf_string.html#compas_robots.RobotModel.to_urdf_string" title="compas_robots.RobotModel.to_urdf_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_urdf_string</span></code></a></p></td>
+<td><p>Construct a URDF string model description from a robot model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.transformed_axes.html#compas_robots.RobotModel.transformed_axes" title="compas_robots.RobotModel.transformed_axes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transformed_axes</span></code></a></p></td>
+<td><p>Returns the transformed axes based on the joint_state.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.transformed_frames.html#compas_robots.RobotModel.transformed_frames" title="compas_robots.RobotModel.transformed_frames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transformed_frames</span></code></a></p></td>
+<td><p>Returns the transformed frames based on the joint_state.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.ur5.html#compas_robots.RobotModel.ur5" title="compas_robots.RobotModel.ur5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ur5</span></code></a></p></td>
+<td><p>Construct a UR5 robot model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.zero_configuration.html#compas_robots.RobotModel.zero_configuration" title="compas_robots.RobotModel.zero_configuration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zero_configuration</span></code></a></p></td>
+<td><p>Get the zero joint configuration.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Inherited Methods</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.ToString.html#compas_robots.RobotModel.ToString" title="compas_robots.RobotModel.ToString"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToString</span></code></a></p></td>
+<td><p>Converts the instance to a string.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.copy.html#compas_robots.RobotModel.copy" title="compas_robots.RobotModel.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a></p></td>
+<td><p>Make an independent copy of the data object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.from_json.html#compas_robots.RobotModel.from_json" title="compas_robots.RobotModel.from_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_json</span></code></a></p></td>
+<td><p>Construct an object of this type from a JSON file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.from_jsonstring.html#compas_robots.RobotModel.from_jsonstring" title="compas_robots.RobotModel.from_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_jsonstring</span></code></a></p></td>
+<td><p>Construct an object of this type from a JSON string.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.sha256.html#compas_robots.RobotModel.sha256" title="compas_robots.RobotModel.sha256"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sha256</span></code></a></p></td>
+<td><p>Compute a hash of the data for comparison during version control using the sha256 algorithm.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.to_json.html#compas_robots.RobotModel.to_json" title="compas_robots.RobotModel.to_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_json</span></code></a></p></td>
+<td><p>Convert an object to its native data representation and save it to a JSON file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.RobotModel.to_jsonstring.html#compas_robots.RobotModel.to_jsonstring" title="compas_robots.RobotModel.to_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_jsonstring</span></code></a></p></td>
+<td><p>Convert an object to its native data representation and save it to a JSON string.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.RobotModel.validate_data.html#compas_robots.RobotModel.validate_data" title="compas_robots.RobotModel.validate_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_data</span></code></a></p></td>
+<td><p>Validate the data against the object's data schema.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_robots.RobotModel"><code class="docutils literal notranslate"><span class="pre">RobotModel</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright COMPAS Association.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
