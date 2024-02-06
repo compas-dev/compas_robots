@@ -10,6 +10,7 @@ from compas.datastructures import Mesh
 from compas.geometry import Frame
 
 from compas_robots.files import URDFElement
+from compas_robots.model.base import ColorProxy
 
 from .base import ProxyObject
 from .base import _attr_from_data
@@ -242,6 +243,21 @@ class Material(Data):
         self.name = name
         self.color = color
         self.texture = texture
+
+    @property
+    def color(self):
+        return self._color
+
+    @color.setter
+    def color(self, value):
+        if value is None:
+            self._color = None
+            return
+
+        if isinstance(value, compas.colors.Color):
+            self._color = ColorProxy.create_proxy(value)
+        else:
+            self._color = value
 
     def get_urdf_element(self):
         attributes = {"name": self.name}
