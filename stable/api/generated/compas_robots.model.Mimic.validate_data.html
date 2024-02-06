@@ -104,12 +104,6 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
-
-
-  <div class="bd-header-announcement container-fluid bd-header-announcement">
-    <div class="bd-header-announcement__content">This is the documentation for the pre-release of COMPAS 2.0. The documentation of the stable release of COMPAS 1.x is available <a href='https://compas.dev/compas/stable/'>here</a>.</div>
-  </div>
-
   
     <nav class="bd-header navbar navbar-expand-lg bd-navbar">
 <div class="bd-header__inner bd-page-width">
@@ -148,7 +142,7 @@
     <div class="me-auto navbar-header-items__center">
       
         <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
+  <!-- <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
      aria-label="Site Navigation">
@@ -212,7 +206,7 @@
                 </div>
             </div>
             
-  </ul>
+  </ul> -->
 </nav></div>
       
     </div>
@@ -336,7 +330,7 @@ document.write(`
       <div class="sidebar-header-items__center">
         
           <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
+  <!-- <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
      aria-label="Site Navigation">
@@ -400,7 +394,7 @@ document.write(`
                 </div>
             </div>
             
-  </ul>
+  </ul> -->
 </nav></div>
         
       </div>
@@ -480,20 +474,27 @@ document.write(`
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <!-- <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p> -->
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../compas_robots.html">compas_robots</a></li>
-<li class="toctree-l2 current active"><a class="reference internal" href="../compas_robots.model.html">compas_robots.model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../compas_robots.resources.html">compas_robots.resources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../compas_robots.scene.html">compas_robots.scene</a></li>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../api.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active"><a class="reference internal" href="../index.html">API Reference</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
 </ul>
-</div>
+
+    </div>
 </nav></div>
+        <div class="sidebar-primary-item"><div class="sidebar-primary-item">
+    <a href="https://compas.dev" target="_blank">
+        COMPAS.dev <i class="fa fa-external-link" aria-hidden="true"></i>
+    </a>
+</div></div>
     </div>
   
   
@@ -560,7 +561,7 @@ document.write(`
 <h1>Mimic.validate_data</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_robots.model.Mimic.validate_data">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Mimic.</span></span><span class="sig-name descname"><span class="pre">validate_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_robots/blob/3379981/src/compas_robots/../../../../../../../opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages/compas/data/data.py#L323"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Mimic.</span></span><span class="sig-name descname"><span class="pre">validate_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_robots/blob/b8fc5c6/src/compas_robots/../../../../../../../opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages/compas/data/data.py#L323"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Validate the data against the object’s data schema.</p>
 <p>The data is the raw data that can be used to construct an object of this type with the classmethod <code class="docutils literal notranslate"><span class="pre">__from_data__</span></code>.</p>
 <dl class="field-list simple">
