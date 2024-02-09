@@ -165,7 +165,10 @@ class LocalPackageMeshLoader(AbstractMeshLoader):
         super(LocalPackageMeshLoader, self).__init__()
         self.path = path
         self.support_package = support_package
-        self.schema_prefix = "package://" + self.support_package + "/"
+        if support_package is None or support_package == "":
+            self.schema_prefix = "package://"
+        else:
+            self.schema_prefix = "package://" + self.support_package + "/"
 
     def build_path(self, *path_parts):
         """Returns the building path.
