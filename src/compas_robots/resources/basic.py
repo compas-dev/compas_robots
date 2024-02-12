@@ -156,16 +156,17 @@ class LocalPackageMeshLoader(AbstractMeshLoader):
     ----------
     path : str
         Path where the package is stored locally.
-    support_package : str
+    support_package : str, optional
         Name of the support package containing URDF, Meshes
-        and additional assets, e.g. 'abb_irb4400_support'
+        and additional assets, e.g. 'abb_irb4400_support'.
+        Default is None.
     """
 
-    def __init__(self, path, support_package):
+    def __init__(self, path, support_package = None):
         super(LocalPackageMeshLoader, self).__init__()
         self.path = path
         self.support_package = support_package
-        if support_package is None or support_package == "":
+        if not support_package:
             self.schema_prefix = "package://"
         else:
             self.schema_prefix = "package://" + self.support_package + "/"
