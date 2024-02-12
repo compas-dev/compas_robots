@@ -162,7 +162,7 @@ class LocalPackageMeshLoader(AbstractMeshLoader):
         Default is None.
     """
 
-    def __init__(self, path, support_package = None):
+    def __init__(self, path, support_package=None):
         super(LocalPackageMeshLoader, self).__init__()
         self.path = path
         self.support_package = support_package
