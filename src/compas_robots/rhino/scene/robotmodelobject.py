@@ -90,18 +90,22 @@ class RobotModelObject(RhinoSceneObject, BaseRobotModelObject):
         return mesh
 
     def _enter_layer(self):
+        import rhinoscriptsyntax as rs  # type: ignore
+
         self._previous_layer = None
 
         if self.layer:
-            if not compas_rhino.rs.IsLayer(self.layer):
+            if not rs.IsLayer(self.layer):
                 compas_rhino.create_layers_from_path(self.layer)
-            self._previous_layer = compas_rhino.rs.CurrentLayer(self.layer)
+            self._previous_layer = rs.CurrentLayer(self.layer)
 
-        compas_rhino.rs.EnableRedraw(False)
+        rs.EnableRedraw(False)
 
     def _exit_layer(self):
+        import rhinoscriptsyntax as rs  # type: ignore
+
         if self.layer and self._previous_layer:
-            compas_rhino.rs.CurrentLayer(self._previous_layer)
+            rs.CurrentLayer(self._previous_layer)
 
         self.redraw()
 
@@ -190,11 +194,13 @@ class RobotModelObject(RhinoSceneObject, BaseRobotModelObject):
         None
 
         """
+        import rhinoscriptsyntax as rs  # type: ignore
+
         if timeout:
             time.sleep(timeout)
 
-        compas_rhino.rs.EnableRedraw(True)
-        compas_rhino.rs.Redraw()
+        rs.EnableRedraw(True)
+        rs.Redraw()
 
     def clear_layer(self):
         """Clear the main layer of the scene object.

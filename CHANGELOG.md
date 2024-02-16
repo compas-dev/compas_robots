@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Fixed bug in `RobotModelObject` caused by non-existent `compas_rhino.rs`. Replaced with `import rhinoscriptsyntax as rs`.
 * Allow no `support_package` in `LocalPackageMeshLoader`
 
 ### Removed
