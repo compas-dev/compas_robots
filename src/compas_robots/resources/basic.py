@@ -183,7 +183,10 @@ class LocalPackageMeshLoader(AbstractMeshLoader):
         -------
         str
         """
-        return os.path.join(self.path, self.support_package, *path_parts)
+        if not self.support_package:
+            return os.path.join(self.path, *path_parts)
+        else:
+            return os.path.join(self.path, self.support_package, *path_parts)
 
     def load_urdf(self, file):
         """Load a URDF file from local storage.
