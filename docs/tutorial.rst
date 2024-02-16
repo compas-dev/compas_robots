@@ -146,7 +146,7 @@ Visualizing Robots
 Before jumping into how to build a robot model, let's first see how to visualize
 one. This can be done using COMPAS :class:`~compas.scene.Scene`.
 The procedure is the same in any of the CAD software. Below you can find
- an example code for both Rhino and Blender.
+an example code for both Rhino and Blender.
 
 
 .. tab-set::
@@ -432,13 +432,12 @@ The following snippet shows how to load the robot model currently active in ROS:
     ...    print(robot.model)
 
 
-FK, IK & Path Planning
-======================
+IK & Path Planning
+==================
 
 Robot models are the base for a large number of additional features that are
-provided via extension packages. In particular, features such as
-forward and inverse kinematic solvers and path planning are built on top of
-these robot models, but are integrated into
+provided via extension packages. In particular, features such as inverse kinematic
+solvers and path planning are built on top of these robot models, but are integrated into
 `COMPAS FAB <https://gramaziokohler.github.io/compas_fab/latest/>`_.
 
 For further details about these features, check the detailed examples in
