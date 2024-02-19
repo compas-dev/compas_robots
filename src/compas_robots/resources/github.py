@@ -8,7 +8,7 @@ except ImportError:
     from urllib2 import urlopen
 
 from .basic import AbstractMeshLoader
-from .basic import _mesh_import
+from .mesh_importer import mesh_import
 
 
 class GithubPackageMeshLoader(AbstractMeshLoader):
@@ -112,4 +112,4 @@ class GithubPackageMeshLoader(AbstractMeshLoader):
         _prefix, path = url.split(self.schema_prefix)
         url = self.build_url(path)
 
-        return _mesh_import(url, url, precision)
+        return mesh_import(url, url, precision)
