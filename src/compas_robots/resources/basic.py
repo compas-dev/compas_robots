@@ -9,9 +9,8 @@ try:
 except ImportError:
     from urlparse import urlparse
 
-from compas.datastructures import Mesh
-
-SUPPORTED_FORMATS = ("obj", "stl", "ply")
+from .mesh_importer import mesh_import
+from .mesh_importer import get_file_format
 
 
 class AbstractMeshLoader(object):
@@ -94,7 +93,7 @@ class DefaultMeshLoader(AbstractMeshLoader):
                 return True
 
         # Only OBJ loader supports remote files atm
-        is_obj = _get_file_format(url) == "obj"
+        is_obj = get_file_format(url) == "obj"
         return scheme in ("http", "https") and is_obj
 
     def load_meshes(self, url, precision=None):
@@ -115,7 +114,7 @@ class DefaultMeshLoader(AbstractMeshLoader):
             List of meshes.
         """
         url = self._get_mesh_url(url)
-        return _mesh_import(url, url, precision)
+        return mesh_import(url, url, precision)
 
     def _get_mesh_url(self, url):
         """Concatenates basepath directory to URL only if defined in the keyword arguments.
@@ -139,14 +138,6 @@ class DefaultMeshLoader(AbstractMeshLoader):
         if basepath:
             return os.path.join(basepath, url)
         return url
-
-
-def _get_file_format(url):
-    # This could be much more elaborate
-    # with an actual header check
-    # and/or remote content-type check
-    file_extension = url.split(".")[-1].lower()
-    return file_extension
 
 
 class LocalPackageMeshLoader(AbstractMeshLoader):
@@ -240,27 +231,8 @@ class LocalPackageMeshLoader(AbstractMeshLoader):
             List of meshes.
         """
         local_file = self._get_local_path(url)
-        return _mesh_import(url, local_file, precision)
+        return mesh_import(url, local_file, precision)
 
     def _get_local_path(self, url):
         _prefix, path = url.split(self.schema_prefix)
         return self.build_path(*path.split("/"))
-
-
-def _mesh_import(name, file, precision=None):
-    """Internal function to load meshes using the correct loader.
-
-    Name and file might be the same but not always, e.g. temp files."""
-    file_extension = _get_file_format(name)
-
-    if file_extension not in SUPPORTED_FORMATS:
-        raise NotImplementedError("Mesh type not supported: {}".format(file_extension))
-
-    if file_extension == "obj":
-        return [Mesh.from_obj(file, precision)]
-    elif file_extension == "stl":
-        return [Mesh.from_stl(file, precision)]
-    elif file_extension == "ply":
-        return [Mesh.from_ply(file, precision)]
-
-    raise Exception
