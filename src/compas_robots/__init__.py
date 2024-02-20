@@ -20,7 +20,7 @@ __author__ = ["Gonzalo Casas"]
 __copyright__ = "COMPAS Association"
 __license__ = "MIT License"
 __email__ = "casas@arch.ethz.ch"
-__version__ = "0.2.3"
+__version__ = "0.3.0"
 
 
 from .configuration import Configuration
