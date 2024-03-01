@@ -69,10 +69,10 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
         self._show_visual = value
         for i, visual_object in enumerate(self.visual_objects):
             if value:
-                self.viewer.tree.add_object(visual_object, self.visual_objects[i - 1] if i > 0 else self)
-                self.viewer.instance_colors[visual_object.instance_color.rgb255] = visual_object
+                self.scene.tree.add_object(visual_object, self.visual_objects[i - 1] if i > 0 else self)
+                self.scene.instance_colors[visual_object.instance_color.rgb255] = visual_object
             else:
-                self.viewer.tree.remove_object(visual_object)
+                self.scene.tree.remove_object(visual_object)
 
     @property
     def show_collision(self):
@@ -85,24 +85,24 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
         self._show_collision = value
         for i, collision_object in enumerate(self.collision_objects):
             if value:
-                self.viewer.tree.add_object(collision_object, self.visual_objects[i - 1] if i > 0 else self)
-                self.viewer.instance_colors[collision_object.instance_color.rgb255] = collision_object
+                self.scene.tree.add_object(collision_object, self.visual_objects[i - 1] if i > 0 else self)
+                self.scene.instance_colors[collision_object.instance_color.rgb255] = collision_object
             else:
-                self.viewer.tree.remove_object(collision_object)
+                self.scene.tree.remove_object(collision_object)
 
     def init(self):
         """Initialize the robot object with creating the visual and collision objects."""
         for i, visual_object in enumerate(self.visual_objects):
             visual_object.init()
             if self.show_visual:
-                self.viewer.tree.add_object(visual_object, self.visual_objects[i - 1] if i > 0 else self)
-                self.viewer.instance_colors[visual_object.instance_color.rgb255] = visual_object
+                self.scene.tree.add_object(visual_object, self.visual_objects[i - 1] if i > 0 else self)
+                self.scene.instance_colors[visual_object.instance_color.rgb255] = visual_object
 
         for i, collision_object in enumerate(self.collision_objects):
             collision_object.init()
             if self.show_collision:
-                self.viewer.tree.add_object(collision_object, self.visual_objects[i - 1] if i > 0 else self)
-                self.viewer.instance_colors[collision_object.instance_color.rgb255] = collision_object
+                self.scene.tree.add_object(collision_object, self.visual_objects[i - 1] if i > 0 else self)
+                self.scene.instance_colors[collision_object.instance_color.rgb255] = collision_object
 
     def transform(self, geometry, transformation: Transformation):
         """Transform the geometry by a given transformation.
@@ -136,7 +136,7 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
             lineswidth=self.lineswidth,
             pointssize=self.pointssize,
             opacity=self.opacity,
-            config=self.viewer.scene_config,
+            config=self.scene.config,
             hide_coplanaredges=self.hide_coplanaredges,
             use_vertexcolors=self.use_vertexcolors,
             name=name,
@@ -159,4 +159,4 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
             for obj in self.collision_objects:
                 obj._update_matrix()
 
-        self.viewer.renderer.update()
+        self.renderer.update()
