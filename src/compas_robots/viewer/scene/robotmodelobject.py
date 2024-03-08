@@ -120,7 +120,7 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
         --------
         :class:`compas_robots.scene.AbstractRobotModelObject`
         """
-        mesh_object = MeshObject(  # type: ignore
+        mesh_object = MeshObject(
             geometry,
             viewer=self.viewer,
             parent=None,
@@ -130,16 +130,15 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
             show_points=self.show_points,
             show_lines=self.show_lines,
             show_faces=self.show_faces,
-            pointscolor=self.pointscolor,
-            linescolor=self.linescolor,
-            facescolor=color or self.facescolor,
+            facecolor=color,
             lineswidth=self.lineswidth,
             pointssize=self.pointssize,
             opacity=self.opacity,
-            config=self.scene.config,
+            config=self.viewer.config,
             hide_coplanaredges=self.hide_coplanaredges,
             use_vertexcolors=self.use_vertexcolors,
             name=name,
+            context=self.scene.context,
         )
         mesh_object.transformation = Transformation()
 
