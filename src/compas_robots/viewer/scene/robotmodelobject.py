@@ -101,13 +101,19 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
         for i, visual_object in enumerate(self.visual_objects):
             visual_object.init()
             if self.show_visual:
-                self.scene.add(visual_object, self.visual_objects[i - 1] if i > 0 else self)
+                parent = self
+                if i > 0:
+                    parent = self.visual_objects[i - 1]
+                self.scene.add(visual_object, parent)
                 self.scene.instance_colors[visual_object.instance_color.rgb255] = visual_object
 
         for i, collision_object in enumerate(self.collision_objects):
             collision_object.init()
             if self.show_collision:
-                self.scene.add(collision_object, self.visual_objects[i - 1] if i > 0 else self)
+                parent = self
+                if i > 0:
+                    parent = self.visual_objects[i - 1]
+                self.scene.add(collision_object, parent)
                 self.scene.instance_colors[collision_object.instance_color.rgb255] = collision_object
 
     def transform(self, geometry, transformation: Transformation):
