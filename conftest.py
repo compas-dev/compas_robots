@@ -15,7 +15,7 @@ def pytest_ignore_collect(path):
     if "ghpython" in str(path):
         return True
     
-    if "compas_view" in str(path):
+    if "compas_viewer" in str(path):
         return True
 
 @pytest.fixture(autouse=True)
