@@ -14,7 +14,9 @@ def pytest_ignore_collect(path):
 
     if "ghpython" in str(path):
         return True
-
+    
+    if "compas_view" in str(path):
+        return True
 
 @pytest.fixture(autouse=True)
 def add_compas(doctest_namespace):
