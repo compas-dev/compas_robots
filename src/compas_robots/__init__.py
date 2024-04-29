@@ -45,6 +45,7 @@ __all__ = ["Configuration", "RobotModel", "ToolModel", "get"]
 __all_plugins__ = [
     "compas_robots.blender.scene",
     "compas_robots.ghpython.scene",
+    "compas_robots.viewer.scene",
     "compas_robots.rhino.scene",
     "compas_robots.rhino.install",
 ]
