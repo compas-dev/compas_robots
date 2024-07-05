@@ -142,7 +142,7 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
         if not isinstance(item, Data):
             raise ValueError("The item assigned to this scene object should be a data object: {}".format(type(item)))
         mesh_object = MeshObject(
-            item = item,
+            item=item,
             viewer=self.viewer,
             parent=None,
             is_selected=self.is_selected,
