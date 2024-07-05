@@ -5,6 +5,7 @@ from compas.datastructures import Mesh
 from compas.geometry import Transformation
 from compas_viewer.scene import MeshObject
 from compas_viewer.scene import ViewerSceneObject
+from compas.data import Data
 
 from compas_robots import Configuration
 from compas_robots import RobotModel
@@ -40,7 +41,7 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
 
     def __init__(
         self,
-        model: RobotModel,
+        item: RobotModel,
         configuration: Optional[Configuration] = None,
         show_visual: Optional[bool] = None,
         show_collision: Optional[bool] = None,
@@ -52,11 +53,17 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
         self.hide_coplanaredges = hide_coplanaredges
         self._show_visual = show_visual or True
         self._show_collision = show_collision or False
-        self.configuration: Configuration = configuration or model.zero_configuration()
-        super(RobotModelObject, self).__init__(model=model, **kwargs)
+        self.configuration: Configuration = configuration or item.zero_configuration()
+        super(RobotModelObject, self).__init__(model=item, **kwargs)
 
         self.visual_objects: list[MeshObject] = self.draw_visual()
         self.collision_objects: list[MeshObject] = self.draw_collision()
+
+    @property
+    def viewer(self):
+        from compas_viewer import Viewer
+
+        return Viewer()
 
     @property
     def show_visual(self):
@@ -125,32 +132,34 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
         """
         geometry.transformation = transformation * geometry.transformation
 
-    def create_geometry(self, geometry: Mesh, name: Optional[str] = None, color: Optional[Color] = None) -> MeshObject:
+    def create_geometry(self, item: Mesh, name: Optional[str] = None, color: Optional[Color] = None) -> MeshObject:
         """Create a mesh object from a given geometry.
 
         See Also
         --------
         :class:`compas_robots.scene.AbstractRobotModelObject`
         """
+        if not isinstance(item, Data):
+            raise ValueError("The item assigned to this scene object should be a data object: {}".format(type(item)))
         mesh_object = MeshObject(
-            geometry,
+            item = item,
             viewer=self.viewer,
             parent=None,
             is_selected=self.is_selected,
             is_locked=self.is_locked,
-            is_visible=self.is_visible,
-            show_points=self.show_points,
-            show_lines=self.show_lines,
+            is_visible=self.show,
+            show_vertices=self.show_vertices,
+            show_edges=self.show_edges,
             show_faces=self.show_faces,
             facecolor=color,
-            lineswidth=self.lineswidth,
-            pointssize=self.pointssize,
+            lineswidth=self.linewidth,
+            pointssize=self.pointsize,
             opacity=self.opacity,
             config=self.viewer.config,
             hide_coplanaredges=self.hide_coplanaredges,
             use_vertexcolors=self.use_vertexcolors,
             name=name,
-            context=self.scene.context,
+            context="Viewer",
         )
         mesh_object.transformation = Transformation()
 
@@ -170,4 +179,4 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
             for obj in self.collision_objects:
                 obj._update_matrix()
 
-        self.renderer.update()
+        self.viewer.renderer.update()
