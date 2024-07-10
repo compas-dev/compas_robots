@@ -105,23 +105,22 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
 
     def init(self):
         """Initialize the robot object with creating the visual and collision objects."""
-        for i, visual_object in enumerate(self.visual_objects):
-            visual_object.init()
-            if self.show_visual:
-                parent = self
-                if i > 0:
-                    parent = self.visual_objects[i - 1]
-                self.scene.add(visual_object, parent)
-                self.scene.instance_colors[visual_object.instance_color.rgb255] = visual_object
+        self.instance_color = Color.from_rgb255(*next(self.viewer.scene._instance_colors_generator))
+        self.viewer.scene.instance_colors[self.instance_color.rgb255] = self
 
-        for i, collision_object in enumerate(self.collision_objects):
-            collision_object.init()
-            if self.show_collision:
-                parent = self
-                if i > 0:
-                    parent = self.visual_objects[i - 1]
-                self.scene.add(collision_object, parent)
-                self.scene.instance_colors[collision_object.instance_color.rgb255] = collision_object
+        def add_objects(objects, show_flag):
+            """Helper function to initialize and add objects to the scene."""
+            parent = self
+            for i, obj in enumerate(objects):
+                obj.init()
+                if show_flag:
+                    if i > 0:
+                        parent = objects[i - 1]
+                    self.viewer.scene.add(obj, parent)
+                    self.viewer.scene.instance_colors[obj.instance_color.rgb255] = obj
+
+        add_objects(self.visual_objects, self.show_visual)
+        add_objects(self.collision_objects, self.show_collision)
 
     def transform(self, geometry, transformation: Transformation):
         """Transform the geometry by a given transformation.
