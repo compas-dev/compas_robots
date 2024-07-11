@@ -74,13 +74,16 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
 
     """
 
-    def __init__(self, model, **kwargs):
-        super(BaseRobotModelObject, self).__init__(item=model, **kwargs)
-        self.model = model
+    def __init__(self, **kwargs):
+        super(BaseRobotModelObject, self).__init__(**kwargs)
         self.create()
         self.scale_factor = 1.0
         self.attached_tool_models = {}
         self.attached_items = {}
+
+    @property
+    def model(self):
+        return self.item
 
     @property
     def attached_tool_model(self):

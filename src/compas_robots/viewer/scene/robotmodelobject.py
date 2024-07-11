@@ -8,7 +8,6 @@ from compas_viewer.scene import ViewerSceneObject
 from compas.data import Data
 
 from compas_robots import Configuration
-from compas_robots import RobotModel
 from compas_robots.scene import BaseRobotModelObject
 
 
@@ -41,7 +40,6 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
 
     def __init__(
         self,
-        item: RobotModel,
         configuration: Optional[Configuration] = None,
         show_visual: Optional[bool] = None,
         show_collision: Optional[bool] = None,
@@ -53,8 +51,8 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
         self.hide_coplanaredges = hide_coplanaredges
         self._show_visual = show_visual or True
         self._show_collision = show_collision or False
-        self.configuration: Configuration = configuration or item.zero_configuration()
-        super(RobotModelObject, self).__init__(model=item, **kwargs)
+        self.configuration: Configuration = configuration
+        super(RobotModelObject, self).__init__(**kwargs)
 
         self.visual_objects: list[MeshObject] = self.draw_visual()
         self.collision_objects: list[MeshObject] = self.draw_collision()
