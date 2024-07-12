@@ -7,7 +7,6 @@ from compas_viewer.scene import MeshObject
 from compas_viewer.scene import ViewerSceneObject
 
 from compas_robots import Configuration
-from compas_robots import RobotModel
 from compas_robots.scene import BaseRobotModelObject
 
 
@@ -40,7 +39,6 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
 
     def __init__(
         self,
-        model: RobotModel,
         configuration: Optional[Configuration] = None,
         show_visual: Optional[bool] = None,
         show_collision: Optional[bool] = None,
@@ -48,15 +46,22 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
         use_vertexcolors: Optional[bool] = None,
         **kwargs
     ):
+        self.kwargs = kwargs
         self.use_vertexcolors = use_vertexcolors
         self.hide_coplanaredges = hide_coplanaredges
         self._show_visual = show_visual or True
         self._show_collision = show_collision or False
-        self.configuration: Configuration = configuration or model.zero_configuration()
-        super(RobotModelObject, self).__init__(model=model, **kwargs)
+        self.configuration: Configuration = configuration or self.model.zero_configuration()
+        super(RobotModelObject, self).__init__(**kwargs)
 
         self.visual_objects: list[MeshObject] = self.draw_visual()
         self.collision_objects: list[MeshObject] = self.draw_collision()
+
+    @property
+    def viewer(self):
+        from compas_viewer import Viewer
+
+        return Viewer()
 
     @property
     def show_visual(self):
@@ -98,23 +103,22 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
 
     def init(self):
         """Initialize the robot object with creating the visual and collision objects."""
-        for i, visual_object in enumerate(self.visual_objects):
-            visual_object.init()
-            if self.show_visual:
-                parent = self
-                if i > 0:
-                    parent = self.visual_objects[i - 1]
-                self.scene.add(visual_object, parent)
-                self.scene.instance_colors[visual_object.instance_color.rgb255] = visual_object
+        self.instance_color = Color.from_rgb255(*next(self.viewer.scene._instance_colors_generator))
+        self.viewer.scene.instance_colors[self.instance_color.rgb255] = self
 
-        for i, collision_object in enumerate(self.collision_objects):
-            collision_object.init()
-            if self.show_collision:
-                parent = self
-                if i > 0:
-                    parent = self.visual_objects[i - 1]
-                self.scene.add(collision_object, parent)
-                self.scene.instance_colors[collision_object.instance_color.rgb255] = collision_object
+        def add_objects(objects, show_flag):
+            """Helper function to initialize and add objects to the scene."""
+            parent = self
+            for i, obj in enumerate(objects):
+                obj.init()
+                if show_flag:
+                    if i > 0:
+                        parent = objects[i - 1]
+                    self.viewer.scene.add(obj, parent)
+                    self.viewer.scene.instance_colors[obj.instance_color.rgb255] = obj
+
+        add_objects(self.visual_objects, self.show_visual)
+        add_objects(self.collision_objects, self.show_collision)
 
     def transform(self, geometry, transformation: Transformation):
         """Transform the geometry by a given transformation.
@@ -125,32 +129,23 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
         """
         geometry.transformation = transformation * geometry.transformation
 
-    def create_geometry(self, geometry: Mesh, name: Optional[str] = None, color: Optional[Color] = None) -> MeshObject:
+    def create_geometry(self, item: Mesh, name: Optional[str] = None, color: Optional[Color] = None) -> MeshObject:
         """Create a mesh object from a given geometry.
 
         See Also
         --------
         :class:`compas_robots.scene.AbstractRobotModelObject`
         """
+        kwargs = self.kwargs.copy()
+        del kwargs["item"], kwargs["facecolor"]
+
         mesh_object = MeshObject(
-            geometry,
-            viewer=self.viewer,
-            parent=None,
-            is_selected=self.is_selected,
-            is_locked=self.is_locked,
-            is_visible=self.is_visible,
-            show_points=self.show_points,
-            show_lines=self.show_lines,
-            show_faces=self.show_faces,
+            item=item,
+            name=name,
             facecolor=color,
-            lineswidth=self.lineswidth,
-            pointssize=self.pointssize,
-            opacity=self.opacity,
-            config=self.viewer.config,
+            **kwargs,
             hide_coplanaredges=self.hide_coplanaredges,
             use_vertexcolors=self.use_vertexcolors,
-            name=name,
-            context=self.scene.context,
         )
         mesh_object.transformation = Transformation()
 
@@ -170,4 +165,4 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
             for obj in self.collision_objects:
                 obj._update_matrix()
 
-        self.renderer.update()
+        self.viewer.renderer.update()
