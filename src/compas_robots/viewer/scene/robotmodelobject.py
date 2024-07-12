@@ -5,7 +5,6 @@ from compas.datastructures import Mesh
 from compas.geometry import Transformation
 from compas_viewer.scene import MeshObject
 from compas_viewer.scene import ViewerSceneObject
-from compas.data import Data
 
 from compas_robots import Configuration
 from compas_robots.scene import BaseRobotModelObject
@@ -47,11 +46,12 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
         use_vertexcolors: Optional[bool] = None,
         **kwargs
     ):
+        self.kwargs = kwargs
         self.use_vertexcolors = use_vertexcolors
         self.hide_coplanaredges = hide_coplanaredges
         self._show_visual = show_visual or True
         self._show_collision = show_collision or False
-        self.configuration: Configuration = configuration
+        self.configuration: Configuration = configuration or self.model.zero_configuration()
         super(RobotModelObject, self).__init__(**kwargs)
 
         self.visual_objects: list[MeshObject] = self.draw_visual()
@@ -136,26 +136,16 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
         --------
         :class:`compas_robots.scene.AbstractRobotModelObject`
         """
-        if not isinstance(item, Data):
-            raise ValueError("The item assigned to this scene object should be a data object: {}".format(type(item)))
+        kwargs = self.kwargs.copy()
+        del kwargs["item"], kwargs["facecolor"]
+
         mesh_object = MeshObject(
             item=item,
-            viewer=self.viewer,
-            parent=None,
-            is_selected=self.is_selected,
-            is_visible=self.show,
-            show_points=self.show_points,
-            show_lines=self.show_lines,
-            show_faces=self.show_faces,
+            name=name,
             facecolor=color,
-            linewidth=self.linewidth,
-            pointsize=self.pointsize,
-            opacity=self.opacity,
-            config=self.viewer.config,
+            **kwargs,
             hide_coplanaredges=self.hide_coplanaredges,
             use_vertexcolors=self.use_vertexcolors,
-            name=name,
-            context=self.context,
         )
         mesh_object.transformation = Transformation()
 
