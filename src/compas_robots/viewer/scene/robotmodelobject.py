@@ -51,8 +51,9 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
         self.hide_coplanaredges = hide_coplanaredges
         self._show_visual = show_visual or True
         self._show_collision = show_collision or False
-        self.configuration: Configuration = configuration or self.model.zero_configuration()
+
         super(RobotModelObject, self).__init__(**kwargs)
+        self.configuration: Configuration = configuration or self.model.zero_configuration()
 
         self.visual_objects: list[MeshObject] = self.draw_visual()
         self.collision_objects: list[MeshObject] = self.draw_collision()
