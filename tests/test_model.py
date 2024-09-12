@@ -692,6 +692,16 @@ def test_json_serialization(urdf_file):
         assert robot_copy.root.name == "panda_link0"
 
 
+def test_copy(urdf_file, urdf_file_with_shapes_only):
+    robot = RobotModel.from_urdf_file(urdf_file)
+    robot_copy = robot.copy()
+    assert robot_copy.name == robot.name
+
+    robot = RobotModel.from_urdf_file(urdf_file_with_shapes_only)
+    robot_copy = robot.copy()
+    assert robot_copy.name == robot.name
+
+
 # ==============================================================================
 # Main
 # ==============================================================================
