@@ -233,8 +233,9 @@ class Material(Data):
     >>> material = Material('wood', c)
 
     >>> material = Material('aqua')
-    >>> material.get_color()
-    Color(0.0, 1.0, 1.0, alpha=1.0)
+    >>> color = material.get_color()
+    >>> print(color)
+    Color(red=0.0, green=1.0, blue=1.0, alpha=1.0)
 
     """
 
@@ -291,8 +292,9 @@ class Material(Data):
         Examples
         --------
         >>> material = Material('aqua')
-        >>> material.get_color()
-        Color(0.0, 1.0, 1.0, alpha=1.0)
+        >>> color = material.get_color()
+        >>> print(color)
+        Color(red=0.0, green=1.0, blue=1.0, alpha=1.0)
 
         """
         if self.name:
