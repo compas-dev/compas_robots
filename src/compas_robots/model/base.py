@@ -8,6 +8,8 @@ from compas.geometry import Frame
 from compas_robots.files import URDFElement
 from compas_robots.files import URDFGenericElement
 
+from copy import deepcopy
+
 
 def _parse_floats(values):
     return [float(i) for i in values.split()]
@@ -41,6 +43,12 @@ class ProxyObject(object):
 
     def __getattr__(self, attr):
         return getattr(self._proxied_object, attr)
+
+    def __deepcopy__(self, memo):
+        # NOTE: This function was added to avoid recursion error when the ProxyObject is deep copied
+        new_copy = type(self)(deepcopy(self._proxied_object, memo))
+        memo[id(self)] = new_copy
+        return new_copy
 
     def __str__(self):
         return str(self._proxied_object)
