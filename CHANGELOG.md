@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+
+* Dropped support for Python 3.8 and updated compas requirements to 2.3
 * Fixed `robotmodelobject` attribute.
 * Added `__deepcopy__` to `ProxyObject` to solve recursion error when RobotModel is deep copied.
 
