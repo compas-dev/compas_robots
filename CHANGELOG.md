@@ -10,7 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+
+* Dropped support for Python 3.8 and updated compas requirements to 2.3
 * Fixed `robotmodelobject` attribute.
+* Added `__deepcopy__` to `ProxyObject` to solve recursion error when RobotModel is deep copied.
 
 ### Removed
 
@@ -32,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Moved private methods `_get_file_format` and `_mesh_import` to `compas_robots.resources` and made them public (`get_file_format` and `mesh_import`). 
+* Moved private methods `_get_file_format` and `_mesh_import` to `compas_robots.resources` and made them public (`get_file_format` and `mesh_import`).
 
 ### Removed
 
