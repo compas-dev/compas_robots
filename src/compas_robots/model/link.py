@@ -149,8 +149,8 @@ class Inertial(Data):
 
 
 class LinkItem(Data):
-    def __init__(self):
-        super(LinkItem, self).__init__()
+    def __init__(self, name=None):
+        super(LinkItem, self).__init__(name=name)
         self.init_transformation = None  # to store the init transformation
         self.current_transformation = None  # to store the current transformation
         self.native_geometry = None  # to store the link's CAD native geometry
@@ -175,11 +175,10 @@ class Visual(LinkItem):
 
     """
 
-    def __init__(self, geometry, origin=None, name=None, material=None, **kwargs):
-        super(Visual, self).__init__()
+    def __init__(self, geometry, origin=None, material=None, **kwargs):
+        super(Visual, self).__init__(**kwargs)
         self.geometry = geometry
         self.origin = origin
-        self.name = name
         self.material = material
         self.attr = kwargs
 
@@ -290,11 +289,10 @@ class Collision(LinkItem):
 
     """
 
-    def __init__(self, geometry, origin=None, name=None, **kwargs):
+    def __init__(self, geometry, origin=None, **kwargs):
         super(Collision, self).__init__()
         self.geometry = geometry
         self.origin = origin
-        self.name = name
         self.attr = kwargs
 
     @property

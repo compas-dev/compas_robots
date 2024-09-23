@@ -46,7 +46,8 @@ class ProxyObject(object):
 
     def __deepcopy__(self, memo):
         # NOTE: This function was added to avoid recursion error when the ProxyObject is deep copied
-        new_copy = type(self)(deepcopy(self._proxied_object, memo))
+        cls = type(self)
+        new_copy = cls(obj=deepcopy(self._proxied_object, memo))
         memo[id(self)] = new_copy
         return new_copy
 
