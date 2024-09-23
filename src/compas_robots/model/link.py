@@ -175,8 +175,8 @@ class Visual(LinkItem):
 
     """
 
-    def __init__(self, geometry, origin=None, material=None, **kwargs):
-        super(Visual, self).__init__(**kwargs)
+    def __init__(self, geometry, origin=None, name=None, material=None, **kwargs):
+        super(Visual, self).__init__(name=name)
         self.geometry = geometry
         self.origin = origin
         self.material = material
@@ -289,8 +289,8 @@ class Collision(LinkItem):
 
     """
 
-    def __init__(self, geometry, origin=None, **kwargs):
-        super(Collision, self).__init__()
+    def __init__(self, geometry, origin=None, name=None, **kwargs):
+        super(Collision, self).__init__(name=name)
         self.geometry = geometry
         self.origin = origin
         self.attr = kwargs
