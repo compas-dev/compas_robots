@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+
+* Fixed `self.configuration` unassigned error when `RobotModelObject` is being initialized by `Scene.add()`.
 * Fixed `robotmodelobject` attribute.
 
 ### Removed
@@ -32,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Moved private methods `_get_file_format` and `_mesh_import` to `compas_robots.resources` and made them public (`get_file_format` and `mesh_import`). 
+* Moved private methods `_get_file_format` and `_mesh_import` to `compas_robots.resources` and made them public (`get_file_format` and `mesh_import`).
 
 ### Removed
 
