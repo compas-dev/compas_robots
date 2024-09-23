@@ -692,6 +692,35 @@ def test_json_serialization(urdf_file):
         assert robot_copy.root.name == "panda_link0"
 
 
+def test_copy(urdf_file, urdf_file_with_shapes_only):
+    robot = RobotModel.from_urdf_file(urdf_file)
+    robot_copy = robot.copy()
+    assert robot_copy.name == robot.name
+
+    robot = RobotModel.from_urdf_file(urdf_file_with_shapes_only)
+    robot_copy = robot.copy()
+    assert robot_copy.name == robot.name
+
+
+def test_deepcopy(urdf_file, urdf_file_with_shapes_only, ur5_file):
+    from copy import deepcopy
+
+    robot = RobotModel.from_urdf_file(urdf_file)  # type: RobotModel
+    robot_copy = deepcopy(robot)
+    assert robot.to_urdf_string(True) == robot_copy.to_urdf_string(True)
+    assert robot_copy.name == robot.name
+
+    robot = RobotModel.from_urdf_file(urdf_file_with_shapes_only)
+    robot_copy = deepcopy(robot)
+    assert robot.to_urdf_string(True) == robot_copy.to_urdf_string(True)
+    assert robot_copy.name == robot.name
+
+    robot = RobotModel.from_urdf_file(ur5_file)
+    robot_copy = deepcopy(robot)
+    assert robot.to_urdf_string(True) == robot_copy.to_urdf_string(True)
+    assert robot_copy.name == robot.name
+
+
 # ==============================================================================
 # Main
 # ==============================================================================

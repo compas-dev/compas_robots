@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Fixed `self.configuration` unassigned error when `RobotModelObject` is being initialized by `Scene.add()`.
+* Dropped support for Python 3.8 and updated compas requirements to 2.3
 * Fixed `robotmodelobject` attribute.
+* Added `__deepcopy__` to `ProxyObject` to solve recursion error when RobotModel is deep copied.
 
 ### Removed
 
