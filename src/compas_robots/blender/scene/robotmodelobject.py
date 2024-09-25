@@ -1,7 +1,5 @@
 from typing import Any
 from typing import List
-from typing import Optional
-from typing import Union
 
 import bpy  # type: ignore
 import compas_blender
@@ -11,7 +9,6 @@ from compas.datastructures import Mesh
 from compas.geometry import Transformation
 from compas_blender.scene import BlenderSceneObject
 
-from compas_robots import RobotModel
 from compas_robots.scene import BaseRobotModelObject
 
 
