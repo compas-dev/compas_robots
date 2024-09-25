@@ -20,10 +20,6 @@ class RobotModelObject(BlenderSceneObject, BaseRobotModelObject):
 
     Parameters
     ----------
-    model : :class:`~compas_robots.RobotModel`
-        Robot model.
-    collection : str | :blender:`bpy.types.Collection`
-        The Blender scene collection to which the object(s) created by this scene object belong to.
     **kwargs : dict, optional
         Additional keyword arguments.
         For more info,
@@ -31,8 +27,8 @@ class RobotModelObject(BlenderSceneObject, BaseRobotModelObject):
 
     """
 
-    def __init__(self, model: RobotModel, collection: Optional[Union[str, bpy.types.Collection]] = None, **kwargs: Any):
-        super().__init__(model=model, collection=collection or model.name, **kwargs)
+    def __init__(self, **kwargs: Any):
+        super().__init__(**kwargs)
 
     def transform(self, native_mesh: bpy.types.Object, transformation: Transformation) -> None:
         """Transform the mesh of a robot model.

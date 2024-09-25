@@ -14,16 +14,14 @@ class RobotModelObject(GHSceneObject, BaseRobotModelObject):
 
     Parameters
     ----------
-    model : :class:`~compas_robots.RobotModel`
-        Robot model.
     **kwargs : dict, optional
         Additional keyword arguments.
         See :class:`~compas_ghpython.scene.GHSceneObject` and :class:`~compas_robots.scene.BaseRobotModelObject` for more info.
 
     """
 
-    def __init__(self, model, **kwargs):
-        super(RobotModelObject, self).__init__(model=model, **kwargs)
+    def __init__(self, **kwargs):
+        super(RobotModelObject, self).__init__(**kwargs)
 
     def transform(self, native_mesh, transformation):
         T = transformation_to_rhino(transformation)

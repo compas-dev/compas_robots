@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Fixed all four `RobotModelObject.__init__` to not accept `model` input.
+  The model is set at `SceneObject.item` and is available from `BaseRobotModelObject.model`.
 * Fixed `self.configuration` unassigned error when `RobotModelObject` is being initialized by `Scene.add()`.
 * Dropped support for Python 3.8 and updated compas requirements to 2.3
 * Fixed `robotmodelobject` attribute.
