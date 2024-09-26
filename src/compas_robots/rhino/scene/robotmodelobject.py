@@ -22,16 +22,14 @@ class RobotModelObject(RhinoSceneObject, BaseRobotModelObject):
 
     Parameters
     ----------
-    model : :class:`~compas_robots.RobotModel`
-        Robot model.
     **kwargs : dict, optional
         Additional keyword arguments.
         For more info, see :class:`RhinoSceneObject` and :class:`RobotModelObject`.
 
     """
 
-    def __init__(self, model, **kwargs):
-        super(RobotModelObject, self).__init__(model=model, **kwargs)
+    def __init__(self, **kwargs):
+        super(RobotModelObject, self).__init__(**kwargs)
 
     def transform(self, native_mesh, transformation):
         T = transformation_to_rhino(transformation)
