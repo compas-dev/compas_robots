@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import compas_ghpython
+from compas_ghpython.drawing import draw_mesh
 from compas_ghpython.scene import GHSceneObject
 from compas_rhino.conversions import transformation_to_rhino
 
@@ -46,7 +46,7 @@ class RobotModelObject(GHSceneObject, BaseRobotModelObject):
         color = color.rgba255 if color else None
 
         vertices, faces = geometry.to_vertices_and_faces(triangulated=False)
-        mesh = compas_ghpython.draw_mesh(vertices, faces, color=color)
+        mesh = draw_mesh(vertices, faces, color=color)
 
         # Try to fix invalid meshes
         if not mesh.IsValid:
