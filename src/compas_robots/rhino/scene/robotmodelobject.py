@@ -10,9 +10,8 @@ import scriptcontext as sc  # type: ignore
 import System.Drawing  # type: ignore
 from compas_rhino.conversions import transformation_to_rhino
 from compas_rhino.scene import RhinoSceneObject
-from Rhino.DocObjects.ObjectColorSource import ColorFromLayer  # type: ignore
-from Rhino.DocObjects.ObjectColorSource import ColorFromObject  # type: ignore
-from Rhino.DocObjects.ObjectMaterialSource import MaterialFromObject  # type: ignore
+from Rhino.DocObjects import ObjectColorSource  # type: ignore
+from Rhino.DocObjects import ObjectMaterialSource  # type: ignore
 
 from compas_robots.scene import BaseRobotModelObject
 
@@ -233,7 +232,7 @@ class RobotModelObject(RhinoSceneObject, BaseRobotModelObject):
             if color:
                 r, g, b, a = [i * 255 for i in color]
                 attr.ObjectColor = System.Drawing.Color.FromArgb(a, r, g, b)
-                attr.ColorSource = ColorFromObject
+                attr.ColorSource = ObjectColorSource.ColorFromObject
 
                 material_name = "robotmodelobject.{:.2f}_{:.2f}_{:.2f}_{:.2f}".format(r, g, b, a)
                 material_index = sc.doc.Materials.Find(material_name, True)
@@ -247,9 +246,9 @@ class RobotModelObject(RhinoSceneObject, BaseRobotModelObject):
                     material.CommitChanges()
 
                 attr.MaterialIndex = material_index
-                attr.MaterialSource = MaterialFromObject
+                attr.MaterialSource = ObjectMaterialSource.MaterialFromObject
             else:
-                attr.ColorSource = ColorFromLayer
+                attr.ColorSource = ObjectColorSource.ColorFromLayer
 
             if name:
                 attr.Name = name

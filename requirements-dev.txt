@@ -1,14 +1,10 @@
 attrs >=17.4
-autopep8
+ruff
 black
 bump2version >=1.0.1
 check-manifest >=0.36
-compas_invocations
-doc8
-flake8
+compas_invocations2
 invoke >=0.14
-isort
-pydocstyle
 pytest >=3.2
 sphinx_compas2_theme
 twine
