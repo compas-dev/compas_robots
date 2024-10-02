@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Fixed no scene object registered for `RobotModelObject` in context `Rhino`.
+* Fixed no scene object registered for `RobotModel` in context `Rhino`.
 
 ### Removed
 
