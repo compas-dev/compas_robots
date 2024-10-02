@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Fixed no scene object registered for `RobotModel` in context `Rhino`.
+* Adapted import inside `RobotModelObject` to latest changes in `compas_ghpython`.
 
 ### Removed
 
