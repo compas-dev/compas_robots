@@ -98,7 +98,7 @@ class FrameProxy(ProxyObject):
 
         Examples
         --------
-        >>> attributes = {'rpy': '0.0 1.57 0.0', 'xyz': '0.0 0.13 0.0'}
+        >>> attributes = {"rpy": "0.0 1.57 0.0", "xyz": "0.0 0.13 0.0"}
         >>> f = FrameProxy.from_urdf(attributes, [], None)
         >>> f.point
         Point(x=0.000, y=0.130, z=0.000)

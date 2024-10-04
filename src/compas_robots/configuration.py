@@ -127,16 +127,16 @@ class Configuration(Data):
 
     Examples
     --------
-    >>> config = Configuration.from_revolute_values([math.pi/2, 0., 0.])
+    >>> config = Configuration.from_revolute_values([math.pi / 2, 0.0, 0.0])
     >>> config.joint_values
     [1.5707963267948966, 0.0, 0.0]
 
-    >>> config = Configuration.from_prismatic_and_revolute_values([8.312], [math.pi/2, 0., 0., 0., 2*math.pi, 0.8])
+    >>> config = Configuration.from_prismatic_and_revolute_values([8.312], [math.pi / 2, 0.0, 0.0, 0.0, 2 * math.pi, 0.8])
     >>> str(config)
     'Configuration((8.312, 1.571, 0.000, 0.000, 0.000, 6.283, 0.800), (2, 0, 0, 0, 0, 0, 0))'
 
     >>> from compas_robots.model import Joint
-    >>> config = Configuration([math.pi/2, 3., 0.1], [Joint.REVOLUTE, Joint.PRISMATIC, Joint.PLANAR])
+    >>> config = Configuration([math.pi / 2, 3.0, 0.1], [Joint.REVOLUTE, Joint.PRISMATIC, Joint.PLANAR])
     >>> str(config)
     'Configuration((1.571, 3.000, 0.100), (0, 2, 5))'
 

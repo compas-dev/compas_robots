@@ -134,7 +134,7 @@ class MeshDescriptor(Data):
 
     Examples
     --------
-    >>> m = MeshDescriptor('link.stl')
+    >>> m = MeshDescriptor("link.stl")
 
     """
 
@@ -175,7 +175,7 @@ class MeshDescriptor(Data):
                 data["scale"][1],
                 data["scale"][2],
             ),
-            **attr
+            **attr,
         )
         md.meshes = data["meshes"]
         return md
@@ -196,7 +196,7 @@ class Texture(Data):
 
     Examples
     --------
-    >>> t = Texture('wood.jpg')
+    >>> t = Texture("wood.jpg")
 
     """
 
@@ -230,9 +230,9 @@ class Material(Data):
     Examples
     --------
     >>> c = Color(1, 0, 0)
-    >>> material = Material('wood', c)
+    >>> material = Material("wood", c)
 
-    >>> material = Material('aqua')
+    >>> material = Material("aqua")
     >>> color = material.get_color()
     >>> print(color)
     Color(red=0.0, green=1.0, blue=1.0, alpha=1.0)
@@ -291,7 +291,7 @@ class Material(Data):
 
         Examples
         --------
-        >>> material = Material('aqua')
+        >>> material = Material("aqua")
         >>> color = material.get_color()
         >>> print(color)
         Color(red=0.0, green=1.0, blue=1.0, alpha=1.0)
