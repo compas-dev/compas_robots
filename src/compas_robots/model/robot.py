@@ -1040,7 +1040,7 @@ class RobotModel(Data):
         # Note: Each Link can have multiple visual nodes
         for element in link_elements:
             # Some elements may have a non-identity origin frame
-            origin = element.origin.to_compas_frame()
+            origin = element.origin.to_compas_frame() if element.origin else Frame.worldXY()
             t_origin = Transformation.from_frame(origin)
             # If `meshes_at_link_origin` is False, we use an identity transformation
             t_origin = t_origin if meshes_at_link_origin else Transformation()
