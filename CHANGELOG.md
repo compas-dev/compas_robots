@@ -14,6 +14,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 
+## [0.6.0] 2024-10-04
+
+### Added
+
+### Changed
+
+* Fixed no scene object registered for `RobotModel` in context `Rhino`.
+* Adapted import inside `RobotModelObject` to latest changes in `compas_ghpython`.
+* Updated minimum COMPAS version to `2.4.3`.
+
+### Removed
+
+
 ## [0.5.0] 2024-09-26
 
 ### Added

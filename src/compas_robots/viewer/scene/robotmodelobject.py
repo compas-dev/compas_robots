@@ -44,7 +44,7 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
         show_collision: Optional[bool] = None,
         hide_coplanaredges: Optional[bool] = None,
         use_vertexcolors: Optional[bool] = None,
-        **kwargs
+        **kwargs,
     ):
         self.kwargs = kwargs
         self.use_vertexcolors = use_vertexcolors

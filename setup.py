@@ -23,7 +23,7 @@ optional_requirements = {}
 
 setup(
     name="compas_robots",
-    version="0.5.0",
+    version="0.6.0",
     description="Basic infrastructure for working with robots in COMPAS.",
     long_description=long_description,
     long_description_content_type="text/markdown",

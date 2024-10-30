@@ -272,7 +272,7 @@ class RobotModel(Data):
         Examples
         --------
         >>> robot = RobotModel.ur5()
-        >>> j = robot.find_parent_joint(Link('shoulder_link'))
+        >>> j = robot.find_parent_joint(Link("shoulder_link"))
         >>> j.name
         'shoulder_pan_joint'
 
@@ -298,7 +298,7 @@ class RobotModel(Data):
         Examples
         --------
         >>> robot = RobotModel.ur5()
-        >>> l = robot.get_link_by_name('world')
+        >>> l = robot.get_link_by_name("world")
         >>> l.name
         'world'
 
@@ -321,7 +321,7 @@ class RobotModel(Data):
         Examples
         --------
         >>> robot = RobotModel.ur5()
-        >>> j = robot.get_joint_by_name('shoulder_lift_joint')
+        >>> j = robot.get_joint_by_name("shoulder_lift_joint")
         >>> j.name
         'shoulder_lift_joint'
 
@@ -403,7 +403,7 @@ class RobotModel(Data):
         Examples
         --------
         >>> robot = RobotModel.ur5()
-        >>> [l.name for l in robot.iter_link_chain('world', 'forearm_link')]
+        >>> [l.name for l in robot.iter_link_chain("world", "forearm_link")]
         ['world', 'base_link', 'shoulder_link', 'upper_arm_link', 'forearm_link']
 
         """
@@ -437,7 +437,7 @@ class RobotModel(Data):
         Examples
         --------
         >>> robot = RobotModel.ur5()
-        >>> [j.name for j in robot.iter_joint_chain('world', 'forearm_link')]
+        >>> [j.name for j in robot.iter_joint_chain("world", "forearm_link")]
         ['world_joint', 'shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint']
 
         """
@@ -464,7 +464,7 @@ class RobotModel(Data):
         Examples
         --------
         >>> robot = RobotModel.ur5()
-        >>> list(robot.iter_chain('world', 'forearm_link'))
+        >>> list(robot.iter_chain("world", "forearm_link"))
         ['world', 'world_joint', 'base_link', 'shoulder_pan_joint', 'shoulder_link', 'shoulder_lift_joint', 'upper_arm_link', 'elbow_joint', 'forearm_link']
 
         """
@@ -690,7 +690,7 @@ class RobotModel(Data):
         Examples
         --------
         >>> robot = RobotModel.ur5()
-        >>> robot.load_geometry(LocalPackageMeshLoader(compas_robots.DATA, 'ur_description'))
+        >>> robot.load_geometry(LocalPackageMeshLoader(compas_robots.DATA, "ur_description"))
         >>> print(robot)
         Robot name=ur5, Links=11, Joints=10 (6 configurable)
 
@@ -904,8 +904,8 @@ class RobotModel(Data):
         --------
         >>> robot = RobotModel.ur5()
         >>> config = robot.zero_configuration()
-        >>> config['shoulder_pan_joint'] = 1.2
-        >>> config['wrist_2_joint'] = 0.5
+        >>> config["shoulder_pan_joint"] = 1.2
+        >>> config["wrist_2_joint"] = 0.5
         >>> ft = robot.transformed_frames(config)
         >>> ft[1].point
         Point(x=0.000, y=0.000, z=0.089)
@@ -935,8 +935,8 @@ class RobotModel(Data):
         --------
         >>> robot = RobotModel.ur5()
         >>> config = robot.zero_configuration()
-        >>> config['shoulder_pan_joint'] = 1.2
-        >>> config['wrist_2_joint'] = 0.5
+        >>> config["shoulder_pan_joint"] = 1.2
+        >>> config["wrist_2_joint"] = 0.5
         >>> at = robot.transformed_axes(config)
         >>> at[3]
         Vector(x=-0.932, y=0.362, z=0.000)
@@ -1127,8 +1127,8 @@ class RobotModel(Data):
         >>> from compas.geometry import Sphere
         >>> sphere = Sphere(1.0)
         >>> mesh = Mesh.from_shape(sphere)
-        >>> robot = RobotModel('robot')
-        >>> link = robot.add_link('link0', visual_mesh=mesh)
+        >>> robot = RobotModel("robot")
+        >>> link = robot.add_link("link0", visual_mesh=mesh)
 
         """
         self._check_link_name(name)
@@ -1216,9 +1216,9 @@ class RobotModel(Data):
         Examples
         --------
         >>> from compas.geometry import Frame
-        >>> robot = RobotModel('robot')
-        >>> parent_link = robot.add_link('link0')
-        >>> child_link = robot.add_link('link1')
+        >>> robot = RobotModel("robot")
+        >>> parent_link = robot.add_link("link0")
+        >>> child_link = robot.add_link("link1")
         >>> origin = Frame.worldXY()
         >>> axis = (1, 0, 0)
         >>> j = robot.add_joint("joint1", Joint.CONTINUOUS, parent_link, child_link, origin, axis)

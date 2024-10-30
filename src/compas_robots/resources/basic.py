@@ -9,8 +9,8 @@ try:
 except ImportError:
     from urlparse import urlparse
 
-from .mesh_importer import mesh_import
 from .mesh_importer import get_file_format
+from .mesh_importer import mesh_import
 
 
 class AbstractMeshLoader(object):

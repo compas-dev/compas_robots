@@ -514,7 +514,7 @@ class Joint(Data):
                 SafetyController.__from_data__(data["safety_controller"]) if data["safety_controller"] else None
             ),
             mimic=Mimic.__from_data__(data["mimic"]) if data["mimic"] else None,
-            **_attr_from_data(data["attr"])
+            **_attr_from_data(data["attr"]),
         )
         joint.position = data["position"]
         return joint

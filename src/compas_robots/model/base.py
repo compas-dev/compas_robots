@@ -2,13 +2,13 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+from copy import deepcopy
+
 from compas.colors import Color
 from compas.geometry import Frame
 
 from compas_robots.files import URDFElement
 from compas_robots.files import URDFGenericElement
-
-from copy import deepcopy
 
 
 def _parse_floats(values):
@@ -98,7 +98,7 @@ class FrameProxy(ProxyObject):
 
         Examples
         --------
-        >>> attributes = {'rpy': '0.0 1.57 0.0', 'xyz': '0.0 0.13 0.0'}
+        >>> attributes = {"rpy": "0.0 1.57 0.0", "xyz": "0.0 0.13 0.0"}
         >>> f = FrameProxy.from_urdf(attributes, [], None)
         >>> f.point
         Point(x=0.000, y=0.130, z=0.000)
