@@ -5,6 +5,7 @@ from __future__ import print_function
 import itertools
 import random
 
+from compas import IPY
 from compas.colors import Color
 from compas.data import Data
 from compas.datastructures import Mesh
@@ -33,6 +34,13 @@ from .joint import Limit
 from .link import Collision
 from .link import Link
 from .link import Visual
+
+if not IPY:
+    from typing import TYPE_CHECKING
+
+    if TYPE_CHECKING:
+        from typing import List  # noqa: F401
+        from typing import Optional  # noqa: F401
 
 
 class RobotModel(Data):
@@ -822,6 +830,10 @@ class RobotModel(Data):
 
         self._scale_factor = factor
 
+    # --------------------------------------------------------------------------
+    # Methods for computing frames and axes from the Robot Model
+    # --------------------------------------------------------------------------
+
     def compute_transformations(self, joint_state, link=None, parent_transformation=None):
         """Recursive function to calculate the transformations of each joint.
 
@@ -874,7 +886,9 @@ class RobotModel(Data):
         return transformations
 
     def transformed_frames(self, joint_state):
-        """Returns the transformed frames based on the joint_state.
+        """Returns the transformed Joint frames (relative to the Robot Coordinate Frame) based on the joint_state (:class:`~compas_robots.Configuration`).
+
+        The order of the frames is the same as the order returned by :meth:`iter_joints`.
 
         Parameters
         ----------
@@ -989,6 +1003,93 @@ class RobotModel(Data):
         all_link_names = [l.name for l in self.links]  # noqa: E741
         if name in all_link_names:
             raise ValueError("Link name '%s' already used in chain." % name)
+
+    # --------------------------------------------------------------------------
+    # Methods for accessing the visual and collision geometry
+    # --------------------------------------------------------------------------
+
+    def _extract_link_geometry(self, link_elements, meshes_at_link_origin=True):
+        # type: (List[Visual] | List[Collision], Optional[bool]) -> Mesh
+        """Extracts the list of meshes from a link's Visual or Collision elements.
+
+        Parameters
+        ----------
+        link_elements : list of :class:`~compas_robots.model.Visual` or :class:`~compas_robots.model.Collision`
+            The list of Visual or Collision elements of a link.
+        meshes_at_link_origin : bool, optional
+            Defaults to True, which means that the meshes will be transformed according to
+            `element.origin`, such that the mesh origin matches with the link's origin frame.
+            If False, the meshes will be extracted as it is loaded from the
+            robot model package. Note that the `.origin` for each element is not necessarily
+            the same.
+
+        Returns
+        -------
+        list of :class:`~compas.datastructures.Mesh`
+            A list of meshes belonging to the link elements.
+
+        """
+        if not link_elements:
+            return None
+
+        meshes = []
+        # Note: Each Link can have multiple visual nodes
+        for element in link_elements:
+            # Some elements may have a non-identity origin frame
+            origin = element.origin.to_compas_frame()
+            t_origin = Transformation.from_frame(origin)
+            # If `meshes_at_link_origin` is False, we use an identity transformation
+            t_origin = t_origin if meshes_at_link_origin else Transformation()
+
+            shape = element.geometry.shape
+            # Note: the MeshDescriptor.meshes object supports a list of compas meshes.
+            if isinstance(shape, MeshDescriptor):
+                # There can be multiple mesh in a single MeshDescriptor
+                for mesh in shape.meshes:
+                    # Transform the mesh (even if t_origin is identity) so we always get a new mesh object
+                    meshes.append(mesh.transformed(t_origin))
+
+        return meshes
+
+    def get_link_visual_meshes(self, link):
+        # type: (Link) -> List[Mesh]
+        """Get the list of visual meshes of a link."""
+        visual_meshes = self._extract_link_geometry(link.visual, True)
+        return visual_meshes
+
+    def get_link_visual_meshes_joined(self, link, join_precision=12):
+        # type: (Link, Optional[int]) -> Mesh | None
+        """Get the visual meshes of a link joined into a single mesh."""
+        visual_meshes = self._extract_link_geometry(link.visual, True)
+        if not visual_meshes:
+            return None
+
+        joined_mesh = Mesh()
+        for mesh in visual_meshes:
+            joined_mesh.join(mesh, False, join_precision)
+        return joined_mesh
+
+    def get_link_collision_meshes(self, link):
+        # type: (Link) -> List[Mesh]
+        """Get the list of collision meshes of a link."""
+        collision_meshes = self._extract_link_geometry(link.collision, True)
+        return collision_meshes
+
+    def get_link_collision_meshes_joined(self, link, join_precision=12):
+        # type: (Link, Optional[int]) -> Mesh | None
+        """Get the collision meshes of a link joined into a single mesh."""
+        collision_meshes = self._extract_link_geometry(link.collision, True)
+        if not collision_meshes:
+            return None
+
+        joined_mesh = Mesh()
+        for mesh in collision_meshes:
+            joined_mesh.join(mesh, False, join_precision)
+        return joined_mesh
+
+    # --------------------------------------------------------------------------
+    # Methods for modifying the Robot Model structure
+    # --------------------------------------------------------------------------
 
     def add_link(self, name, visual_meshes=None, visual_color=None, collision_meshes=None, **kwargs):
         """Adds a link to the robot model.
