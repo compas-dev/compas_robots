@@ -93,7 +93,7 @@ class RobotModelObject(RhinoSceneObject, BaseRobotModelObject):
 
         if self.layer:
             if not rs.IsLayer(self.layer):
-                compas_rhino.create_layers_from_path(self.layer)
+                compas_rhino.layers.create_layers_from_path(self.layer)
             self._previous_layer = rs.CurrentLayer(self.layer)
 
         rs.EnableRedraw(False)
@@ -208,9 +208,9 @@ class RobotModelObject(RhinoSceneObject, BaseRobotModelObject):
 
         """
         if self.layer:
-            compas_rhino.clear_layer(self.layer)
+            compas_rhino.layers.clear_layer(self.layer)
         else:
-            compas_rhino.clear_current_layer()
+            compas_rhino.layers.clear_current_layer()
 
     def _add_mesh_to_doc(self, mesh):
         guid = sc.doc.Objects.AddMesh(mesh)

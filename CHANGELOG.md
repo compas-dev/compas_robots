@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added new functions to extract Visual and Collision meshes from `RobotModel`.
+* Added `RobotModel.get_link_visual_meshes` and `RobotModel.get_link_collision_meshes`
+  for extracting meshes from a specific link.
+  Added `RobotModel.get_link_visual_meshes_joined` and `RobotModel.get_link_collision_meshes_joined`
+  for extracting a single joined mesh from a specific link.
+
 ### Changed
 
 * Fixed bug in `compas_viewer` due to import of `RobotModelObject` inside registration function.
