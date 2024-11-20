@@ -132,9 +132,6 @@ class FrameProxy(ProxyObject):
         """
         self.point = self.point * factor
 
-    def to_compas_frame(self):
-        return Frame(self.point, self.xaxis, self.yaxis)
-
 
 class ColorProxy(ProxyObject):
     """Proxy class that adds URDF functionality to an instance of :class:`Color`.

@@ -1027,21 +1027,18 @@ class RobotModel(Data):
         -------
         list of :class:`~compas.datastructures.Mesh`
             A list of meshes belonging to the link elements.
+            If there are no meshes, an empty list is returned.
 
         Notes
         -----
         Only MeshDescriptor in `element.geometry.shape` is supported. Other shapes are ignored.
 
         """
-        if not link_elements:
-            return None
-
         meshes = []
         # Note: Each Link can have multiple visual nodes
         for element in link_elements:
             # Some elements may have a non-identity origin frame
-            origin = element.origin.to_compas_frame() if element.origin else Frame.worldXY()
-            t_origin = Transformation.from_frame(origin)
+            t_origin = Transformation.from_frame(element.origin or Frame.worldXY())
             # If `meshes_at_link_origin` is False, we use an identity transformation
             t_origin = t_origin if meshes_at_link_origin else Transformation()
 
@@ -1052,6 +1049,7 @@ class RobotModel(Data):
                 for mesh in shape.meshes:
                     # Transform the mesh (even if t_origin is identity) so we always get a new mesh object
                     meshes.append(mesh.transformed(t_origin))
+            # Add support for other shapes here if needed, e.g. Box, Cylinder, Sphere, Capsule etc.
 
         return meshes
 
@@ -1071,6 +1069,7 @@ class RobotModel(Data):
         -------
         list of :class:`~compas.datastructures.Mesh`
             A list of visual meshes belonging to the link
+            The list is empty if no visual meshes are found.
 
         Notes
         -----
@@ -1131,6 +1130,7 @@ class RobotModel(Data):
         -------
         list of :class:`~compas.datastructures.Mesh`
             A list of collision meshes belonging to the link
+            The list is empty if no collision meshes are found.
 
         Notes
         -----
