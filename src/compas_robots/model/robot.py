@@ -1008,20 +1008,21 @@ class RobotModel(Data):
     # Methods for accessing the visual and collision geometry
     # --------------------------------------------------------------------------
 
-    def _extract_link_meshes(self, link_elements, meshes_at_link_origin=True):
-        # type: (List[Visual] | List[Collision], Optional[bool]) -> List[Mesh]
+    def _extract_link_meshes(self, link_elements):
+        # type: (List[Visual] | List[Collision]) -> List[Mesh]
         """Extracts the list of compas meshes from a link's Visual or Collision elements.
+
+        Note that each link may have multiple visual or collision nodes, each can have
+        a different origin frame. Therefore, the returned meshes are transformed
+        according to the ``.origin`` frame of each visual or collision element.
+
+        This transformation is time consuming for large meshes and should be done only once.
+        This transformation is automatically skipped if the origin is None or the identity frame.
 
         Parameters
         ----------
         link_elements : list of :class:`~compas_robots.model.Visual` or :class:`~compas_robots.model.Collision`
             The list of Visual or Collision elements of a link.
-        meshes_at_link_origin : bool, optional
-            Defaults to True, which means that the meshes will be transformed according to
-            `element.origin`, such that the mesh origin matches with the link's origin frame.
-            If False, the meshes will be extracted as it is loaded from the
-            robot model package. Note that the `.origin` for each element is not necessarily
-            the same.
 
         Returns
         -------
@@ -1029,27 +1030,25 @@ class RobotModel(Data):
             A list of meshes belonging to the link elements.
             If there are no meshes, an empty list is returned.
 
-        Notes
-        -----
-        Only MeshDescriptor in `element.geometry.shape` is supported. Other shapes are ignored.
-
         """
         meshes = []
         # Note: Each Link can have multiple visual nodes
         for element in link_elements:
             # Some elements may have a non-identity origin frame
-            t_origin = Transformation.from_frame(element.origin or Frame.worldXY())
-            # If `meshes_at_link_origin` is False, we use an identity transformation
-            t_origin = t_origin if meshes_at_link_origin else Transformation()
+            t_origin = None
+            if element.origin:
+                origin = element.origin if isinstance(element.origin, Frame) else element.origin._proxied_object
+                if Frame.worldXY() != origin:
+                    t_origin = Transformation.from_frame(element.origin)
 
-            shape = element.geometry.shape
             # Note: the MeshDescriptor.meshes object supports a list of compas meshes.
-            if isinstance(shape, MeshDescriptor):
-                # There can be multiple mesh in a single MeshDescriptor
-                for mesh in shape.meshes:
-                    # Transform the mesh (even if t_origin is identity) so we always get a new mesh object
+            # There can be multiple mesh in a single MeshDescriptor
+            for mesh in LinkGeometry._get_item_meshes(element):
+                # Transform the mesh
+                if t_origin:
                     meshes.append(mesh.transformed(t_origin))
-            # Add support for other shapes here if needed, e.g. Box, Cylinder, Sphere, Capsule etc.
+                else:
+                    meshes.append(mesh)
 
         return meshes
 
