@@ -561,7 +561,7 @@ document.write(`
 <h1>ToolModel</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_robots.ToolModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_robots.</span></span><span class="sig-name descname"><span class="pre">ToolModel</span></span><a class="reference external" href="https://github.com/compas-dev/compas_robots/blob/3284fbc/src/compas_robots/model/tool.py#L14"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_robots.</span></span><span class="sig-name descname"><span class="pre">ToolModel</span></span><a class="reference external" href="https://github.com/compas-dev/compas_robots/blob/897f3f1/src/compas_robots/model/tool.py#L14"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="compas_robots.RobotModel.html#compas_robots.RobotModel" title="compas_robots.model.robot.RobotModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">RobotModel</span></code></a></p>
 <p>Represents a tool to be attached to the robot’s flange.</p>
 <dl class="field-list">
@@ -666,6 +666,18 @@ document.write(`
 <tr class="row-even"><td><p><a class="reference internal" href="compas_robots.ToolModel.get_link_by_name.html#compas_robots.ToolModel.get_link_by_name" title="compas_robots.ToolModel.get_link_by_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_link_by_name</span></code></a></p></td>
 <td><p>Get a link in a robot model matching by its name.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.ToolModel.get_link_collision_meshes.html#compas_robots.ToolModel.get_link_collision_meshes" title="compas_robots.ToolModel.get_link_collision_meshes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_link_collision_meshes</span></code></a></p></td>
+<td><p>Get the list of collision meshes of a link.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.ToolModel.get_link_collision_meshes_joined.html#compas_robots.ToolModel.get_link_collision_meshes_joined" title="compas_robots.ToolModel.get_link_collision_meshes_joined"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_link_collision_meshes_joined</span></code></a></p></td>
+<td><p>Get the collision meshes of a Link joined into a single mesh.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.ToolModel.get_link_visual_meshes.html#compas_robots.ToolModel.get_link_visual_meshes" title="compas_robots.ToolModel.get_link_visual_meshes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_link_visual_meshes</span></code></a></p></td>
+<td><p>Get a list of visual meshes from a Link.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_robots.ToolModel.get_link_visual_meshes_joined.html#compas_robots.ToolModel.get_link_visual_meshes_joined" title="compas_robots.ToolModel.get_link_visual_meshes_joined"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_link_visual_meshes_joined</span></code></a></p></td>
+<td><p>Get the visual meshes of a Link joined into a single mesh.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.ToolModel.get_urdf_element.html#compas_robots.ToolModel.get_urdf_element" title="compas_robots.ToolModel.get_urdf_element"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_urdf_element</span></code></a></p></td>
 <td><p></p></td>
 </tr>
@@ -718,7 +730,7 @@ document.write(`
 <td><p>Returns the transformed axes based on the joint_state.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_robots.ToolModel.transformed_frames.html#compas_robots.ToolModel.transformed_frames" title="compas_robots.ToolModel.transformed_frames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transformed_frames</span></code></a></p></td>
-<td><p>Returns the transformed frames based on the joint_state.</p></td>
+<td><p>Returns the transformed Joint frames (relative to the Robot Coordinate Frame) based on the joint_state (<a class="reference internal" href="compas_robots.Configuration.html#compas_robots.Configuration" title="compas_robots.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a>).</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_robots.ToolModel.ur5.html#compas_robots.ToolModel.ur5" title="compas_robots.ToolModel.ur5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ur5</span></code></a></p></td>
 <td><p>Construct a UR5 robot model.</p></td>
