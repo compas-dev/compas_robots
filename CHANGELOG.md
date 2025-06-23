@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Fixed bug in `compas_viewer` due to import of `RobotModelObject` inside registration function.
+* Fixed a double transformation issue with `RobotModelObject` for latest version of `compas_viewer`.
 
 ### Removed
 
