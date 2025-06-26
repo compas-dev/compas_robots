@@ -73,11 +73,12 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
         if value == self._show_visual:
             return
         self._show_visual = value
+        parent = self
         for i, visual_object in enumerate(self.visual_objects):
             if value:
-                parent = self
-                if i > 0:
-                    parent = self.visual_objects[i - 1]
+                # NOTE: This is a workaround to avoid double transformation issue with latest version of `compas_viewer`.
+                # if i > 0:
+                #     parent = self.visual_objects[i - 1]
                 self.scene.add(visual_object, parent)
                 self.scene.instance_colors[visual_object.instance_color.rgb255] = visual_object
             else:
@@ -91,12 +92,13 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
     def show_collision(self, value: bool):
         if value == self._show_collision:
             return
+        parent = self
         self._show_collision = value
         for i, collision_object in enumerate(self.collision_objects):
             if value:
-                parent = self
-                if i > 0:
-                    parent = self.visual_objects[i - 1]
+                # NOTE: This is a workaround to avoid double transformation issue with latest version of `compas_viewer`.
+                # if i > 0:
+                #     parent = self.visual_objects[i - 1]
                 self.scene.add(collision_object, parent)
                 self.scene.instance_colors[collision_object.instance_color.rgb255] = collision_object
             else:
@@ -113,8 +115,9 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
             for i, obj in enumerate(objects):
                 obj.init()
                 if show_flag:
-                    if i > 0:
-                        parent = objects[i - 1]
+                    # NOTE: This is a workaround to avoid double transformation issue with latest version of `compas_viewer`.
+                    # if i > 0:
+                    #     parent = objects[i - 1]
                     self.viewer.scene.add(obj, parent)
                     self.viewer.scene.instance_colors[obj.instance_color.rgb255] = obj
 
@@ -160,10 +163,10 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
 
         if self.show_visual:
             for obj in self.visual_objects:
-                obj._update_matrix()
+                obj.update()
 
         if self.show_collision:
             for obj in self.collision_objects:
-                obj._update_matrix()
+                obj.update()
 
         self.viewer.renderer.update()
