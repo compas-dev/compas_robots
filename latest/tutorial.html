@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/css/compas.css?v=617b33e2" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=4c969af8" />
@@ -576,7 +576,7 @@ in relation to the next. Examples of typical coordinate frames are:</p>
 (<code class="docutils literal notranslate"><span class="pre">xaxis</span></code>, <code class="docutils literal notranslate"><span class="pre">yaxis</span></code>). Both the point and the vectors can be defined
 using simple lists of XYZ components or using classes. Frames are
 right-handed coordinate systems. The following two examples are equivalent:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">Point</span><span class="p">,</span> <span class="n">Vector</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">compas.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">Point</span><span class="p">,</span> <span class="n">Vector</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
@@ -603,7 +603,7 @@ from alternative representations such as:</p>
 </div>
 <p>The relationship between coordinate frames is expressed as a
 <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Transformation.html" title="(in COMPAS vlatest)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transformation</span></code></a> between the two, for example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Transformation</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">compas.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Transformation</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">([</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
@@ -677,8 +677,8 @@ an example code for both Rhino and Blender.</p>
 Rhino</label><div class="sd-tab-content docutils">
 <p>Be sure to first install COMPAS for Rhino.  While the following code is incomplete,
 it can be used as a scaffolding for code to be run in a Python script editor within Rhino.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.scene</span> <span class="kn">import</span> <span class="n">Scene</span>
-<span class="kn">from</span> <span class="nn">compas_robots</span> <span class="kn">import</span> <span class="n">RobotModel</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">compas.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_robots</span><span class="w"> </span><span class="kn">import</span> <span class="n">RobotModel</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">RobotModel</span><span class="p">(</span><span class="s1">&#39;Robby&#39;</span><span class="p">)</span>
 
@@ -693,8 +693,8 @@ it can be used as a scaffolding for code to be run in a Python script editor wit
 <input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
 <label class="sd-tab-label" for="sd-tab-item-1">
 Blender</label><div class="sd-tab-content docutils">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.scene</span> <span class="kn">import</span> <span class="n">Scene</span>
-<span class="kn">from</span> <span class="nn">compas_robots</span> <span class="kn">import</span> <span class="n">RobotModel</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">compas.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_robots</span><span class="w"> </span><span class="kn">import</span> <span class="n">RobotModel</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">RobotModel</span><span class="p">(</span><span class="s1">&#39;Robby&#39;</span><span class="p">)</span>
 
@@ -715,8 +715,8 @@ Blender</label><div class="sd-tab-content docutils">
 <p>Robot models are represented by the <a class="reference internal" href="api/generated/compas_robots.RobotModel.html" title="compas_robots.RobotModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">RobotModel</span></code></a> class.
 There are various ways to construct a robot model. The following snippet
 shows how to construct one programmatically:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compas_robots</span> <span class="kn">import</span> <span class="n">RobotModel</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compas_robots.model</span> <span class="kn">import</span> <span class="n">Joint</span><span class="p">,</span> <span class="n">Link</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">compas_robots</span><span class="w"> </span><span class="kn">import</span> <span class="n">RobotModel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">compas_robots.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Joint</span><span class="p">,</span> <span class="n">Link</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j1</span> <span class="o">=</span> <span class="n">Joint</span><span class="p">(</span><span class="s1">&#39;joint_1&#39;</span><span class="p">,</span> <span class="s1">&#39;revolute&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="s1">&#39;base&#39;</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="s1">&#39;link_1&#39;</span><span class="p">)</span>
@@ -743,8 +743,8 @@ shows how to construct one programmatically:</p>
 and <code class="docutils literal notranslate"><span class="pre">add_joint</span></code> of <a class="reference internal" href="api/generated/compas_robots.RobotModel.html" title="compas_robots.RobotModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">RobotModel</span></code></a> offer an alternative that
 significantly reduces the amount of code required.  Starting with an empty
 robot model, adding a link in the shape of a box is as easy as:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Frame</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compas_robots</span> <span class="kn">import</span> <span class="n">RobotModel</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">compas.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Frame</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">compas_robots</span><span class="w"> </span><span class="kn">import</span> <span class="n">RobotModel</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">RobotModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Boxy&#39;</span><span class="p">)</span>
@@ -757,9 +757,9 @@ to visualize Boxy.  Throughout the rest of this tutorial, the code
 snippets will include the lines for visualization in Rhino, but be
 aware that the class <a class="reference internal" href="api/generated/compas_robots.RobotModel.html" title="compas_robots.RobotModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">RobotModel</span></code></a> can be used,
 and is useful, outside of a CAD environment.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.scene</span> <span class="kn">import</span> <span class="n">Scene</span>
-<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Frame</span>
-<span class="kn">from</span> <span class="nn">compas_robots</span> <span class="kn">import</span> <span class="n">RobotModel</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">compas.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Frame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_robots</span><span class="w"> </span><span class="kn">import</span> <span class="n">RobotModel</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">RobotModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Boxy&#39;</span><span class="p">)</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">.5</span><span class="p">)</span>
@@ -783,9 +783,9 @@ this tutorial uses only primitives.</p>
 origin, simply change the frame of the provided box. To move the box so that it sits
 above the XY plane, the origin must be shifted in the z-direction by half the height
 of the box.  The box is also shifted slightly forward in the y-direction:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.scene</span> <span class="kn">import</span> <span class="n">Scene</span>
-<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Frame</span>
-<span class="kn">from</span> <span class="nn">compas_robots</span> <span class="kn">import</span> <span class="n">RobotModel</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">compas.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Frame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_robots</span><span class="w"> </span><span class="kn">import</span> <span class="n">RobotModel</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">RobotModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Boxy&#39;</span><span class="p">)</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="n">Frame</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="mf">.25</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
@@ -801,9 +801,9 @@ of the box.  The box is also shifted slightly forward in the y-direction:</p>
 </figure>
 <p>A link may have more than one geometric element associated to it.  Now
 there is a stack of two boxes:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.scene</span> <span class="kn">import</span> <span class="n">Scene</span>
-<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Frame</span>
-<span class="kn">from</span> <span class="nn">compas_robots</span> <span class="kn">import</span> <span class="n">RobotModel</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">compas.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Frame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_robots</span><span class="w"> </span><span class="kn">import</span> <span class="n">RobotModel</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">RobotModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Boxy&#39;</span><span class="p">)</span>
 <span class="n">box_1</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="n">Frame</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="mf">.25</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
@@ -824,10 +824,10 @@ So to stack the boxes, the center of <code class="docutils literal notranslate">
 <code class="docutils literal notranslate"><span class="pre">&lt;height</span> <span class="pre">of</span> <span class="pre">box_1&gt;</span> <span class="pre">+</span> <span class="pre">1/2</span> <span class="pre">*</span> <span class="pre">&lt;height</span> <span class="pre">of</span> <span class="pre">box_2&gt;</span> <span class="pre">=</span> <span class="pre">.5</span> <span class="pre">+</span> <span class="pre">.5</span> <span class="pre">*</span> <span class="pre">7</span> <span class="pre">=</span> <span class="pre">4</span></code>.</p>
 <p>One link does not an interesting robot make.  The following code snippet adds
 a cylindrical second link as well as a joint connecting the two.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.scene</span> <span class="kn">import</span> <span class="n">Scene</span>
-<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Cylinder</span><span class="p">,</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">Vector</span>
-<span class="kn">from</span> <span class="nn">compas_robots</span> <span class="kn">import</span> <span class="n">RobotModel</span>
-<span class="kn">from</span> <span class="nn">compas_robots.model</span> <span class="kn">import</span> <span class="n">Joint</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">compas.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Cylinder</span><span class="p">,</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">Vector</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_robots</span><span class="w"> </span><span class="kn">import</span> <span class="n">RobotModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_robots.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Joint</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">RobotModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Jointy&#39;</span><span class="p">)</span>
 <span class="n">box_1</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="n">Frame</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="mf">.25</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
@@ -891,9 +891,9 @@ models are loaded from URDF files. To load a URDF into a robot model, use the
 <p>Since a large number of robot models defined in URDF are available on Github,
 there are specialized loaders that allow loading an entire model including
 its linked geometry directly from a Github repository:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">compas</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compas_robots</span> <span class="kn">import</span> <span class="n">RobotModel</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compas_robots.resources</span> <span class="kn">import</span> <span class="n">GithubPackageMeshLoader</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">compas</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">compas_robots</span><span class="w"> </span><span class="kn">import</span> <span class="n">RobotModel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">compas_robots.resources</span><span class="w"> </span><span class="kn">import</span> <span class="n">GithubPackageMeshLoader</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">github</span> <span class="o">=</span> <span class="n">GithubPackageMeshLoader</span><span class="p">(</span><span class="s1">&#39;ros-industrial/abb&#39;</span><span class="p">,</span> <span class="s1">&#39;abb_irb6600_support&#39;</span><span class="p">,</span> <span class="s1">&#39;kinetic-devel&#39;</span><span class="p">)</span>
@@ -911,7 +911,7 @@ an overview of some of the installation options is available
 Once ROS is configured on your system, the most convenient way to load the
 robot model is to use <strong>COMPAS FAB</strong> and its ROS integration.
 The following snippet shows how to load the robot model currently active in ROS:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compas_fab.backends</span> <span class="kn">import</span> <span class="n">RosClient</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">compas_fab.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">RosClient</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">RosClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">ros</span><span class="p">:</span>
