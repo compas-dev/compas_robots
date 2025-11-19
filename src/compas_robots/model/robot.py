@@ -1074,7 +1074,7 @@ class RobotModel(Data):
         -----
         Only MeshDescriptor in `element.geometry.shape` is supported. Other shapes are ignored.
         """
-        visual_meshes = self._extract_link_meshes(link.visual, True)
+        visual_meshes = self._extract_link_meshes(link.visual)
         return visual_meshes
 
     def get_link_visual_meshes_joined(self, link, weld=False, weld_precision=None):
@@ -1104,7 +1104,7 @@ class RobotModel(Data):
         -----
         Only MeshDescriptor in `element.geometry.shape` is supported. Other shapes are ignored.
         """
-        visual_meshes = self._extract_link_meshes(link.visual, True)
+        visual_meshes = self._extract_link_meshes(link.visual)
         if not visual_meshes:
             return None
 
@@ -1135,7 +1135,7 @@ class RobotModel(Data):
         -----
         Only MeshDescriptor in `element.geometry.shape` is supported. Other shapes are ignored.
         """
-        collision_meshes = self._extract_link_meshes(link.collision, True)
+        collision_meshes = self._extract_link_meshes(link.collision)
         return collision_meshes
 
     def get_link_collision_meshes_joined(self, link, weld=False, weld_precision=None):
@@ -1165,7 +1165,7 @@ class RobotModel(Data):
         -----
         Only MeshDescriptor in `element.geometry.shape` is supported. Other shapes are ignored.
         """
-        collision_meshes = self._extract_link_meshes(link.collision, True)
+        collision_meshes = self._extract_link_meshes(link.collision)
         if not collision_meshes:
             return None
 
