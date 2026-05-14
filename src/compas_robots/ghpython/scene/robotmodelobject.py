@@ -1,7 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from typing import Optional
 
+from compas.colors import Color
+from compas.datastructures import Mesh
 from compas_ghpython.drawing import draw_mesh
 from compas_ghpython.scene import GHSceneObject
 from compas_rhino.conversions import transformation_to_rhino
@@ -16,7 +16,7 @@ class RobotModelObject(GHSceneObject, BaseRobotModelObject):
     ----------
     **kwargs : dict, optional
         Additional keyword arguments.
-        See :class:`~compas_ghpython.scene.GHSceneObject` and :class:`~compas_robots.scene.BaseRobotModelObject` for more info.
+        See [GHSceneObject][compas_ghpython.scene.GHSceneObject] and [BaseRobotModelObject][compas_robots.scene.BaseRobotModelObject] for more info.
 
     """
 
@@ -27,21 +27,21 @@ class RobotModelObject(GHSceneObject, BaseRobotModelObject):
         T = transformation_to_rhino(transformation)
         native_mesh.Transform(T)
 
-    def create_geometry(self, geometry, name=None, color=None):
+    def create_geometry(self, geometry: Mesh, name: Optional[str] = None, color: Optional[Color] = None):
         """Create the scene objecy representing the robot geometry.
 
         Parameters
         ----------
-        geometry : :class:`~compas.datastructures.Mesh`
+        geometry
             Instance of a mesh data structure
-        name : str, optional
+        name
             The name of the mesh to draw.
-        color : :class:`~compas.colors.Color`
+        color
             The color of the object.`
 
         Returns
         -------
-        :rhino:`Rhino.Geometry.Mesh`
+        `Rhino.Geometry.Mesh`
         """
         color = color.rgba255 if color else None
 
@@ -59,7 +59,7 @@ class RobotModelObject(GHSceneObject, BaseRobotModelObject):
 
         Returns
         -------
-        list[:rhino:`Rhino.Geometry.Mesh`]
+        list[`Rhino.Geometry.Mesh`]
 
         """
         return self.draw_visual()

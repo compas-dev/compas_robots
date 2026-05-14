@@ -1,3 +1,59 @@
+[build-system]
+requires = ["setuptools>=66.0"]
+build-backend = "setuptools.build_meta"
+
+# ============================================================================
+# Project info
+# ============================================================================
+
+[project]
+name = "compas_robots"
+description = "Basic infrastructure for working with robots in COMPAS."
+keywords = ["robots", "urdf", "kinematics", "compas", "robotics"]
+authors = [
+    { name = "Gonzalo Casas", email = "casas@arch.ethz.ch" },
+    { name = "Chen Kasirer", email = "ckasirer@ethz.ch" },
+    { name = "Victor Leung", email = "yck011522@gmail.com" },
+]
+license = { file = "LICENSE" }
+readme = "README.md"
+requires-python = ">=3.9"
+dynamic = ['dependencies', 'optional-dependencies', 'version']
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Unix",
+    "Operating System :: POSIX",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "compas_robots.__version__" }
+dependencies = { file = "requirements.txt" }
+optional-dependencies = { dev = { file = "requirements-dev.txt" } }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.urls]
+Homepage = "https://github.com/compas-dev/compas_robots"
+Documentation = "https://compas.dev/compas_robots"
+Repository = "https://github.com/compas-dev/compas_robots"
+Changelog = "https://github.com/compas-dev/compas_robots/blob/main/CHANGELOG.md"
+Issues = "https://github.com/compas-dev/compas_robots/issues"
+Forum = "https://forum.compas-framework.org/"
+
 # ============================================================================
 # Testing
 # ============================================================================
@@ -9,22 +65,13 @@ python_files = [
     "test_*.py",
     "tests.py"
 ]
-addopts = "-ra --strict --doctest-modules --doctest-glob=*.rst --tb=short"
+addopts = "-ra --strict-markers --doctest-modules --doctest-glob=*.md --tb=short"
 doctest_optionflags= "NORMALIZE_WHITESPACE IGNORE_EXCEPTION_DETAIL ALLOW_UNICODE ALLOW_BYTES NUMBER"
 filterwarnings = "ignore::DeprecationWarning"
 
 # ============================================================================
 # Linting and formatting
 # ============================================================================
-
-[tool.black]
-line-length = 120
-
-[tool.ruff.lint.isort]
-force-single-line = true
-known-first-party = [
-    "compas_robots",
-]
 
 [tool.ruff]
 line-length = 179
@@ -39,6 +86,12 @@ select = ["E", "F", "I"]
 "tests/*" = ["I001", "E501"]
 "tasks.py" = ["I001"]
 
+[tool.ruff.lint.isort]
+force-single-line = true
+known-first-party = [
+    "compas_robots",
+]
+
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
 
@@ -48,3 +101,23 @@ max-doc-length = 179
 [tool.ruff.format]
 docstring-code-format = true
 docstring-code-line-length = "dynamic"
+
+# ============================================================================
+# Release automation
+# ============================================================================
+
+[tool.bumpversion]
+current_version = "0.6.0"
+message = "Bump version to {new_version}"
+commit = true
+tag = true
+
+[[tool.bumpversion.files]]
+filename = "src/compas_robots/__init__.py"
+search = "{current_version}"
+replace = "{new_version}"
+
+[[tool.bumpversion.files]]
+filename = "CHANGELOG.md"
+search = "Unreleased"
+replace = "[{new_version}] {now:%Y-%m-%d}"

@@ -13,6 +13,7 @@ from .joint import Calibration
 from .joint import ChildLink
 from .joint import Dynamics
 from .joint import Joint
+from .joint import JointType
 from .joint import Limit
 from .joint import Mimic
 from .joint import ParentLink
@@ -38,6 +39,7 @@ __all__ = [
     "ChildLink",
     "Dynamics",
     "Joint",
+    "JointType",
     "Limit",
     "Mimic",
     "ParentLink",

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added `compas_robots.model.JointType` enum exposing the supported URDF joint types, including `JointType.from_urdf(name)` and `JointType.urdf_name` for converting to/from URDF strings.
 * Added new functions to extract Visual and Collision meshes from `RobotModel`.
 * Added `RobotModel.get_link_visual_meshes` and `RobotModel.get_link_collision_meshes`
   for extracting meshes from a specific link.
@@ -17,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Migrated documentation to MkDocs and docstrings from reStructuredText to Markdown.
+* Migrated build configuration to `pyproject.toml` (removed `setup.py`, `setup.cfg`, `.bumpversion.cfg`).
+* Added PEP 484 type hints to all public APIs across `compas_robots`, moving type information from docstrings to function/method signatures.
+* Fixed docstring inaccuracies.
 * Fixed bug in `compas_viewer` due to import of `RobotModelObject` inside registration function.
 * Fixed a double transformation issue with `RobotModelObject` for `compas_viewer>=1.4.0`.
 

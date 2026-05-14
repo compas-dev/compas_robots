@@ -1,7 +1,7 @@
 from typing import Any
-from typing import List
+from typing import Optional
 
-import bpy  # type: ignore
+import bpy
 import compas_blender
 import mathutils
 from compas.colors import Color
@@ -20,7 +20,7 @@ class RobotModelObject(BlenderSceneObject, BaseRobotModelObject):
     **kwargs : dict, optional
         Additional keyword arguments.
         For more info,
-        see :class:`~compas_blender.scene.BlenderSceneObject` and :class:`~compas_robots.scene.BaseRobotModelObject`.
+        see [BlenderSceneObject][compas_blender.scene.BlenderSceneObject] and [BaseRobotModelObject][compas_robots.scene.BaseRobotModelObject].
 
     """
 
@@ -32,9 +32,9 @@ class RobotModelObject(BlenderSceneObject, BaseRobotModelObject):
 
         Parameters
         ----------
-        native_mesh : bpy.types.Object
+        native_mesh
             A mesh scene object.
-        transformation : :class:`~compas.geometry.Transformation`
+        transformation
             A transformation matrix.
 
         Returns
@@ -47,19 +47,19 @@ class RobotModelObject(BlenderSceneObject, BaseRobotModelObject):
     def create_geometry(
         self,
         geometry: Mesh,
-        name: str = None,
-        color: Color = None,
+        name: Optional[str] = None,
+        color: Optional[Color] = None,
     ) -> bpy.types.Object:
         """Create the scene object representing the robot geometry.
 
         Parameters
         ----------
-        geometry : :class:`~compas.datastructures.Mesh`
+        geometry
             Instance of a mesh data structure
-        name : str, optional
+        name
             The name of the mesh to draw.
-        color : :class:`~compas.colors.Color`
-            The color of the object.`
+        color
+            The color of the object.
 
         Returns
         -------
@@ -95,23 +95,23 @@ class RobotModelObject(BlenderSceneObject, BaseRobotModelObject):
         if len(self.collection.objects) == 0:
             self.create()
 
-    def draw(self) -> List[bpy.types.Object]:
+    def draw(self) -> list[bpy.types.Object]:
         """Draw the robot model.
 
         Returns
         -------
-        list[:blender:`bpy.types.Object`]
+        list[bpy.types.Object]
 
         """
         self._ensure_geometry()
         return self.draw_visual()
 
-    def draw_visual(self) -> List[bpy.types.Object]:
+    def draw_visual(self) -> list[bpy.types.Object]:
         """Draw the robot model.
 
         Returns
         -------
-        list[:blender:`bpy.types.Object`]
+        list[bpy.types.Object]
 
         """
         self._ensure_geometry()
@@ -120,12 +120,12 @@ class RobotModelObject(BlenderSceneObject, BaseRobotModelObject):
             visual.hide_set(False)
         return visuals
 
-    def draw_collision(self) -> List[bpy.types.Object]:
+    def draw_collision(self) -> list[bpy.types.Object]:
         """Draw the collision mesh of the robot model.
 
         Returns
         -------
-        list[:blender:`bpy.types.Object`]
+        list[bpy.types.Object]
 
         """
         self._ensure_geometry()
@@ -134,12 +134,12 @@ class RobotModelObject(BlenderSceneObject, BaseRobotModelObject):
             collision.hide_set(False)
         return collisions
 
-    def draw_attached_meshes(self) -> List[bpy.types.Object]:
+    def draw_attached_meshes(self) -> list[bpy.types.Object]:
         """Draw the meshes attached to the robot model, if any.
 
         Returns
         -------
-        list[:blender:`bpy.types.Object`]
+        list[bpy.types.Object]
 
         """
         self._ensure_geometry()

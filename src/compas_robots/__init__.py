@@ -1,18 +1,9 @@
+"""This package provides the basic infrastructure for working with robots in COMPAS.
+
+The root of a robot model is the [RobotModel][compas_robots.RobotModel] class, which
+describes a robot consisting of a set of link elements, and a set of joint
+elements connecting the links together.
 """
-********************************************************************************
-compas_robots
-********************************************************************************
-
-.. currentmodule:: compas_robots
-
-
-.. toctree::
-    :maxdepth: 1
-
-
-"""
-
-from __future__ import print_function
 
 import os
 

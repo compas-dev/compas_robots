@@ -1,3 +1,4 @@
+from typing import TYPE_CHECKING
 from typing import Optional
 
 from compas.colors import Color
@@ -13,28 +14,28 @@ from compas_robots.scene import BaseRobotModelObject
 class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
     """Viewer scene object for displaying COMPAS Robot geometry.
 
+    The robot model itself is set via `SceneObject.item` (i.e. by passing it to
+    `Scene.add`) rather than through this constructor.
+
     Parameters
     ----------
-    model : :class:`compas_robots.RobotModel`
-        The robot model.
-    configuration : :class:`compas_robots.Configuration`, optional
+    configuration
         The initial configuration of the robot. Defaults to the zero configuration.
-    show_visual : bool, optional
+    show_visual
         Toggle the visibility of the visual geometry. Defaults to True.
-    show_collision : bool, optional
+    show_collision
         Toggle the visibility of the collision geometry. Defaults to False.
-    hide_coplanaredges : bool, optional
+    hide_coplanaredges
         True to hide the coplanar edges. It will override the value in the config file.
-    use_vertexcolors : bool, optional
+    use_vertexcolors
         True to use vertex color. It will override the value in the config file.
-    **kwargs : dict, optional
+    **kwargs
         Additional keyword arguments.
-        For more info, see :class:`compas_viewer.scene.ViewerSceneObject`.
+        For more info, see `compas_viewer.scene.ViewerSceneObject`.
 
     See Also
     --------
-    :class:`compas_robots.scene.BaseRobotModelObject`
-    :class:`compas_viewer.scene.ViewerSceneObject`
+    See [ViewerSceneObject][compas_viewer.scene.ViewerSceneObject] and [BaseRobotModelObject][compas_robots.scene.BaseRobotModelObject] for more info.
     """
 
     def __init__(
@@ -129,7 +130,7 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
 
         See Also
         --------
-        :class:`compas_robots.scene.AbstractRobotModelObject`
+        [AbstractRobotModelObject][compas_robots.scene.AbstractRobotModelObject]
         """
         geometry.transformation = transformation * geometry.transformation
 
@@ -138,7 +139,7 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
 
         See Also
         --------
-        :class:`compas_robots.scene.AbstractRobotModelObject`
+        [AbstractRobotModelObject][compas_robots.scene.AbstractRobotModelObject]
         """
         kwargs = self.kwargs.copy()
         del kwargs["item"], kwargs["facecolor"]

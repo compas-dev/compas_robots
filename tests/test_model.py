@@ -168,24 +168,18 @@ def test_ur5_urdf_data(ur5_file):
 
 
 def test_root_urdf_attributes():
-    r = RobotModel.from_urdf_string(
-        """<?xml version="1.0" encoding="UTF-8"?><robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="panda"></robot>"""
-    )
+    r = RobotModel.from_urdf_string("""<?xml version="1.0" encoding="UTF-8"?><robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="panda"></robot>""")
     assert r.name == "panda"
 
 
 def test_root_urdf_attributes_to_string():
-    r = RobotModel.from_urdf_string(
-        """<?xml version="1.0" encoding="UTF-8"?><robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="panda"></robot>"""
-    )
+    r = RobotModel.from_urdf_string("""<?xml version="1.0" encoding="UTF-8"?><robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="panda"></robot>""")
     urdf_string = URDF.from_robot(r).to_string(prettify=True)
     assert b'name="panda"' in urdf_string
 
 
 def test_robot_urdf_namespaces_to_string():
-    r = RobotModel.from_urdf_string(
-        """<?xml version="1.0" encoding="UTF-8"?><robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="panda"><xacro:bamboo/></robot>"""
-    )
+    r = RobotModel.from_urdf_string("""<?xml version="1.0" encoding="UTF-8"?><robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="panda"><xacro:bamboo/></robot>""")
     urdf_string = URDF.from_robot(r).to_string(prettify=True)
     assert isinstance(r, RobotModel)
     assert b'xmlns:xacro="http://www.ros.org/wiki/xacro"' in urdf_string
@@ -196,9 +190,7 @@ def test_robot_urdf_namespaces_to_string():
 
 
 def test_robot_default_namespace():
-    r = RobotModel.from_urdf_string(
-        """<?xml version="1.0" encoding="UTF-8"?><robot xmlns="https://drake.mit.edu" name="Acrobot"><frame/></robot>"""
-    )
+    r = RobotModel.from_urdf_string("""<?xml version="1.0" encoding="UTF-8"?><robot xmlns="https://drake.mit.edu" name="Acrobot"><frame/></robot>""")
     assert isinstance(r, RobotModel)
     assert r.name == "Acrobot"
 
@@ -213,9 +205,7 @@ def test_robot_link_nameless_is_allowed_with_custom_namespace():
 
 def test_link_nameless_raises_if_no_custom_namespace():
     with pytest.raises(Exception):
-        RobotModel.from_urdf_string(
-            """<?xml version="1.0" encoding="UTF-8"?><robot name="NamelessLinkRobot"><link/></robot>"""
-        )
+        RobotModel.from_urdf_string("""<?xml version="1.0" encoding="UTF-8"?><robot name="NamelessLinkRobot"><link/></robot>""")
 
 
 def test_robot_default_namespace_creates_box_shape_based_on_tagname():
@@ -228,9 +218,7 @@ def test_robot_default_namespace_creates_box_shape_based_on_tagname():
 
 
 def test_robot_default_namespace_to_string():
-    r = RobotModel.from_urdf_string(
-        """<?xml version="1.0" encoding="UTF-8"?><robot xmlns="https://drake.mit.edu" name="Acrobot"><frame/></robot>"""
-    )
+    r = RobotModel.from_urdf_string("""<?xml version="1.0" encoding="UTF-8"?><robot xmlns="https://drake.mit.edu" name="Acrobot"><frame/></robot>""")
     urdf_string = URDF.from_robot(r).to_string(prettify=True)
     assert b'xmlns="https://drake.mit.edu"' in urdf_string
     assert b"<ns0:frame" in urdf_string
@@ -295,16 +283,12 @@ def test_programmatic_model(ur5):
 
 
 def test_robot_material_attributes():
-    r = RobotModel.from_urdf_string(
-        """<?xml version="1.0" encoding="UTF-8"?><robot name="panda"><material name="LightGrey"><color rgba="0.7 0.7 0.7 1.0"/></material></robot>"""
-    )
+    r = RobotModel.from_urdf_string("""<?xml version="1.0" encoding="UTF-8"?><robot name="panda"><material name="LightGrey"><color rgba="0.7 0.7 0.7 1.0"/></material></robot>""")
     assert r.materials[0].color.rgba == (0.7, 0.7, 0.7, 1.0)
 
 
 def test_robot_material_conversion_from_name():
-    r = RobotModel.from_urdf_string(
-        """<?xml version="1.0" encoding="UTF-8"?><robot name="panda"><material name="aqua"/></robot>"""
-    )
+    r = RobotModel.from_urdf_string("""<?xml version="1.0" encoding="UTF-8"?><robot name="panda"><material name="aqua"/></robot>""")
     assert r.materials[0].get_color() == Color(0.0, 1.0, 1.0, 1.0)
 
 
@@ -318,26 +302,20 @@ def test_robot_material_attributes_to_string():
 
 
 def test_unknown_urdf_attributes():
-    r = RobotModel.from_urdf_string(
-        """<?xml version="1.0" encoding="UTF-8"?><robot name="panda" some_random_attr="1337"></robot>"""
-    )
+    r = RobotModel.from_urdf_string("""<?xml version="1.0" encoding="UTF-8"?><robot name="panda" some_random_attr="1337"></robot>""")
     assert r.name == "panda"
     assert r.attr["some_random_attr"] == "1337"
 
 
 def test_unknown_urdf_attributes_to_string():
-    r_original = RobotModel.from_urdf_string(
-        """<?xml version="1.0" encoding="UTF-8"?><robot name="panda" some_random_attr="1337"></robot>"""
-    )
+    r_original = RobotModel.from_urdf_string("""<?xml version="1.0" encoding="UTF-8"?><robot name="panda" some_random_attr="1337"></robot>""")
     urdf = URDF.from_robot(r_original)
     r = RobotModel.from_urdf_string(urdf.to_string())
     assert r.attr["some_random_attr"] == "1337"
 
 
 def test_unknown_urdf_attributes_data():
-    r_original = RobotModel.from_urdf_string(
-        """<?xml version="1.0" encoding="UTF-8"?><robot name="panda" some_random_attr="1337"></robot>"""
-    )
+    r_original = RobotModel.from_urdf_string("""<?xml version="1.0" encoding="UTF-8"?><robot name="panda" some_random_attr="1337"></robot>""")
     r = RobotModel.__from_data__(r_original.__data__)
     assert r.name == "panda"
     assert r.attr["some_random_attr"] == "1337"

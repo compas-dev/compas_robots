@@ -1,4 +1,6 @@
-from __future__ import absolute_import
+"""
+This package provides functionality for visualizing robot models in Grasshopper.
+"""
 
 from compas.plugins import plugin
 from compas.scene import register

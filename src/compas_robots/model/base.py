@@ -1,8 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import annotations
 
 from copy import deepcopy
+from typing import TYPE_CHECKING
 
 from compas.colors import Color
 from compas.geometry import Frame
@@ -10,8 +9,12 @@ from compas.geometry import Frame
 from compas_robots.files import URDFElement
 from compas_robots.files import URDFGenericElement
 
+if TYPE_CHECKING:
+    from typing import Any
+    from typing import Optional
 
-def _parse_floats(values):
+
+def _parse_floats(values: str) -> list[float]:
     return [float(i) for i in values.split()]
 
 
@@ -36,7 +39,7 @@ class ProxyObject(object):
     An object proxy wraps the proxied object and forwards all calls to it
     unless a method/attribute/property is found first on the proxy itself.
 
-    The magic part is ``__getattr__`` ."""
+    The magic part is `__getattr__` ."""
 
     def __init__(self, obj):
         self._proxied_object = obj
@@ -66,7 +69,7 @@ class ProxyObject(object):
 
 
 class FrameProxy(ProxyObject):
-    """Proxy class that adds URDF functionality to an instance of :class:`Frame`.
+    """Proxy class that adds URDF functionality to an instance of [Frame][].
 
     This class is internal and not intended to be referenced externally.
     """
@@ -79,22 +82,26 @@ class FrameProxy(ProxyObject):
         return URDFElement("origin", attributes)
 
     @classmethod
-    def from_urdf(cls, attributes, elements=None, text=None):
+    def from_urdf(
+        cls,
+        attributes: dict[str, Any],
+        elements: Optional[list[object]] = None,
+        text: Optional[str] = None,
+    ) -> FrameProxy:
         """Create origin instance from an URDF element.
 
         Parameters
         ----------
-        attributes : dict[str, Any]
+        attributes
             Attributes of the URDF element.
-        elements: list[object], optional
+        elements
             Children elements of the URDF element.
-        text: str, optional
+        text
             Text content of the URDF element.
 
         Returns
         -------
-        :class:`FrameProxy`
-            Frame proxy instance.
+        Frame proxy instance.
 
         Examples
         --------
@@ -112,17 +119,13 @@ class FrameProxy(ProxyObject):
         rpy = _parse_floats(attributes.get("rpy", "0 0 0"))
         return cls(Frame.from_euler_angles(rpy, static=True, axes="xyz", point=xyz))
 
-    def scale(self, factor):
+    def scale(self, factor: float) -> None:
         """Scale the origin by a given factor.
 
         Parameters
         ----------
-        factor : float
+        factor
             Scale factor.
-
-        Returns
-        -------
-        None
 
         Examples
         --------
@@ -134,7 +137,7 @@ class FrameProxy(ProxyObject):
 
 
 class ColorProxy(ProxyObject):
-    """Proxy class that adds URDF functionality to an instance of :class:`Color`.
+    """Proxy class that adds URDF functionality to an instance of [Color][].
 
     This class is internal and not intended to be referenced externally.
     """

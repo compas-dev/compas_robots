@@ -1,6 +1,6 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from compas.colors import Color
 from compas.data import Data
@@ -27,6 +27,12 @@ from .geometry import MeshDescriptor
 from .geometry import SphereProxy
 from .geometry import Texture
 
+if TYPE_CHECKING:
+    from typing import Iterable
+    from typing import Optional
+
+    from compas.geometry import Shape
+
 
 class Mass(Data):
     """Represents a value of mass usually related to a link."""
@@ -52,11 +58,11 @@ class Inertia(Data):
 
     Since the rotational inertia matrix is symmetric, only 6 above-diagonal
     elements of this matrix are specified here, using the attributes
-    ``ixx``, ``ixy``, ``ixz``, ``iyy``, ``iyz``, ``izz``.
+    `ixx`, `ixy`, `ixz`, `iyy`, `iyz`, `izz`.
 
     """
 
-    def __init__(self, ixx=0.0, ixy=0.0, ixz=0.0, iyy=0.0, iyz=0.0, izz=0.0):
+    def __init__(self, ixx: float = 0.0, ixy: float = 0.0, ixz: float = 0.0, iyy: float = 0.0, iyz: float = 0.0, izz: float = 0.0):
         super(Inertia, self).__init__()
         self.ixx = float(ixx)
         self.ixy = float(ixy)
@@ -102,7 +108,7 @@ class Inertia(Data):
 class Inertial(Data):
     """Inertial properties of a link.
 
-    Attributes
+    Parameters
     ----------
     origin
         This is the pose of the inertial reference frame,
@@ -114,7 +120,7 @@ class Inertial(Data):
 
     """
 
-    def __init__(self, origin=None, mass=None, inertia=None):
+    def __init__(self, origin: Optional[Frame] = None, mass: Optional[Mass] = None, inertia: Optional[Inertia] = None):
         super(Inertial, self).__init__()
         self.origin = origin
         self.mass = mass
@@ -159,7 +165,7 @@ class LinkItem(Data):
 class Visual(LinkItem):
     """Visual description of a link.
 
-    Attributes
+    Parameters
     ----------
     geometry
         Shape of the visual element.
@@ -170,12 +176,12 @@ class Visual(LinkItem):
         Name of the visual element.
     material
         Material of the visual element.
-    attr
+    kwargs
         Non-standard attributes.
 
     """
 
-    def __init__(self, geometry, origin=None, name=None, material=None, **kwargs):
+    def __init__(self, geometry: LinkGeometry, origin: Optional[Frame] = None, name: Optional[str] = None, material: Optional[Material] = None, **kwargs):
         super(Visual, self).__init__(name=name)
         self.geometry = geometry
         self.origin = origin
@@ -234,14 +240,14 @@ class Visual(LinkItem):
             visual.current_transformation = Transformation.__from_data__(data["current_transformation"])
         return visual
 
-    def get_color(self):
+    def get_color(self) -> Optional[Color]:
         """Get the RGBA color array assigned to the link.
 
         Only if the link has a material assigned.
 
         Returns
         -------
-        :class:`~compas.colors.Color`
+        Optional[Color]
             If the link has a material assigned, return its color.
 
         """
@@ -251,20 +257,20 @@ class Visual(LinkItem):
             return None
 
     @classmethod
-    def from_primitive(cls, primitive, **kwargs):
+    def from_primitive(cls, primitive: Shape, **kwargs) -> Visual:
         """Create visual link from a primitive shape.
 
         Parameters
         ----------
-        primitive : :class:`compas.geometry.Shape`
+        primitive
             A primitive shape.
-        **kwargs : dict[str, Any], optional
+        **kwargs
             The keyword arguments (kwargs) collected in a dict.
             These allow using non-standard attributes absent in the URDF specification.
 
         Returns
         -------
-        :class:`~compas.datastructures.Mesh`
+        Visual
             A visual description object.
         """
         geometry = LinkGeometry()
@@ -275,7 +281,7 @@ class Visual(LinkItem):
 class Collision(LinkItem):
     """Collidable description of a link.
 
-    Attributes
+    Parameters
     ----------
     geometry
         Shape of the collidable element.
@@ -284,12 +290,12 @@ class Collision(LinkItem):
         to the reference frame of the link.
     name
         Name of the collidable element.
-    attr
+    kwargs
         Non-standard attributes.
 
     """
 
-    def __init__(self, geometry, origin=None, name=None, **kwargs):
+    def __init__(self, geometry: LinkGeometry, origin: Optional[Frame] = None, name: Optional[str] = None, **kwargs):
         super(Collision, self).__init__(name=name)
         self.geometry = geometry
         self.origin = origin
@@ -349,20 +355,20 @@ class Collision(LinkItem):
         return collision
 
     @classmethod
-    def from_primitive(cls, primitive, **kwargs):
+    def from_primitive(cls, primitive: Shape, **kwargs) -> Collision:
         """Create collision link from a primitive shape.
 
         Parameters
         ----------
-        primitive : :class:`compas.geometry.Shape`
+        primitive
             A primitive shape.
-        **kwargs : dict[str, Any], optional
+        **kwargs
             The keyword arguments (kwargs) collected in a dict.
             These allow using non-standard attributes absent in the URDF specification.
 
         Returns
         -------
-        :class:`~compas.datastructures.Mesh`
+        Collision
             A collision description object.
         """
         geometry = LinkGeometry()
@@ -373,7 +379,7 @@ class Collision(LinkItem):
 class Link(Data):
     """Link represented as a rigid body with an inertia, visual, and collision features.
 
-    Attributes
+    Parameters
     ----------
     name
         Name of the link itself.
@@ -386,16 +392,20 @@ class Link(Data):
         from the visual properties of a link.
     inertial
         Inertial properties of the link.
-    attr
+    kwargs
         Non-standard attributes.
-    joints
-        A list of joints that are the link's children
-    parent_joint
-        The reference to a parent joint if it exists
 
     """
 
-    def __init__(self, name, type=None, visual=(), collision=(), inertial=None, **kwargs):
+    def __init__(
+        self,
+        name: str,
+        type: Optional[str] = None,
+        visual: Optional[Iterable[Visual]] = (),
+        collision: Optional[Iterable[Collision]] = (),
+        inertial: Optional[Inertial] = None,
+        **kwargs,
+    ):
         super(Link, self).__init__()
         self.name = name
         self.type = type
