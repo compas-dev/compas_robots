@@ -124,46 +124,91 @@ of joints:
 
 ## Visualizing Robots
 
-Before jumping into how to build a robot model, let's first see how to visualize
-one. This can be done using COMPAS [Scene][compas.scene.Scene].
-The procedure is the same in any of the CAD software. Below you can find
-an example code for both Rhino and Blender.
+Before jumping into how to build a robot model, let's first see how to
+visualize one. This is done through the COMPAS [Scene][compas.scene.Scene],
+and the procedure is the same in every supported environment (Rhino,
+Blender, Grasshopper, and the COMPAS viewer):
+
+```python
+from compas.scene import Scene
+from compas_robots import RobotModel
+
+model = RobotModel('Robby')
+
+# Add some geometry to Robby here
+
+scene = Scene()
+scene.add(model)
+scene.draw()
+```
+
+Of course, an empty robot is not very exciting. Ok, here's a UR5 robot visualized.
 
 === "Rhino"
 
-    Be sure to first install COMPAS for Rhino. While the following code is incomplete,
-    it can be used as a scaffolding for code to be run in a Python script editor within Rhino.
-
     ```python
-    from compas.scene import Scene
     from compas_robots import RobotModel
+    from compas.scene import Scene
 
-    model = RobotModel('Robby')
+    model = RobotModel.ur5(load_geometry=True)
 
-    # Add some geometry to Robby here
+    config = model.zero_configuration()
+    config["shoulder_pan_joint"] = 0.0
+    config["shoulder_lift_joint"] = -3.14 / 2
+    config["elbow_joint"] = 3.14 / 2
+    config["wrist_1_joint"] = -3.14 / 2
+    config["wrist_2_joint"] = -3.14 / 2
+    config["wrist_3_joint"] = 0
 
     scene = Scene()
-    scene.add(model)
+    scene_object = scene.add(model)
+    scene_object.update(config)
     scene.draw()
+    ```
+
+=== "Grasshopper"
+
+    ```python
+    from compas_robots import RobotModel
+    from compas.scene import Scene
+
+    model = RobotModel.ur5(load_geometry=True)
+
+    config = model.zero_configuration()
+    config["shoulder_pan_joint"] = 0.0
+    config["shoulder_lift_joint"] = -3.14 / 2
+    config["elbow_joint"] = 3.14 / 2
+    config["wrist_1_joint"] = -3.14 / 2
+    config["wrist_2_joint"] = -3.14 / 2
+    config["wrist_3_joint"] = 0
+
+    scene = Scene()
+    scene_object = scene.add(model)
+    scene_object.update(config)
+    a = scene.draw()
     ```
 
 === "Blender"
 
     ```python
-    from compas.scene import Scene
     from compas_robots import RobotModel
+    from compas.scene import Scene
 
-    model = RobotModel('Robby')
+    model = RobotModel.ur5(load_geometry=True)
 
-    # Add some geometry to Robby here
+    config = model.zero_configuration()
+    config["shoulder_pan_joint"] = 0.0
+    config["shoulder_lift_joint"] = -3.14 / 2
+    config["elbow_joint"] = 3.14 / 2
+    config["wrist_1_joint"] = -3.14 / 2
+    config["wrist_2_joint"] = -3.14 / 2
+    config["wrist_3_joint"] = 0
 
     scene = Scene()
-    scene.add(model)
+    scene_object = scene.add(model)
+    scene_object.update(config)
     scene.draw()
     ```
-
-See below for a complete example of how to programmatically create a robot model.
-
 
 ## Building robot models
 
@@ -171,27 +216,26 @@ Robot models are represented by the [RobotModel][compas_robots.RobotModel] class
 There are various ways to construct a robot model. The following snippet
 shows how to construct one programmatically:
 
-```pycon
->>> from compas_robots import RobotModel
->>> from compas_robots.model import Joint, Link
->>> j1 = Joint('joint_1', 'revolute', parent='base', child='link_1')
->>> j2 = Joint('joint_2', 'revolute', parent='link_1', child='link_2')
->>> j3 = Joint('joint_3', 'revolute', parent='link_2', child='link_3')
->>> j4 = Joint('joint_4', 'revolute', parent='link_3', child='link_4')
->>> j5 = Joint('joint_5', 'revolute', parent='link_4', child='link_5')
->>> j6 = Joint('joint_6', 'revolute', parent='link_5', child='link_6')
->>> l0 = Link('base')
->>> l1 = Link('link_1')
->>> l2 = Link('link_2')
->>> l3 = Link('link_3')
->>> l4 = Link('link_4')
->>> l5 = Link('link_5')
->>> l6 = Link('link_6')
->>> links = [l0, l1, l2, l3, l4, l5, l6]
->>> joints = [j1, j2, j3, j4, j5, j6]
->>> robot = RobotModel('johnny-5', joints=joints, links=links)
->>> robot.get_configurable_joint_names()
-['joint_1', 'joint_2', 'joint_3', 'joint_4', 'joint_5', 'joint_6']
+```python
+from compas_robots import RobotModel
+from compas_robots.model import Joint, Link
+j1 = Joint('joint_1', 'revolute', parent='base', child='link_1')
+j2 = Joint('joint_2', 'revolute', parent='link_1', child='link_2')
+j3 = Joint('joint_3', 'revolute', parent='link_2', child='link_3')
+j4 = Joint('joint_4', 'revolute', parent='link_3', child='link_4')
+j5 = Joint('joint_5', 'revolute', parent='link_4', child='link_5')
+j6 = Joint('joint_6', 'revolute', parent='link_5', child='link_6')
+l0 = Link('base')
+l1 = Link('link_1')
+l2 = Link('link_2')
+l3 = Link('link_3')
+l4 = Link('link_4')
+l5 = Link('link_5')
+l6 = Link('link_6')
+links = [l0, l1, l2, l3, l4, l5, l6]
+joints = [j1, j2, j3, j4, j5, j6]
+robot = RobotModel('johnny-5', joints=joints, links=links)
+robot.get_configurable_joint_names()
 ```
 
 This approach can end up being very verbose, so the methods `add_link`
@@ -199,12 +243,12 @@ and `add_joint` of [RobotModel][compas_robots.RobotModel] offer an alternative t
 significantly reduces the amount of code required. Starting with an empty
 robot model, adding a link in the shape of a box is as easy as:
 
-```pycon
->>> from compas.geometry import Box, Frame
->>> from compas_robots import RobotModel
->>> model = RobotModel(name='Boxy')
->>> box = Box(1, 2, .5)
->>> _ = model.add_link(name='box_link', visual_meshes=[box])
+```python
+from compas.geometry import Box, Frame
+from compas_robots import RobotModel
+model = RobotModel(name='Boxy')
+box = Box(1, 2, .5)
+_ = model.add_link(name='box_link', visual_meshes=[box])
 ```
 
 This code snippet can be modified and run in a Rhino python editor
