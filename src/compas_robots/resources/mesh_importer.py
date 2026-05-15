@@ -66,7 +66,9 @@ def _meshes_from_collada(filename, precision):
     dae = XML.from_file(filename)
     meshes = []
     namespace = _xml_namespace(dae.root.tag)
-    tag = lambda name: _xml_tag(name, namespace)
+
+    def tag(name):
+        return _xml_tag(name, namespace)
 
     visual_scenes = dae.root.find(tag("library_visual_scenes"))
     materials = dae.root.find(tag("library_materials"))
