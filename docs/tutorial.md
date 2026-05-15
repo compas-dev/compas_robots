@@ -151,7 +151,7 @@ An empty robot is not very exciting, of course. Let's draw a real one.
 
 ### Posing a robot
 
-We can load a robot model from a URDF file, `compas_robots` provides some built-in URDFs for testing and demonstration purposes, so let's load the UR5 industrial arm. Here it is in its "ready" pose:
+We can load a robot model from a URDF file, `compas_robots` provides some built-in URDFs for testing and demonstration purposes, so let's load the UR5e industrial arm. Here it is in its "ready" pose:
 
 === "Rhino"
 

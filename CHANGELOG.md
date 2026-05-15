@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Fixed several issues on Blender support for robot models and improved the handling of collections and objects in the Blender scene.
 * Migrated documentation to MkDocs and docstrings from reStructuredText to Markdown.
 * Migrated build configuration to `pyproject.toml` (removed `setup.py`, `setup.cfg`, `.bumpversion.cfg`).
 * Added PEP 484 type hints to all public APIs across `compas_robots`, moving type information from docstrings to function/method signatures.
@@ -31,6 +32,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.6.0] 2024-10-04
 
 ### Added
+
+* Added basic support for COLLADA / DAE files to the mesh loader.
+* Added a UR5e URDF model with COLLADA meshes including materials.
 
 ### Changed
 

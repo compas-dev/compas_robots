@@ -231,6 +231,27 @@ class RobotModel(Data):
             model.load_geometry(loader)
         return model
 
+    @classmethod
+    def ur5e(cls, load_geometry: bool = False) -> RobotModel:
+        """Construct a UR5e robot model.
+
+        Parameters
+        ----------
+        load_geometry
+            Indicate whether to load the geometry of the robot or not.
+
+        Returns
+        -------
+        RobotModel
+            A robot model instance.
+
+        """
+        model = cls.from_urdf_file(compas_robots.get("ur_description/urdf/ur5e.urdf"))
+        if load_geometry:
+            loader = LocalPackageMeshLoader(compas_robots.DATA, "ur_description")
+            model.load_geometry(loader)
+        return model
+
     def to_urdf_string(self, prettify: bool = False) -> str:
         """Construct a URDF string model description from a robot model.
 
