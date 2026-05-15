@@ -43,9 +43,7 @@ class RobotModelObject(GHSceneObject, BaseRobotModelObject):
         -------
         `Rhino.Geometry.Mesh`
         """
-        if "mesh_color.diffuse" in geometry.attributes:
-            color = Color(*geometry.attributes["mesh_color.diffuse"][:3])
-        elif color is None:
+        if color is None:
             color = Color(0.8, 0.8, 0.8)
 
         vertices, faces = geometry.to_vertices_and_faces(triangulated=False)

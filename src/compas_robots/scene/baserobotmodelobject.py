@@ -3,6 +3,7 @@ from __future__ import annotations
 import itertools
 from typing import TYPE_CHECKING
 
+from compas.colors import Color
 from compas.geometry import Frame
 from compas.geometry import Scale
 from compas.geometry import Transformation
@@ -259,7 +260,10 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
                             str(i),
                         ]
                     mesh_name = ".".join(mesh_name_components)
-                    native_mesh = self.create_geometry(mesh, name=mesh_name, color=color)
+                    # Imported colors take priority over a the parameter color
+                    mesh_diffuse_color = mesh.attributes.get("mesh_color.diffuse") if hasattr(mesh, "attributes") else None
+                    mesh_color = Color(*mesh_diffuse_color[:3]) if mesh_diffuse_color else color
+                    native_mesh = self.create_geometry(mesh, name=mesh_name, color=mesh_color)
 
                     self.transform(native_mesh, item.init_transformation)
 

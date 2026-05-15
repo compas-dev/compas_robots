@@ -104,10 +104,7 @@ class RobotModelObject(BlenderSceneObject, BaseRobotModelObject):
         bpy.types.Object
 
         """
-        # Imported colors take priority over the parameter color.
-        if "mesh_color.diffuse" in geometry.attributes:
-            color = Color(*geometry.attributes["mesh_color.diffuse"][:3])
-        elif color is None:
+        if color is None:
             color = Color(1.0, 1.0, 1.0)
 
         mesh_data = mesh_to_blender(geometry)

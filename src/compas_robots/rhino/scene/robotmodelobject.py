@@ -53,10 +53,6 @@ class RobotModelObject(RhinoSceneObject, BaseRobotModelObject):
         """
         color = color.rgba if color else None
 
-        # Imported colors take priority over a the parameter color
-        if "mesh_color.diffuse" in geometry.attributes:
-            color = geometry.attributes["mesh_color.diffuse"]
-
         vertices, faces = geometry.to_vertices_and_faces(triangulated=False)
 
         mesh = Rhino.Geometry.Mesh()
