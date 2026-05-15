@@ -135,7 +135,6 @@ nav:
   - Home: index.md
   - Installation: installation.md
   - Tutorial: tutorial.md
-  - Examples: examples.md
   - API Reference:
       - api/index.md
       - Core:
