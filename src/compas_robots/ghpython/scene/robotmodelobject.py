@@ -43,10 +43,13 @@ class RobotModelObject(GHSceneObject, BaseRobotModelObject):
         -------
         `Rhino.Geometry.Mesh`
         """
-        color = color.rgba255 if color else None
+        if "mesh_color.diffuse" in geometry.attributes:
+            color = Color(*geometry.attributes["mesh_color.diffuse"][:3])
+        elif color is None:
+            color = Color(0.8, 0.8, 0.8)
 
         vertices, faces = geometry.to_vertices_and_faces(triangulated=False)
-        mesh = draw_mesh(vertices, faces, color=color)
+        mesh = draw_mesh(vertices, faces, color=color.rgba255)
 
         # Try to fix invalid meshes
         if not mesh.IsValid:
