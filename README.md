@@ -1,74 +1,108 @@
 # COMPAS Robots
 
-Basic infrastructure for working with robots in COMPAS.
+[![Made with COMPAS](https://compas.dev/badge.svg)](https://compas.dev)
+ [![PyPI](https://img.shields.io/pypi/v/compas_robots)](https://pypi.org/project/compas_robots/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Getting started with this project
+Robot models and visualization for the [COMPAS framework](https://compas.dev).
 
-### Setup code editor
+## Features
 
-1. Open project folder in VS Code
-2. Select python environment for the project
-3. First time using VS Code and on Windows? Make sure select the correct terminal profile: `Ctrl+Shift+P`, `Terminal: Select Default Profile` and select `Command Prompt`.
+- Load and build robot models from URDF files or programmatically
+- Visualize robots in **Rhino**, **Grasshopper**, **Blender**, and the **COMPAS Viewer**
+- Forward kinematics and configuration management
+- Load geometry from local files or directly from GitHub repositories
+- Attach tools and meshes to robot links
 
-> All terminal commands in the following sections can be run from the VS Code integrated terminal. 
+## Installation
 
+```bash
+pip install compas_robots
+```
 
-### First steps with git
+## Quick start
 
-1. Go to the `Source control` tab
-2. Make an initial commit with all newly created files
+```python
+import math
+from compas_robots import RobotModel
+from compas_viewer import Viewer
 
+model = RobotModel.ur5e(load_geometry=True)
 
-### First steps with code
+config = model.zero_configuration()
+config["shoulder_lift_joint"] = -math.pi / 2
+config["elbow_joint"]         =  math.pi / 2
+config["wrist_1_joint"]       = -math.pi / 2
+config["wrist_2_joint"]       = -math.pi / 2
 
-1. Install the newly created project 
+viewer = Viewer()
+scene_object = viewer.scene.add(model)
+scene_object.update(config)
+viewer.show()
+```
 
-        pip install -e .
+## Loading robot models
 
-2. Install it on Rhino
+From a URDF file:
 
-        python -m compas_rhino.install
+```python
+from compas_robots import RobotModel
 
+model = RobotModel.from_urdf_file("ur5e.urdf")
+```
 
-### Code conventions
+From a GitHub repository:
 
-Code convention follows [PEP8](https://pep8.org/) style guidelines and line length of 120 characters.
+```python
+from compas_robots import RobotModel
+from compas_robots.resources import GithubPackageMeshLoader
 
-1. Check adherence to style guidelines
+github = GithubPackageMeshLoader("ros-industrial/abb", "abb_irb6600_support", "kinetic-devel")
+model = RobotModel.from_urdf_file(github.load_urdf("irb6640.urdf"))
+model.load_geometry(github)
+```
 
-        invoke lint
+## Documentation
 
-2. Format code automatically
+Full documentation, tutorials, and examples at [compas.dev/compas_robots](https://compas.dev/compas_robots).
 
-        invoke format
+## Contributing
 
+### Setup
 
-### Documentation
+```bash
+git clone https://github.com/compas-dev/compas_robots
+cd compas_robots
+pip install -e ".[dev]"
+```
 
-Documentation is generated automatically out of docstrings and Markdown files in this repository using [MkDocs](https://www.mkdocs.org/) with the [Material](https://squidfunk.github.io/mkdocs-material/) theme and [mkdocstrings](https://mkdocstrings.github.io/).
+### Code style
 
-1. Generate the docs
+```bash
+invoke lint      # check style
+invoke format    # auto-format
+```
 
-        invoke docs
+### Tests
 
-2. Open docs in your browser (file explorer -> `dist/docs/index.html`)
+```bash
+invoke test
+```
 
+### Docs
 
-### Testing
+```bash
+invoke docs
+```
 
-Tests are written using the [pytest](https://docs.pytest.org/) framework
+### Releases
 
-1. Run all tests from terminal
+Releases follow [semver](https://semver.org/spec/v2.0.0.html):
 
-        invoke test
+```bash
+invoke release minor
+```
 
-2. Or run them from VS Code from the `Testing` tab
+## License
 
-
-### Publish release
-
-Releases follow the [semver](https://semver.org/spec/v2.0.0.html) versioning convention.
-
-1. Create a new release
-
-        invoke release major
+MIT. See [LICENSE](LICENSE).
