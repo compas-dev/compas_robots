@@ -19,7 +19,7 @@ regardless of where the configurations come from.
 
     Bake one keyframe per frame onto Blender's timeline. After the script
     finishes, the animation lives in the `.blend` file and can be scrubbed,
-    looped, or rendered to a video — no script needs to be running.
+    looped, or rendered to a video, no script needs to be running.
 
     ```python
     --8<-- "docs/files/animate_ur5e_keyframes.py"
