@@ -1,9 +1,37 @@
 [
   {
+    "name": "Latest",
+    "version": "latest",
+    "url": "/compas_robots/latest/"
+  },
+  {
+    "name": "1.0.0",
     "version": "1.0.0",
-    "title": "1.0.0",
-    "aliases": [
-      "latest"
-    ]
+    "url": "/compas_robots/1.0.0/"
+  },
+  {
+    "name": "0.6.0",
+    "version": "0.6.0",
+    "url": "/compas_robots/0.6.0/"
+  },
+  {
+    "name": "0.5.0",
+    "version": "0.5.0",
+    "url": "/compas_robots/0.5.0/"
+  },
+  {
+    "name": "0.4.0",
+    "version": "0.4.0",
+    "url": "/compas_robots/0.4.0/"
+  },
+  {
+    "name": "0.3.0",
+    "version": "0.3.0",
+    "url": "/compas_robots/0.3.0/"
+  },
+  {
+    "name": "0.2.3",
+    "version": "0.2.3",
+    "url": "/compas_robots/0.2.3/"
   }
 ]
