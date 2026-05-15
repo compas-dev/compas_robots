@@ -82,6 +82,17 @@ class RobotModelObject(BlenderSceneObject, BaseRobotModelObject):
             coll.hide_viewport = hide_viewport
             coll.hide_render = hide_render
 
+    def set_object_color(self, obj: bpy.types.Object, color: Color) -> None:
+        super().set_object_color(obj, color)
+        # NOTE: compas_blender sets diffuse_color but not the node graph, so renders appear grey.
+        # Remove this override once fixed upstream in compas_blender.
+        material = obj.active_material
+        if material:
+            material.use_nodes = True  # activating this creates node_tree if absent
+            bsdf = material.node_tree.nodes.get("Principled BSDF") if material.node_tree else None
+            if bsdf:
+                bsdf.inputs["Base Color"].default_value = color.rgba
+
     def create_geometry(
         self,
         geometry: Mesh,
