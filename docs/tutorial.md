@@ -122,12 +122,17 @@ of joints:
   are locked.
 
 
-## Visualizing Robots
+## Visualizing robots
 
 Before jumping into how to build a robot model, let's first see how to
 visualize one. This is done through the COMPAS [Scene][compas.scene.Scene],
 and the procedure is the same in every supported environment (Rhino,
-Blender, Grasshopper, and the COMPAS viewer):
+Blender, Grasshopper, and the COMPAS viewer).
+
+### Drawing a robot
+
+The basic pattern is the same for any robot model: load it, add it to a
+scene, and draw the scene.
 
 ```python
 from compas.scene import Scene
@@ -142,23 +147,28 @@ scene.add(model)
 scene.draw()
 ```
 
-Of course, an empty robot is not very exciting. Ok, here's a UR5 robot visualized.
+An empty robot is not very exciting, of course. Let's draw a real one.
+
+### Posing a robot
+
+We can load a robot model from a URDF file, `compas_robots` provides some built-in URDFs for testing and demonstration purposes, so let's load the UR5 industrial arm. Here it is in its "ready" pose:
 
 === "Rhino"
 
     ```python
+    import math
     from compas_robots import RobotModel
     from compas.scene import Scene
 
-    model = RobotModel.ur5(load_geometry=True)
+    model = RobotModel.ur5e(load_geometry=True)
 
     config = model.zero_configuration()
-    config["shoulder_pan_joint"] = 0.0
-    config["shoulder_lift_joint"] = -3.14 / 2
-    config["elbow_joint"] = 3.14 / 2
-    config["wrist_1_joint"] = -3.14 / 2
-    config["wrist_2_joint"] = -3.14 / 2
-    config["wrist_3_joint"] = 0
+    config["shoulder_pan_joint"]  =  0.0
+    config["shoulder_lift_joint"] = -math.pi / 2
+    config["elbow_joint"]         =  math.pi / 2
+    config["wrist_1_joint"]       = -math.pi / 2
+    config["wrist_2_joint"]       = -math.pi / 2
+    config["wrist_3_joint"]       =  0.0
 
     scene = Scene()
     scene_object = scene.add(model)
@@ -169,18 +179,19 @@ Of course, an empty robot is not very exciting. Ok, here's a UR5 robot visualize
 === "Grasshopper"
 
     ```python
+    import math
     from compas_robots import RobotModel
     from compas.scene import Scene
 
-    model = RobotModel.ur5(load_geometry=True)
+    model = RobotModel.ur5e(load_geometry=True)
 
     config = model.zero_configuration()
-    config["shoulder_pan_joint"] = 0.0
-    config["shoulder_lift_joint"] = -3.14 / 2
-    config["elbow_joint"] = 3.14 / 2
-    config["wrist_1_joint"] = -3.14 / 2
-    config["wrist_2_joint"] = -3.14 / 2
-    config["wrist_3_joint"] = 0
+    config["shoulder_pan_joint"]  =  0.0
+    config["shoulder_lift_joint"] = -math.pi / 2
+    config["elbow_joint"]         =  math.pi / 2
+    config["wrist_1_joint"]       = -math.pi / 2
+    config["wrist_2_joint"]       = -math.pi / 2
+    config["wrist_3_joint"]       =  0.0
 
     scene = Scene()
     scene_object = scene.add(model)
@@ -191,24 +202,52 @@ Of course, an empty robot is not very exciting. Ok, here's a UR5 robot visualize
 === "Blender"
 
     ```python
+    import math
     from compas_robots import RobotModel
     from compas.scene import Scene
 
-    model = RobotModel.ur5(load_geometry=True)
+    model = RobotModel.ur5e(load_geometry=True)
 
     config = model.zero_configuration()
-    config["shoulder_pan_joint"] = 0.0
-    config["shoulder_lift_joint"] = -3.14 / 2
-    config["elbow_joint"] = 3.14 / 2
-    config["wrist_1_joint"] = -3.14 / 2
-    config["wrist_2_joint"] = -3.14 / 2
-    config["wrist_3_joint"] = 0
+    config["shoulder_pan_joint"]  =  0.0
+    config["shoulder_lift_joint"] = -math.pi / 2
+    config["elbow_joint"]         =  math.pi / 2
+    config["wrist_1_joint"]       = -math.pi / 2
+    config["wrist_2_joint"]       = -math.pi / 2
+    config["wrist_3_joint"]       =  0.0
 
     scene = Scene()
     scene_object = scene.add(model)
     scene_object.update(config)
     scene.draw()
     ```
+
+A `Configuration` is just a mapping from joint names to joint values. Joint values
+are in radians for revolute joints, meters for prismatic ones. The UR5e has six
+configurable joints; we start from `model.zero_configuration()` (all
+zeros) and override the values that define the pose. The arm ends up
+folded forward with the elbow bent up: the standard "ready" configuration
+used in most UR demos.
+
+### Updating the pose
+
+Once a robot has been added to a scene, you can change its pose at any
+time by calling `update()` with a new configuration. There is no need to
+recreate the scene object:
+
+```python
+# Continuing from above: model, scene and scene_object already exist.
+new_config = model.zero_configuration()
+new_config["elbow_joint"] = math.pi / 4
+scene_object.update(new_config)
+scene.draw()
+```
+
+This `update()` call is the building block for everything dynamic:
+visualizing a planned trajectory, animating a sequence of poses, or
+driving an interactive control surface. For a full animation walkthrough
+built on this same pattern, see [Animating a robot](examples.md#animating-a-robot)
+in the Examples.
 
 ## Building robot models
 
@@ -383,9 +422,13 @@ joint was added, it makes sense that the axis of rotation would also need to be 
 Here, the joint will rotate about the joint origin's x-axis.
 
 Adding a bit more geometry and a few links with fixed joints and we arrive at a rough
-model of the classic drinking bird toy (full code [here](files/drinking_bird.py)).
+model of the classic drinking bird toy.
+
+See [Drinking bird](examples.md#drinking-bird) in the Examples for a complete code snippet to build this model.
 
 ![The drinking bird toy.](files/drinking_bird.png)
+
+## Loading robot models
 
 While it can be useful to programmatically create a robot, more often than not, robot
 models are loaded from URDF files. To load a URDF into a robot model, use the
