@@ -1,9 +1,9 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import annotations
 
 import itertools
+from typing import TYPE_CHECKING
 
+from compas.colors import Color
 from compas.geometry import Frame
 from compas.geometry import Scale
 from compas.geometry import Transformation
@@ -12,39 +12,51 @@ from compas.scene import SceneObject
 from compas_robots.model import LinkGeometry
 from compas_robots.model.link import LinkItem
 
+if TYPE_CHECKING:
+    from typing import Optional
+    from typing import Union
+
+    from compas.datastructures import Mesh
+
+    from compas_robots import Configuration
+    from compas_robots import RobotModel
+    from compas_robots import ToolModel
+    from compas_robots.model import Collision
+    from compas_robots.model import Link
+    from compas_robots.model import Visual
+
 
 class AbstractRobotModelObject(object):
     """Defines the interface for robot model scene objects."""
 
-    def transform(self, geometry, transformation):
+    def transform(self, geometry: object, transformation: Transformation) -> None:
         """Transforms a CAD-specific geometry using a Transformation.
 
         Parameters
         ----------
-        geometry : object
-            A CAD-specific (i.e. native) geometry object as returned by :meth:`create_geometry`.
-        transformation : :class:`~compas.geometry.Transformation`
+        geometry
+            A CAD-specific (i.e. native) geometry object as returned by `create_geometry`.
+        transformation
             Transformation to update the geometry object.
 
         """
         raise NotImplementedError
 
-    def create_geometry(self, geometry, name=None, color=None):
+    def create_geometry(self, geometry: Mesh, name: Optional[str] = None, color=None) -> object:
         """Draw geometry in the respective CAD environment.
 
         Parameters
         ----------
-        geometry : :class:`~compas.datastructures.Mesh`
+        geometry
             Instance of a mesh data structure
-        name : str, optional
+        name
             The name of the mesh to draw.
-        color : :class:`~compas.colors.Color`
-            The color of the object.`
+        color
+            The color of the object.
 
         Returns
         -------
-        object
-            CAD-specific geometry
+        CAD-specific geometry
 
         Notes
         -----
@@ -57,19 +69,19 @@ class AbstractRobotModelObject(object):
 class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
     """Provides common functionality to most robot model scene object implementations.
 
-    In COMPAS, "SceneObjects" are classes that assist with the visualization of
+    In COMPAS, `SceneObjects` are classes that assist with the visualization of
     datastructures and models, in a way that maintains the data separated from the
     specific CAD interfaces, while providing a way to leverage native performance
     of the CAD environment.
 
     There are two methods that implementers of this base class should provide, one
     is concerned with the actual creation of geometry in the native format of the
-    CAD environment (:meth:`create_geometry`) and the other is one to apply a transformation
-    to geometry (:meth:`transform`).
+    CAD environment (`create_geometry`) and the other is one to apply a transformation
+    to geometry (`transform`).
 
     Attributes
     ----------
-    model : :class:`~compas_robots.RobotModel`
+    model : RobotModel
         Instance of a robot model.
 
     """
@@ -82,19 +94,15 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
         self.attached_items = {}
 
     @property
-    def model(self):
+    def model(self) -> RobotModel:
         return self.item
 
     @property
-    def attached_tool_model(self):
+    def attached_tool_model(self) -> Optional[ToolModel]:
         """
         For backwards compatibility. Returns the tool attached to the first end effector link or,
         if not available, the first tool from the dictionary.
         Returns None if no tool are attached.
-
-        Returns
-        -------
-        :class: `~compas_robots.ToolModel`
 
         """
         tool_model = None
@@ -103,12 +111,12 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
             tool_model = self.attached_tool_models.get(connected_to) or list(self.attached_tool_models.values())[0]
         return tool_model
 
-    def attach_tool_model(self, tool_model):
+    def attach_tool_model(self, tool_model: ToolModel) -> None:
         """Attach a tool to the robot scene object for visualization.
 
         Parameters
         ----------
-        tool_model : :class:`~compas_robots.ToolModel`
+        tool_model
             The tool that should be attached to the robot's flange.
 
         """
@@ -119,6 +127,8 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
             tool_model.connected_to = link.name
         else:
             link = self.model.get_link_by_name(tool_model.connected_to)
+
+        assert link is not None, "Link not found"
 
         # don't attach twice on the same link
         self.attached_tool_models[tool_model.connected_to] = tool_model
@@ -139,14 +149,14 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
 
         tool_model.parent_joint_name = link.parent_joint.name
 
-    def detach_tool_model(self, tool_model=None):
+    def detach_tool_model(self, tool_model: Optional[ToolModel] = None) -> None:
         """
         Detach tool_model from this robot model.
         If tool_model is None, all attached tools are detached.
 
         Parameters
         ----------
-        tool_model : :class:`~compas_robots.ToolModel`
+        tool_model
             The tool that should be detached from the robot's flange.
             If None, all attached tools tools are removed.
         """
@@ -155,28 +165,26 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
         else:
             self.attached_tool_models.clear()
 
-    def attach_mesh(self, mesh, name, link=None, frame=None):
+    def attach_mesh(self, mesh: Mesh, name: str, link: Optional[Link] = None, frame: Optional[Frame] = None) -> None:
         """Rigidly attaches a compas mesh to a given link for visualization.
 
         Parameters
         ----------
-        mesh : :class:`~compas.datastructures.Mesh`
+        mesh
             The mesh to attach to the robot model.
-        name : str
+        name
             The identifier of the mesh.
-        link : :class:`~compas_robots.model.Link`
+        link
             The link within the robot model or tool model to attach the mesh to. Optional.
             Defaults to the model's end effector link.
-        frame : :class:`~compas.geometry.Frame`
-            The frame of the mesh. Defaults to :meth:`compas.geometry.Frame.worldXY`.
-
-        Returns
-        -------
-        None
+        frame
+            The frame of the mesh. Defaults to [compas.geometry.Frame.worldXY][].
 
         """
         if not link:
             link = self.model.get_end_effector_link()
+        assert link is not None, "Link not found"
+
         transformation = Transformation.from_frame(frame) if frame else Transformation()
 
         sample_geometry = None
@@ -196,39 +204,31 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
 
         self.attached_items.setdefault(link.name, {})[name] = item
 
-    def detach_mesh(self, name):
+    def detach_mesh(self, name: str) -> None:
         """Removes attached collision meshes with a given name.
 
         Parameters
         ----------
-        name : str
+        name
             The identifier of the mesh.
-
-        Returns
-        -------
-        None
 
         """
         for _, items in self.attached_items:
             items.pop(name, None)
 
-    def create(self, link=None, context=None):
+    def create(self, link: Optional[Link] = None, context: Optional[str] = None) -> None:
         """Recursive function that triggers the drawing of the robot model's geometry.
 
-        This method delegates the geometry drawing to the :meth:`create_geometry`
+        This method delegates the geometry drawing to the `create_geometry`
         method. It transforms the geometry based on the saved initial
         transformation from the robot model.
 
         Parameters
         ----------
-        link : :class:`~compas_robots.model.Link`, optional
+        link
             Link instance to create. Defaults to the robot model's root.
-        context : str, optional
+        context
             Subdomain identifier to insert in the mesh names.
-
-        Returns
-        -------
-        None
 
         """
         if link is None:
@@ -260,7 +260,10 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
                             str(i),
                         ]
                     mesh_name = ".".join(mesh_name_components)
-                    native_mesh = self.create_geometry(mesh, name=mesh_name, color=color)
+                    # Imported colors take priority over a the parameter color
+                    mesh_diffuse_color = mesh.attributes.get("mesh_color.diffuse") if hasattr(mesh, "attributes") else None
+                    mesh_color = Color(*mesh_diffuse_color[:3]) if mesh_diffuse_color else color
+                    native_mesh = self.create_geometry(mesh, name=mesh_name, color=mesh_color)
 
                     self.transform(native_mesh, item.init_transformation)
 
@@ -272,24 +275,26 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
         for child_joint in link.joints:
             self.create(child_joint.child_link)
 
-    def meshes(self, link=None, visual=True, collision=False, attached_meshes=True):
+    def meshes(
+        self,
+        link: Optional[Link] = None,
+        visual: bool = True,
+        collision: bool = False,
+        attached_meshes: bool = True,
+    ) -> list[Mesh]:
         """Returns all compas meshes of the model.
 
         Parameters
         ----------
-        link : :class:`~compas_robots.model.Link`, optional
+        link
             Base link instance.
             Defaults to the robot model's root.
-        visual : bool, optional
+        visual
             Whether to include the robot's visual meshes.
-        collision : bool, optional
+        collision
             Whether to include the robot's collision meshes.
-        attached_meshes : bool, optional
+        attached_meshes
             Whether to include the robot's attached meshes.
-
-        Returns
-        -------
-        list[:class:`~compas.datastructures.Mesh`]
 
         """
         if link is None:
@@ -312,17 +317,13 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
             meshes += self.meshes(child_joint.child_link, visual, collision, attached_meshes)
         return meshes
 
-    def scale(self, factor):
+    def scale(self, factor: float) -> None:
         """Scales the robot model's geometry by factor (absolute).
 
         Parameters
         ----------
-        factor : float
+        factor
             The factor to scale the robot with.
-
-        Returns
-        -------
-        None
 
         """
         self.model.scale(factor)
@@ -332,19 +333,15 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
         self.scale_link(self.model.root, transformation)
         self.scale_factor = factor
 
-    def scale_link(self, link, transformation):
+    def scale_link(self, link: Link, transformation: Transformation) -> None:
         """Recursive function to apply the scale transformation on each link.
 
         Parameters
         ----------
-        link : :class:`~compas_robots.model.Link`
+        link
             A link.
-        transformation : :class:`~compas.geometry.Transformation`
+        transformation
             A transformation to apply to th link's geometry.
-
-        Returns
-        -------
-        None
 
         """
         self._scale_link_helper(link, transformation)
@@ -363,7 +360,7 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
         for child_joint in link.joints:
             self._scale_link_helper(child_joint.child_link, transformation)
 
-    def _apply_transformation_on_transformed_link(self, item, transformation):
+    def _apply_transformation_on_transformed_link(self, item: Union[Visual, Collision], transformation: Transformation) -> None:
         """Applies a transformation on a link that is already transformed.
 
         Calculates the relative transformation and applies it to the link
@@ -371,14 +368,10 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
 
         Parameters
         ----------
-        item: :class:`~compas_robots.model.Visual` | :class:`~compas_robots.model.Collision`
+        item
             The visual or collidable object of a link.
-        transformation: :class:`~compas.geometry.Transformation`
+        transformation
             The (absolute) transformation to apply onto the link's geometry.
-
-        Returns
-        -------
-        None
 
         """
         if getattr(item, "current_transformation"):
@@ -389,21 +382,17 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
             self.transform(native_geometry, relative_transformation)
         item.current_transformation = transformation
 
-    def update(self, joint_state, visual=True, collision=True):
+    def update(self, joint_state: Union[Configuration, dict[str, float]], visual: bool = True, collision: bool = True) -> None:
         """Triggers the update of the robot geometry.
 
         Parameters
         ----------
-        joint_state : :class:`~compas_robots.Configuration` | dict[str, float]
+        joint_state
             A dictionary with joint names as keys and joint positions as values.
-        visual : bool, optional
+        visual
             If True, the visual geometry will also be updated.
-        collision : bool, optional
+        collision
             If True, the collision geometry will also be updated.
-
-        Returns
-        -------
-        None
 
         """
         _ = self._update(self.model, joint_state, visual, collision)
@@ -440,26 +429,29 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
         for item in self.attached_items.get(link.name, {}).values():
             self._apply_transformation_on_transformed_link(item, transformation)
 
-    def update_tool(self, tool, joint_state=None, visual=True, collision=True, transformation=None):
+    def update_tool(
+        self,
+        tool: ToolModel,
+        joint_state: Optional[Union[Configuration, dict[str, float]]] = None,
+        visual: bool = True,
+        collision: bool = True,
+        transformation: Optional[Transformation] = None,
+    ) -> None:
         """Triggers the update of the robot geometry of the tool.
 
         Parameters
         ----------
-        joint_state : :class:`~compas_robots.Configuration` | dict[str, float], optional
+        joint_state
             A dictionary with joint names as keys and joint positions as values.
             Defaults to an empty dictionary.
-        transformation : :class:`~compas.geometry.Transformation`, optional
+        transformation
             The (absolute) transformation to apply to the entire tool's geometry.
             If None is given, no additional transformation will be applied.
             Defaults to None.
-        visual : bool, optional
+        visual
             If True, the visual geometry will also be updated.
-        collision : bool, optional
+        collision
             If True, the collision geometry will also be updated.
-
-        Returns
-        -------
-        None
 
         """
         joint_state = joint_state or {}
@@ -470,13 +462,12 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
         self._update(tool, joint_state, visual, collision, transformation)
         tool.current_transformation = transformation
 
-    def draw_visual(self):
+    def draw_visual(self) -> list[object]:
         """Draws all visual geometry of the robot model.
 
         Returns
         -------
-        list[object]
-            A list of context-specific mesh representations.
+        A list of context-specific mesh representations.
 
         """
         visual = []
@@ -487,13 +478,12 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
                 visual.append(native_geometry)
         return visual
 
-    def draw_collision(self):
+    def draw_collision(self) -> list[object]:
         """Draws all collision geometry of the robot model.
 
         Returns
         -------
-        list[object]
-            A list of context-specific mesh representations.
+        A list of context-specific mesh representations.
 
         """
         visual = []
@@ -505,13 +495,12 @@ class BaseRobotModelObject(AbstractRobotModelObject, SceneObject):
 
         return visual
 
-    def draw_attached_meshes(self):
+    def draw_attached_meshes(self) -> list[object]:
         """Draws all meshes attached to the robot model.
 
         Returns
         -------
-        list[object]
-            A list of context-specific mesh representations.
+        A list of context-specific mesh representations.
 
         """
         visual = []

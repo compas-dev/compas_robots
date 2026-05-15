@@ -1,6 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+"""
+This package provides the base scene objects used to visualize robot models
+across the different CAD backends.
+"""
 
 from .baserobotmodelobject import AbstractRobotModelObject
 from .baserobotmodelobject import BaseRobotModelObject

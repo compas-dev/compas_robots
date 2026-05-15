@@ -13,28 +13,28 @@ from compas_robots.scene import BaseRobotModelObject
 class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
     """Viewer scene object for displaying COMPAS Robot geometry.
 
+    The robot model itself is set via `SceneObject.item` (i.e. by passing it to
+    `Scene.add`) rather than through this constructor.
+
     Parameters
     ----------
-    model : :class:`compas_robots.RobotModel`
-        The robot model.
-    configuration : :class:`compas_robots.Configuration`, optional
+    configuration
         The initial configuration of the robot. Defaults to the zero configuration.
-    show_visual : bool, optional
+    show_visual
         Toggle the visibility of the visual geometry. Defaults to True.
-    show_collision : bool, optional
+    show_collision
         Toggle the visibility of the collision geometry. Defaults to False.
-    hide_coplanaredges : bool, optional
+    hide_coplanaredges
         True to hide the coplanar edges. It will override the value in the config file.
-    use_vertexcolors : bool, optional
+    use_vertexcolors
         True to use vertex color. It will override the value in the config file.
-    **kwargs : dict, optional
+    **kwargs
         Additional keyword arguments.
-        For more info, see :class:`compas_viewer.scene.ViewerSceneObject`.
+        For more info, see `compas_viewer.scene.ViewerSceneObject`.
 
     See Also
     --------
-    :class:`compas_robots.scene.BaseRobotModelObject`
-    :class:`compas_viewer.scene.ViewerSceneObject`
+    See [ViewerSceneObject][compas_viewer.scene.ViewerSceneObject] and [BaseRobotModelObject][compas_robots.scene.BaseRobotModelObject] for more info.
     """
 
     def __init__(
@@ -106,8 +106,16 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
 
     def init(self):
         """Initialize the robot object with creating the visual and collision objects."""
+        if getattr(self, "_init_in_progress", False):
+            return
+        self._init_in_progress = True
         self.instance_color = Color.from_rgb255(*next(self.viewer.scene._instance_colors_generator))
         self.viewer.scene.instance_colors[self.instance_color.rgb255] = self
+
+        # HACK: Suppress per-object rebuild_buffers calls; we do one at the end.
+        # This is a horrible workaround, I hope it can be removed soon (15.5.2026)
+        original_rebuild = self.viewer.renderer.rebuild_buffers
+        self.viewer.renderer.rebuild_buffers = lambda: None
 
         def add_objects(objects, show_flag):
             """Helper function to initialize and add objects to the scene."""
@@ -121,15 +129,21 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
                     self.viewer.scene.add(obj, parent)
                     self.viewer.scene.instance_colors[obj.instance_color.rgb255] = obj
 
-        add_objects(self.visual_objects, self.show_visual)
-        add_objects(self.collision_objects, self.show_collision)
+        try:
+            add_objects(self.visual_objects, self.show_visual)
+            add_objects(self.collision_objects, self.show_collision)
+        finally:
+            # HACK: Re-enable buffer rebuilding
+            self.viewer.renderer.rebuild_buffers = original_rebuild
+
+        self._init_in_progress = False
 
     def transform(self, geometry, transformation: Transformation):
         """Transform the geometry by a given transformation.
 
         See Also
         --------
-        :class:`compas_robots.scene.AbstractRobotModelObject`
+        [AbstractRobotModelObject][compas_robots.scene.AbstractRobotModelObject]
         """
         geometry.transformation = transformation * geometry.transformation
 
@@ -138,8 +152,12 @@ class RobotModelObject(BaseRobotModelObject, ViewerSceneObject):
 
         See Also
         --------
-        :class:`compas_robots.scene.AbstractRobotModelObject`
+        [AbstractRobotModelObject][compas_robots.scene.AbstractRobotModelObject]
         """
+
+        if color is None:
+            color = Color(1.0, 1.0, 1.0)
+
         kwargs = self.kwargs.copy()
         del kwargs["item"], kwargs["facecolor"]
 

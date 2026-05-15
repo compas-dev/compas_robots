@@ -1,3 +1,8 @@
+"""
+This package provides the URDF file format parser used to load robot models
+from standard URDF descriptions.
+"""
+
 from __future__ import absolute_import
 
 from .urdf import URDF

@@ -1,6 +1,6 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import compas
 import compas.geometry
@@ -17,9 +17,17 @@ from .base import _attr_from_data
 from .base import _attr_to_data
 from .base import _parse_floats
 
+if TYPE_CHECKING:
+    from typing import Optional
+
+    from compas.geometry import Box
+    from compas.geometry import Capsule
+    from compas.geometry import Cylinder
+    from compas.geometry import Sphere
+
 
 class BoxProxy(ProxyObject):
-    """Proxy class that adds URDF functionality to an instance of :class:`~compas.geometry.Box`.
+    """Proxy class that adds URDF functionality to an instance of [Box][compas.geometry.Box].
 
     This class is internal and not intended to be referenced externally.
     """
@@ -43,7 +51,7 @@ class BoxProxy(ProxyObject):
 
 
 class CylinderProxy(ProxyObject):
-    """Proxy class that adds URDF functionality to an instance of :class:`~compas.geometry.Cylinder`.
+    """Proxy class that adds URDF functionality to an instance of [Cylinder][compas.geometry.Cylinder].
 
     This class is internal and not intended to be referenced externally.
     """
@@ -69,7 +77,7 @@ class CylinderProxy(ProxyObject):
 
 
 class SphereProxy(ProxyObject):
-    """Proxy class that adds URDF functionality to an instance of :class:`~compas.geometry.Sphere`.
+    """Proxy class that adds URDF functionality to an instance of [Sphere][compas.geometry.Sphere].
 
     This class is internal and not intended to be referenced externally.
     """
@@ -89,7 +97,7 @@ class SphereProxy(ProxyObject):
 
 
 class CapsuleProxy(ProxyObject):
-    """Proxy class that adds URDF functionality to an instance of :class:`~compas.geometry.Capsule`.
+    """Proxy class that adds URDF functionality to an instance of [Capsule][compas.geometry.Capsule].
 
     This class is internal and not intended to be referenced externally.
     """
@@ -115,11 +123,11 @@ class MeshDescriptor(Data):
 
     Parameters
     ----------
-    filename : str
+    filename
         The mesh' filename.
-    scale : str, optional
+    scale
         The scale factors of the mesh in the x-, y-, and z-direction.
-    **kwargs : dict[str, Any], optional
+    **kwargs
         The keyword arguments (kwargs) collected in a dict.
         These allow using non-standard attributes absent in the URDF specification.
 
@@ -129,7 +137,7 @@ class MeshDescriptor(Data):
         The mesh' filename.
     scale : [float, float, float]
         The scale factors of the mesh in the x-, y-, and z-direction.
-    meshes : list[:class:`~compas.datastructures.Mesh`]
+    meshes : list[[compas.datastructures.Mesh]]
         List of COMPAS geometric meshes.
 
     Examples
@@ -138,7 +146,7 @@ class MeshDescriptor(Data):
 
     """
 
-    def __init__(self, filename, scale="1.0 1.0 1.0", **kwargs):
+    def __init__(self, filename: str, scale: str = "1.0 1.0 1.0", **kwargs) -> None:
         super(MeshDescriptor, self).__init__()
         self.filename = filename
         self.scale = _parse_floats(scale)
@@ -186,7 +194,7 @@ class Texture(Data):
 
     Parameters
     ----------
-    filename : str
+    filename
         The filename of the texture.
 
     Attributes
@@ -200,7 +208,7 @@ class Texture(Data):
 
     """
 
-    def __init__(self, filename):
+    def __init__(self, filename: str) -> None:
         super(Texture, self).__init__()
         self.filename = filename
 
@@ -220,11 +228,11 @@ class Material(Data):
 
     Parameters
     ----------
-    name : str
+    name
         The name of the material.
-    color : :class:`~compas.colors.Color`, optional
+    color
         The color of the material.
-    texture : :class:`~compas_robots.model.Texture`, optional
+    texture
         The filename of the texture.
 
     Examples
@@ -239,7 +247,7 @@ class Material(Data):
 
     """
 
-    def __init__(self, name=None, color=None, texture=None):
+    def __init__(self, name: Optional[str] = None, color: Optional[Color] = None, texture: Optional[Texture] = None) -> None:
         super(Material, self).__init__()
         self.name = name
         self.color = color
@@ -281,13 +289,12 @@ class Material(Data):
             texture=Texture.__from_data__(data["texture"]) if data["texture"] else None,
         )
 
-    def get_color(self):
+    def get_color(self) -> Optional[Color]:
         """Get the RGBA color array of the material.
 
         Returns
         -------
-        :class:`~compas.colors.Color`
-            Color of the material.
+        Color of the material.
 
         Examples
         --------
@@ -314,17 +321,17 @@ class LinkGeometry(Data):
 
     Parameters
     ----------
-    box : :class:`~compas.geometry.Box`, optional
+    box
         A box shape primitive.
-    cylinder : :class:`~compas.geometry.Cylinder`, optional
+    cylinder
         A cylinder shape primitive.
-    sphere : :class:`~compas.geometry.Sphere`, optional
+    sphere
         A sphere shape primitive.
-    capsule : :class:`~compas.geometry.Capsule`, optional
+    capsule
         A capsule shape primitive.
-    mesh : :class:`~compas_robots.model.MeshDescriptor`, optional
+    mesh
         A descriptor of a mesh.
-    **kwargs : dict[str, Any], optional
+    **kwargs
         The keyword arguments (kwargs) collected in a dict.
         These allow using non-standard attributes absent in the URDF specification.
 
@@ -342,7 +349,15 @@ class LinkGeometry(Data):
 
     """
 
-    def __init__(self, box=None, cylinder=None, sphere=None, capsule=None, mesh=None, **kwargs):
+    def __init__(
+        self,
+        box: Optional[Box] = None,
+        cylinder: Optional[Cylinder] = None,
+        sphere: Optional[Sphere] = None,
+        capsule: Optional[Capsule] = None,
+        mesh: Optional[MeshDescriptor] = None,
+        **kwargs,
+    ) -> None:
         super(LinkGeometry, self).__init__()
         self.shape = box or cylinder or sphere or capsule or mesh
         self.attr = kwargs

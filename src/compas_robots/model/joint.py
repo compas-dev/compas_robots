@@ -1,6 +1,8 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import annotations
+
+from enum import IntEnum
+from typing import TYPE_CHECKING
+from typing import Optional
 
 from compas.data import Data
 from compas.geometry import Frame
@@ -17,6 +19,58 @@ from .base import FrameProxy
 from .base import _attr_from_data
 from .base import _attr_to_data
 from .base import _parse_floats
+
+if TYPE_CHECKING:
+    from typing import Union
+
+
+class JointType(IntEnum):
+    """Supported joint types as defined by URDF.
+
+    Members carry an integer value (used for storage and comparison) and
+    a URDF-compatible string representation accessible via [urdf_name][].
+    The enum can be constructed from either form:
+
+    Examples
+    --------
+    >>> JointType.REVOLUTE.urdf_name
+    'revolute'
+    >>> JointType.from_urdf("prismatic") is JointType.PRISMATIC
+    True
+    >>> JointType(0) is JointType.REVOLUTE
+    True
+    """
+
+    REVOLUTE = 0
+    CONTINUOUS = 1
+    PRISMATIC = 2
+    FIXED = 3
+    FLOATING = 4
+    PLANAR = 5
+
+    @property
+    def urdf_name(self):
+        """The URDF-compatible string representation of the joint type."""
+        return self.name.lower()
+
+    @classmethod
+    def from_urdf(cls, name: str) -> JointType:
+        """Return the [JointType][] matching a URDF type name.
+
+        Parameters
+        ----------
+        name
+            URDF joint type name, e.g. ``"revolute"``.
+
+        Raises
+        ------
+        ValueError
+            If `name` is not a known URDF joint type.
+        """
+        try:
+            return cls[name.upper()]
+        except KeyError:
+            raise ValueError("Unsupported joint type: {!r}".format(name))
 
 
 class ParentLink(Data):
@@ -119,20 +173,20 @@ class Dynamics(Data):
 class Limit(Data):
     """Joint limit properties.
 
-    Attributes
+    Parameters
     ----------
-    effort : float
+    effort
         Maximum joint effort.
-    velocity : float
+    velocity
         Maximum joint velocity.
-    lower : float
+    lower
         Lower joint limit (radians for revolute joints, meter for prismatic joints).
-    upper : float
+    upper
         Upper joint limit (radians for revolute joints, meter for prismatic joints).
 
     """
 
-    def __init__(self, effort=0.0, velocity=0.0, lower=0.0, upper=0.0, **kwargs):
+    def __init__(self, effort: float = 0.0, velocity: float = 0.0, lower: float = 0.0, upper: float = 0.0, **kwargs):
         super(Limit, self).__init__()
         self.effort = float(effort)
         self.velocity = float(velocity)
@@ -140,7 +194,7 @@ class Limit(Data):
         self.upper = float(upper)
         self.attr = kwargs
 
-    def get_urdf_element(self):
+    def get_urdf_element(self) -> URDFElement:
         attributes = {
             "lower": self.lower,
             "upper": self.upper,
@@ -165,18 +219,13 @@ class Limit(Data):
     def __from_data__(cls, data):
         return cls(data["effort"], data["velocity"], data["lower"], data["upper"], **_attr_from_data(data["attr"]))
 
-    def scale(self, factor):
+    def scale(self, factor: float) -> None:
         """Scale the upper and lower limits by a given factor.
 
         Parameters
         ----------
-        factor : float
+        factor
             Scale factor.
-
-        Returns
-        -------
-        None
-
         """
         self.lower *= factor
         self.upper *= factor
@@ -191,7 +240,7 @@ class Mimic(Data):
         self.multiplier = float(multiplier)
         self.offset = float(offset)
 
-    def get_urdf_element(self):
+    def get_urdf_element(self) -> URDFElement:
         attributes = {"joint": self.joint}
         if self.multiplier != 1.0:
             attributes["multiplier"] = self.multiplier
@@ -221,7 +270,7 @@ class SafetyController(Data):
         self.soft_lower_limit = float(soft_lower_limit)
         self.soft_upper_limit = float(soft_upper_limit)
 
-    def get_urdf_element(self):
+    def get_urdf_element(self) -> URDFElement:
         attributes = {
             "k_position": self.k_position,
             "soft_lower_limit": self.soft_lower_limit,
@@ -244,6 +293,14 @@ class SafetyController(Data):
 class Axis(Data):
     """Representation of an axis or vector.
 
+    Parameters
+    ----------
+    xyz
+        3D coordinates of the axis, specified as a string of three space-separated floats (e.g. ``"1 0 0"``).
+        The axis will be normalized to unit length if it is not the zero vector
+    kwargs
+        Additional attributes to be stored in the axis.
+
     Attributes
     ----------
     x : float
@@ -257,17 +314,17 @@ class Axis(Data):
 
     """
 
-    def __init__(self, xyz="1 0 0", **kwargs):
+    def __init__(self, xyz: str = "1 0 0", **kwargs):
         # We are not using Vector here because we
         # cannot attach _urdf_source to it due to __slots__
         super(Axis, self).__init__()
-        xyz = _parse_floats(xyz)
-        xyz = Vector(*xyz)
-        if xyz.length != 0:
-            xyz.unitize()
-        self.x = xyz[0]
-        self.y = xyz[1]
-        self.z = xyz[2]
+        xyz_parsed = _parse_floats(xyz)
+        axis_vector = Vector(*xyz_parsed)
+        if axis_vector.length != 0:
+            axis_vector.unitize()
+        self.x = axis_vector[0]
+        self.y = axis_vector[1]
+        self.z = axis_vector[2]
         self.attr = kwargs
 
     def get_urdf_element(self):
@@ -293,12 +350,12 @@ class Axis(Data):
         cls = type(self)
         return cls("%f %f %f" % (self.x, self.y, self.z))
 
-    def transform(self, transformation):
+    def transform(self, transformation: Transformation) -> None:
         """Transform the axis in place.
 
         Parameters
         ----------
-        transformation : :class:`~compas.geometry.Transformation`
+        transformation
             The transformation used to transform the axis.
 
         """
@@ -307,17 +364,17 @@ class Axis(Data):
         self.y = xyz[0][1]
         self.z = xyz[0][2]
 
-    def transformed(self, transformation):
+    def transformed(self, transformation: Transformation) -> Vector:
         """Return a transformed copy of the axis.
 
         Parameters
         ----------
-        transformation : :class:`~compas.geometry.Transformation`
+        transformation
             The transformation used to transform the axis.
 
         Returns
         -------
-        :class:`Axis`
+        Vector
             The transformed axis.
 
         """
@@ -336,101 +393,99 @@ class Axis(Data):
 class Joint(Data):
     """Representation of the kinematics and dynamics of a joint and its safety limits.
 
-    Attributes
+    Parameters
     ----------
-    name : str
+    name
         Unique name for the joint.
-    type : str | int
-        Joint type either as a string or an index number. See class attributes for named constants and supported types.
-    origin : :class:`Frame`
+    type
+        Joint type. May be supplied as a [JointType][compas_robots.model.JointType] member,
+        a URDF type name (e.g. `"revolute"`), or its integer value. Stored as a
+        [JointType][compas_robots.model.JointType] member.
+    origin
         Frame defining the transformation from the parent link to the child link frame.
-    parent : :class:`ParentLink` | str
+    parent
         Parent link instance or parent link name.
-    child : :class:`ChildLink` | str
+    child
         Child link instance or name of child link.
-    axis : :class:`Axis`
+    axis
         Joint axis specified in the joint frame. Represents the axis of
         rotation for revolute joints, the axis of translation for prismatic
         joints, and the surface normal for planar joints. The axis is
         specified in the joint frame of reference.
-    calibration : :class:`Calibration`
+    calibration
         Reference positions of the joint, used to calibrate the absolute position of the joint.
-    dynamics : :class:`Dynamics`
+    dynamics
         Physical properties of the joint. These values are used to
         specify modeling properties of the joint, particularly useful for
         simulation.
-    limit : :class:`Limit`
+    limit
         Joint limit properties.
-    safety_controller : :class:`SafetyController`
+    safety_controller
         Safety controller properties.
-    mimic : :class:`Mimic`
+    mimic
         Used to specify that the defined joint mimics another existing joint.
-    attr : dict
+    kwargs : dict
         Non-standard attributes.
-    child_link : :class:`Link`
+
+    Attributes
+    ----------
+    child_link : Link
         Joint's child link
     position : float
         The current position of the joint. This depends on the
         joint type, i.e. for revolute joints, it will be the rotation angle
         in radians, for prismatic joints the translation in meters.
-    REVOLUTE : int
-        Revolute joint type.
-    CONTINUOUS : int
-        Continuous joint type.
-    PRISMATIC : int
-        Prismatic joint type.
-    FIXED : int
-        Fixed joint type.
-    FLOATING : int
-        Floating joint type.
-    PLANAR : int
-        Planar joint type.
-    SUPPORTED_TYPES : list[str]
-        String representations of the supported joint types.
+    REVOLUTE : JointType
+        Alias for [`JointType.REVOLUTE`][compas_robots.model.JointType].
+    CONTINUOUS : JointType
+        Alias for [`JointType.CONTINUOUS`][compas_robots.model.JointType].
+    PRISMATIC : JointType
+        Alias for [`JointType.PRISMATIC`][compas_robots.model.JointType].
+    FIXED : JointType
+        Alias for [`JointType.FIXED`][compas_robots.model.JointType].
+    FLOATING : JointType
+        Alias for [`JointType.FLOATING`][compas_robots.model.JointType].
+    PLANAR : JointType
+        Alias for [`JointType.PLANAR`][compas_robots.model.JointType].
+    SUPPORTED_TYPES : tuple[str, ...]
+        URDF string representations of the supported joint types.
     """
 
-    REVOLUTE = 0
-    CONTINUOUS = 1
-    PRISMATIC = 2
-    FIXED = 3
-    FLOATING = 4
-    PLANAR = 5
+    REVOLUTE = JointType.REVOLUTE
+    CONTINUOUS = JointType.CONTINUOUS
+    PRISMATIC = JointType.PRISMATIC
+    FIXED = JointType.FIXED
+    FLOATING = JointType.FLOATING
+    PLANAR = JointType.PLANAR
 
-    SUPPORTED_TYPES = (
-        "revolute",
-        "continuous",
-        "prismatic",
-        "fixed",
-        "floating",
-        "planar",
-    )
+    SUPPORTED_TYPES = tuple(t.urdf_name for t in JointType)
 
     def __init__(
         self,
-        name,
-        type,
-        parent,
-        child,
-        origin=None,
-        axis=None,
-        calibration=None,
-        dynamics=None,
-        limit=None,
-        safety_controller=None,
-        mimic=None,
-        **kwargs
+        name: str,
+        type: Union[str, int, JointType],
+        parent: Union[ParentLink, str],
+        child: Union[ChildLink, str],
+        origin: Optional[Frame] = None,
+        axis: Optional[Axis] = None,
+        calibration: Optional[Calibration] = None,
+        dynamics: Optional[Dynamics] = None,
+        limit: Optional[Limit] = None,
+        safety_controller: Optional[SafetyController] = None,
+        mimic: Optional[Mimic] = None,
+        **kwargs,
     ):
-        type_idx = type
-
-        if isinstance(type_idx, str) and type_idx in Joint.SUPPORTED_TYPES:
-            type_idx = Joint.SUPPORTED_TYPES.index(type_idx)
-
-        if type_idx not in range(len(Joint.SUPPORTED_TYPES)):
-            raise ValueError("Unsupported joint type: %s" % type)
+        if isinstance(type, str):
+            joint_type = JointType.from_urdf(type)
+        else:
+            try:
+                joint_type = JointType(type)
+            except ValueError:
+                raise ValueError("Unsupported joint type: %s" % type)
 
         super(Joint, self).__init__()
         self.name = name
-        self.type = type_idx
+        self.type = joint_type
         self.parent = parent if isinstance(parent, ParentLink) else ParentLink(parent)
         self.child = child if isinstance(child, ChildLink) else ChildLink(child)
         self.origin = origin or Frame.from_euler_angles([0.0, 0.0, 0.0])
@@ -465,7 +520,7 @@ class Joint(Data):
         self._current_origin = FrameProxy.create_proxy(value)
 
     def get_urdf_element(self):
-        attributes = {"name": self.name, "type": self.SUPPORTED_TYPES[self.type]}
+        attributes = {"name": self.name, "type": self.type.urdf_name}
         attributes.update(self.attr)
         elements = [
             self.parent,
@@ -484,7 +539,7 @@ class Joint(Data):
     def __data__(self):
         return {
             "name": self.name,
-            "type": self.SUPPORTED_TYPES[self.type],
+            "type": self.type.urdf_name,
             "parent": self.parent.__data__,
             "child": self.child.__data__,
             "origin": self.origin.__data__ if self.origin else None,
@@ -502,7 +557,7 @@ class Joint(Data):
     def __from_data__(cls, data):
         joint = cls(
             name=data["name"],
-            type=Joint.SUPPORTED_TYPES.index(data["type"]),
+            type=data["type"],
             parent=ParentLink.__from_data__(data["parent"]),
             child=ChildLink.__from_data__(data["child"]),
             origin=Frame.__from_data__(data["origin"]) if data["origin"] else None,
@@ -510,9 +565,7 @@ class Joint(Data):
             calibration=Calibration.__from_data__(data["calibration"]) if data["calibration"] else None,
             dynamics=Dynamics.__from_data__(data["dynamics"]) if data["dynamics"] else None,
             limit=Limit.__from_data__(data["limit"]) if data["limit"] else None,
-            safety_controller=(
-                SafetyController.__from_data__(data["safety_controller"]) if data["safety_controller"] else None
-            ),
+            safety_controller=(SafetyController.__from_data__(data["safety_controller"]) if data["safety_controller"] else None),
             mimic=Mimic.__from_data__(data["mimic"]) if data["mimic"] else None,
             **_attr_from_data(data["attr"]),
         )
@@ -524,39 +577,31 @@ class Joint(Data):
         """Current transformation of the joint."""
         return Transformation.from_frame(self.current_origin)
 
-    def transform(self, transformation):
+    def transform(self, transformation: Transformation) -> None:
         """Transform the joint in place.
 
         Parameters
         ----------
-        transformation : :class:`~compas.geometry.Transformation`
+        transformation
             The transformation used to transform the joint.
-
-        Returns
-        -------
-        None
 
         """
         self.current_origin.transform(transformation)
         self.current_axis.transform(transformation)
 
-    def _create(self, transformation):
+    def _create(self, transformation: Transformation) -> None:
         """Internal method to initialize the transformation tree.
 
         Parameters
         ----------
-        transformation : :class:`~compas.geometry.Transformation`
+        transformation
             The transformation used to transform the joint.
-
-        Returns
-        -------
-        None
 
         """
         self.current_origin = self.origin.transformed(transformation)
         self.current_axis.transform(self.current_transformation)
 
-    def calculate_revolute_transformation(self, position):
+    def calculate_revolute_transformation(self, position: float) -> Rotation:
         """Returns a transformation of a revolute joint.
 
         A revolute joint rotates about the axis and has a limited range
@@ -564,13 +609,12 @@ class Joint(Data):
 
         Parameters
         ----------
-        position : float
+        position
             Angle in radians.
 
         Returns
         -------
-        :class:`Rotation`
-            Transformation of type rotation for the revolute joint.
+        Transformation of type rotation for the revolute joint.
 
         """
         if not self.limit:
@@ -579,7 +623,7 @@ class Joint(Data):
         position = max(min(position, self.limit.upper), self.limit.lower)
         return self.calculate_continuous_transformation(position)
 
-    def calculate_continuous_transformation(self, position):
+    def calculate_continuous_transformation(self, position: float) -> Rotation:
         """Returns a transformation of a continuous joint.
 
         A continuous joint rotates about the axis and has no upper and lower
@@ -587,18 +631,18 @@ class Joint(Data):
 
         Parameters
         ----------
-        position : float
+        position
             Angle in radians
 
         Returns
         -------
-        :class:`Rotation`
+        Rotation
             Transformation of type rotation for the continuous joint.
 
         """
         return Rotation.from_axis_and_angle(self.current_axis.vector, position, self.current_origin.point)
 
-    def calculate_prismatic_transformation(self, position):
+    def calculate_prismatic_transformation(self, position: float) -> Translation:
         """Returns a transformation of a prismatic joint.
 
         A prismatic joint slides along the axis and has a limited range
@@ -606,12 +650,12 @@ class Joint(Data):
 
         Parameters
         ----------
-        position : float
+        position
             Translation movement in meters.
 
         Returns
         -------
-        :class:`Translation`
+        Transformation
             Transformation of type translation for the prismatic joint.
 
         """
@@ -622,7 +666,7 @@ class Joint(Data):
         return Translation.from_vector(self.current_axis.vector * position)
 
     # does this ever happen?
-    def calculate_fixed_transformation(self, position):
+    def calculate_fixed_transformation(self, position: float) -> Transformation:
         """Returns an identity transformation.
 
         The fixed joint is is not really a joint because it cannot move. All
@@ -630,34 +674,34 @@ class Joint(Data):
 
         Returns
         -------
-        :class:`Translation`
+        Transformation
             Identity transformation.
 
         """
         return Transformation()
 
-    def calculate_floating_transformation(self, position):
+    def calculate_floating_transformation(self, position: float) -> Transformation:
         """Returns a transformation of a floating joint.
 
         A floating joint allows motion for all 6 degrees of freedom.
         """
         raise NotImplementedError
 
-    def calculate_planar_transformation(self, position):
+    def calculate_planar_transformation(self, position: float) -> Transformation:
         """Returns a transformation of a planar joint.
 
         A planar joint allows motion in a plane perpendicular to the axis.
         """
         raise NotImplementedError
 
-    def calculate_transformation(self, position):
+    def calculate_transformation(self, position: float) -> Transformation:
         """Returns the transformation of the joint.
 
         This function calls different calculate_*_transformation depends on self.type
 
         Parameters
         ----------
-        position : float
+        position
             Position in radians or meters depending on the joint type.
         """
 
@@ -676,24 +720,20 @@ class Joint(Data):
         return self._calculate_transformation(position)
 
     def is_configurable(self):
-        """Returns ``True`` if the joint can be configured, otherwise ``False``."""
+        """Returns `True` if the joint can be configured, otherwise `False`."""
         return self.type != Joint.FIXED and self.mimic is None
 
     def is_scalable(self):
-        """Returns ``True`` if the joint can be scaled, otherwise ``False``."""
+        """Returns `True` if the joint can be scaled, otherwise `False`."""
         return self.type in [Joint.PLANAR, Joint.PRISMATIC]
 
-    def scale(self, factor):
+    def scale(self, factor: float) -> None:
         """Scale the joint origin and limit (only if scalable) by a given factor.
 
         Parameters
         ----------
-        factor : float
+        factor
             Scale factor.
-
-        Returns
-        -------
-        None
         """
         self.current_origin.scale(factor)
         if self.is_scalable():

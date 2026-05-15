@@ -1,13 +1,12 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import time
+from typing import Optional
 
 import compas_rhino
 import Rhino.Geometry  # type: ignore
 import scriptcontext as sc  # type: ignore
 import System.Drawing  # type: ignore
+from compas.colors import Color
+from compas.datastructures import Mesh
 from compas_rhino.conversions import transformation_to_rhino
 from compas_rhino.scene import RhinoSceneObject
 from Rhino.DocObjects import ObjectColorSource  # type: ignore
@@ -23,7 +22,7 @@ class RobotModelObject(RhinoSceneObject, BaseRobotModelObject):
     ----------
     **kwargs : dict, optional
         Additional keyword arguments.
-        For more info, see :class:`RhinoSceneObject` and :class:`RobotModelObject`.
+        For more info, see [RhinoSceneObject][] and [BaseRobotModelObject][].
 
     """
 
@@ -34,29 +33,25 @@ class RobotModelObject(RhinoSceneObject, BaseRobotModelObject):
         T = transformation_to_rhino(transformation)
         native_mesh.Transform(T)
 
-    def create_geometry(self, geometry, name=None, color=None):
+    def create_geometry(self, geometry: Mesh, name: Optional[str] = None, color: Optional[Color] = None):
         """Create a Rhino mesh corresponding to the geometry of the model.
 
         Parameters
         ----------
-        geometry : :class:`~compas.datastructures.Mesh`
+        geometry
             Instance of a mesh data structure
-        name : str, optional
+        name
             The name of the mesh to draw.
-        color : :class:`~compas.colors.Color`
+        color
             The color of the object.`
 
 
         Returns
         -------
-        :rhino:`Rhino.Geometry.Mesh`
+        `Rhino.Geometry.Mesh`
 
         """
         color = color.rgba if color else None
-
-        # Imported colors take priority over a the parameter color
-        if "mesh_color.diffuse" in geometry.attributes:
-            color = geometry.attributes["mesh_color.diffuse"]
 
         vertices, faces = geometry.to_vertices_and_faces(triangulated=False)
 
@@ -177,18 +172,14 @@ class RobotModelObject(RhinoSceneObject, BaseRobotModelObject):
         """
         return self.draw_visual()
 
-    def redraw(self, timeout=None):
+    def redraw(self, timeout: float = None):
         """Redraw the Rhino view.
 
         Parameters
         ----------
-        timeout : float, optional
+        timeout
             The amount of time the scene object waits before updating the Rhino view.
             The time should be specified in seconds.
-
-        Returns
-        -------
-        None
 
         """
         import rhinoscriptsyntax as rs  # type: ignore

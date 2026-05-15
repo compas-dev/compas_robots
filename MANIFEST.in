@@ -12,12 +12,13 @@ include README.md
 include AUTHORS.md
 include CHANGELOG.md
 include requirements.txt
+include requirements-dev.txt
 
 exclude compas_robots.jpg
-exclude requirements-dev.txt
-exclude pytest.ini .bumpversion.cfg .editorconfig
+exclude pytest.ini .editorconfig
 exclude tasks.py
 exclude CONTRIBUTING.md
 exclude conftest.py
+exclude mkdocs.yml
 
 global-exclude *.py[cod] __pycache__ *.dylib *.nb[ic] .DS_Store

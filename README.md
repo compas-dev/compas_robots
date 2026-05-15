@@ -45,17 +45,13 @@ Code convention follows [PEP8](https://pep8.org/) style guidelines and line leng
 
 ### Documentation
 
-Documentation is generated automatically out of docstrings and [RST](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html) files in this repository
+Documentation is generated automatically out of docstrings and Markdown files in this repository using [MkDocs](https://www.mkdocs.org/) with the [Material](https://squidfunk.github.io/mkdocs-material/) theme and [mkdocstrings](https://mkdocstrings.github.io/).
 
 1. Generate the docs
 
         invoke docs
 
-2. Check links in docs are valid
-
-        invoke linkcheck
-
-3. Open docs in your browser (file explorer -> `dist/docs/index.html`)
+2. Open docs in your browser (file explorer -> `dist/docs/index.html`)
 
 
 ### Testing

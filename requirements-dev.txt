@@ -1,12 +1,12 @@
 attrs >=17.4
-ruff
-black
-bump2version >=1.0.1
-check-manifest >=0.36
-compas_invocations2
+black >=22.12.0
+build
+bump-my-version
+compas_invocations2[mkdocs]
+fake-bpy-module
 invoke >=0.14
 pytest >=3.2
-sphinx_compas2_theme
+pytest-cov
+ruff
 twine
 wheel
--e .

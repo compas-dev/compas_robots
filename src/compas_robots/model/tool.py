@@ -1,6 +1,6 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from compas.geometry import Frame
 from compas.geometry import Transformation
@@ -10,16 +10,19 @@ from .link import Link
 from .link import Material
 from .robot import RobotModel
 
+if TYPE_CHECKING:
+    from typing import Optional
+
 
 class ToolModel(RobotModel):
     """Represents a tool to be attached to the robot's flange.
 
     Attributes
     ----------
-    frame : :class:`~compas.geometry.Frame`
+    frame : compas.geometry.Frame
         The frame of the tool in reference to the tool0 frame.
     connected_to : str
-        The name of the `Link` to which the tool is attached (ie. connected) to.  Defaults to ``None``.
+        The name of the `Link` to which the tool is attached (ie. connected) to.  Defaults to `None`.
 
     Examples
     --------
@@ -52,17 +55,18 @@ class ToolModel(RobotModel):
             self._create(self.root, Transformation())
 
     @classmethod
-    def from_robot_model(cls, robot, frame_in_tool0_frame, connected_to=None):
-        """Creates a ``ToolModel`` from a :class:`~compas_robots.RobotModel` instance.
+    def from_robot_model(cls, robot: RobotModel, frame_in_tool0_frame: Frame, connected_to: Optional[str] = None) -> ToolModel:
+        """Creates a `ToolModel` from a [RobotModel][compas_robots.RobotModel] instance.
 
         Parameters
         ----------
-        robot : :class:`~compas_robots.RobotModel`
-        frame_in_tool0_frame : str
+        robot
+            The robot model the tool is built from.
+        frame_in_tool0_frame
             The frame of the tool in tool0 frame.
-        connected_to : str
+        connected_to
             The name of the `Link` to which the tool is attached.
-            Defaults to ``None``.
+            Defaults to `None`.
 
         """
         data = robot.__data__
@@ -93,7 +97,7 @@ class ToolModel(RobotModel):
     def __from_data__(cls, data):
         """Construct a `ToolModel` from its data representation.
 
-        To be used in conjunction with the :meth:`to_data` method.
+        To be used in conjunction with the `__data__` property.
 
         Parameters
         ----------
@@ -102,8 +106,8 @@ class ToolModel(RobotModel):
 
         Returns
         -------
-        :class:`ToolModel`
-            The constructed `ToolModel`.
+        ToolModel
+            The newly created instance of tool model.
 
         """
         tool = cls(
@@ -120,18 +124,18 @@ class ToolModel(RobotModel):
 
         return tool
 
-    def from_tcf_to_t0cf(self, frames_tcf):
+    def from_tcf_to_t0cf(self, frames_tcf: list[Frame]) -> list[Frame]:
         """Converts a list of frames at the robot's tool tip (tcf frame) to frames at the robot's flange (tool0 frame).
 
         Parameters
         ----------
-        frames_tcf : list[:class:`~compas.geometry.Frame`]
+        frames_tcf
             Frames (in WCF) at the robot's tool tip (tcf).
 
         Returns
         -------
-        list[:class:`~compas.geometry.Frame`]
-            Frames (in WCF) at the robot's flange (tool0).
+        list[Frame]
+            Frames (in WCF) at the robot's flange (`tool0`).
 
         Examples
         --------
@@ -154,17 +158,17 @@ class ToolModel(RobotModel):
         Te = Transformation.from_frame_to_frame(self.frame, Frame.worldXY())
         return [Frame.from_transformation(Transformation.from_frame(f) * Te) for f in frames_tcf]
 
-    def from_t0cf_to_tcf(self, frames_t0cf):
+    def from_t0cf_to_tcf(self, frames_t0cf: list[Frame]) -> list[Frame]:
         """Converts frames at the robot's flange (tool0 frame) to frames at the robot's tool tip (tcf frame).
 
         Parameters
         ----------
-        frames_t0cf : list[:class:`~compas.geometry.Frame`]
+        frames_t0cf
             Frames (in WCF) at the robot's flange (tool0).
 
         Returns
         -------
-        list[:class:`~compas.geometry.Frame`]
+        list[Frame]
             Frames (in WCF) at the robot's tool tip (tcf).
 
         Examples

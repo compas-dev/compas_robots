@@ -1,14 +1,20 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import annotations
 
 import inspect
 import sys
+from typing import TYPE_CHECKING
 
 from compas.data import Data
 from compas.files.xml import XML
 from compas.files.xml import XMLElement
 from compas.utilities import memoize
+
+if TYPE_CHECKING:
+    from typing import IO
+    from typing import Optional
+    from typing import Union
+
+    from compas_robots import RobotModel
 
 
 def _tag_without_namespace(element, default_namespace):
@@ -26,29 +32,24 @@ def _tag_without_namespace(element, default_namespace):
 class URDF(object):
     """Class for working with URDF files.
 
-    This class abstracts away the underlying XML of the Unified Robot
-    Description Format (`URDF`_) and represents its as an object graph.
+    Abstracts away the underlying XML of the Unified Robot Description
+    Format ([URDF](http://wiki.ros.org/urdf)) and represents it as an
+    object graph.
 
     Attributes
     ----------
-    xml : :class:`XML`
+    xml : XML
         Instance of the XML reader/parser class.
     robot : object
         Root element of the URDF model, i.e. a robot instance.
 
     References
     ----------
-    A detailed description of the model is available on the `URDF Model wiki`_.
-    This package parses URDF v1.0 according to the `URDF XSD Schema`_.
 
-    * `URDF`_
-    * `URDF Model wiki`_
-    * `URDF XSD Schema`_
-
-    .. _URDF: http://wiki.ros.org/urdf
-    .. _URDF Model wiki: http://wiki.ros.org/urdf/XML/model
-    .. _URDF XSD Schema: https://github.com/ros/urdfdom/blob/master/xsd/urdf.xsd
-
+    A detailed description of the model is available on the
+    [URDF Model wiki](http://wiki.ros.org/urdf/XML/model). This package
+    parses URDF v1.0 according to the
+    [URDF XSD Schema](https://github.com/ros/urdfdom/blob/master/xsd/urdf.xsd).
     """
 
     def __init__(self, xml=None):
@@ -76,16 +77,13 @@ class URDF(object):
         self._robot = robot
 
     @classmethod
-    def from_robot(cls, robot):
+    def from_robot(cls, robot: RobotModel) -> URDF:
         """Construct a URDF from a robot.
 
         Parameters
         ----------
-        robot : :class:`compas_robots.RobotModel`
-
-        Returns
-        -------
-        :class:`compas_robots.files.URDF`
+        robot
+            The robot model to be converted to URDF.
 
         """
         urdf = cls()
@@ -93,17 +91,13 @@ class URDF(object):
         return urdf
 
     @classmethod
-    def from_file(cls, source):
+    def from_file(cls, source: Union[str, IO]) -> URDF:
         """Construct a URDF from a file path or file-like object.
 
         Parameters
         ----------
-        source : str | file
+        source
             File path or file-like object.
-
-        Returns
-        -------
-        :class:`compas_robots.files.URDF`
 
         Examples
         --------
@@ -115,17 +109,13 @@ class URDF(object):
     read = from_file
 
     @classmethod
-    def from_string(cls, text):
+    def from_string(cls, text: str) -> URDF:
         """Construct a URDF from a string.
 
         Parameters
         ----------
-        text : str
+        text
             XML string.
-
-        Returns
-        -------
-        :class:`compas_robots.files.URDF`
 
         Examples
         --------
@@ -134,36 +124,32 @@ class URDF(object):
         """
         return cls(XML.from_string(text))
 
-    def to_file(self, destination=None, prettify=False):
+    def to_file(self, destination: Optional[str] = None, prettify: bool = False) -> None:
         """Writes the string representation of this URDF instance,
-        including all sub-elements, to the ``destination``.
+        including all sub-elements, to the `destination`.
 
         Parameters
         ----------
-        destination : str, optional
+        destination
             Filepath where the URDF should be written.  Defaults to
             the filepath of the associated XML object.
-        prettify : bool, optional
+        prettify
             Whether the string should add whitespace for legibility.
-
-        Returns
-        -------
-        None
 
         """
         if destination:
             self.xml.filepath = destination
         self.xml.write(prettify=prettify)
 
-    def to_string(self, encoding="utf-8", prettify=False):
+    def to_string(self, encoding: str = "utf-8", prettify: bool = False) -> str:
         """Generate a string representation of this URDF instance,
         including all sub-elements.
 
         Parameters
         ----------
-        encoding : str, optional
+        encoding
             Output encoding.
-        prettify : bool, optional
+        prettify
             Whether the string should add whitespace for legibility.
 
         Returns
@@ -174,21 +160,17 @@ class URDF(object):
         """
         return self.xml.to_string(encoding=encoding, prettify=prettify)
 
-    def write(self, destination=None, prettify=False):
+    def write(self, destination: Optional[str] = None, prettify: bool = False) -> None:
         """Writes the string representation of this URDF instance,
-        including all sub-elements, to the ``destination``.
+        including all sub-elements, to the `destination`.
 
         Parameters
         ----------
-        destination : str, optional
+        destination
             Filepath where the URDF should be written.
             Defaults to the filepath of the associated XML object.
-        prettify : bool, optional
+        prettify
             Whether the string should add whitespace for legibility.
-
-        Returns
-        -------
-        None
 
         """
         self.to_file(destination=destination, prettify=prettify)
@@ -200,23 +182,22 @@ class URDFParser(object):
     _parsers = dict()
 
     @classmethod
-    def install_parser(cls, parser_type, *tags, **kwargs):
+    def install_parser(cls, parser_type: type, *tags: str, **kwargs) -> None:
         """Installs an URDF parser type for a defined tag.
 
         Parameters
         ----------
-        parser_type : type
+        parser_type
             Python class handling URDF parsing of the tag.
-        *tags : list[str]
+        *tags
             One or more URDF string tag that the parser can parse.
+
+        Other Parameters
+        ----------------
         proxy_type : type, optional
             In some cases, the parser type is a general class without
             knowledge of URDF, and it requires a proxy class to add
             URDF-related functions to it.
-
-        Returns
-        -------
-        None
 
         Raises
         ------
@@ -231,21 +212,21 @@ class URDFParser(object):
             cls._parsers[tag] = {"type": parser_type, "proxy": kwargs.get("proxy_type")}
 
     @classmethod
-    def parse_element(cls, element, path="", element_default_namespace=None):
+    def parse_element(cls, element: XMLElement, path: str = "", element_default_namespace: Optional[str] = None) -> object:
         """Recursively parse URDF element and its children.
 
-        If the parser type implements a class method ``from_urdf``,
+        If the parser type implements a class method `from_urdf`,
         it will use it to parse the element, otherwise
         a generic implementation that relies on conventions
         will be used.
 
         Parameters
         ----------
-        element : :class:`compas.files.XMLElement`
+        element
             XML Element node.
-        path : str, optional
+        path
             Full path to the element.
-        element_default_namespace : str, optional
+        element_default_namespace
             Default namespace at the current level current document.
 
         Returns

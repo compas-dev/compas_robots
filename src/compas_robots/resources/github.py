@@ -1,14 +1,15 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import annotations
 
-try:
-    from urllib.request import urlopen
-except ImportError:
-    from urllib2 import urlopen
+from typing import TYPE_CHECKING
+from urllib.request import urlopen
 
 from .basic import AbstractMeshLoader
 from .mesh_importer import mesh_import
+
+if TYPE_CHECKING:
+    from typing import Optional
+
+    from compas.datastructures import Mesh
 
 
 class GithubPackageMeshLoader(AbstractMeshLoader):
@@ -18,21 +19,21 @@ class GithubPackageMeshLoader(AbstractMeshLoader):
     ----------
     repository : str
         Repository name including organization,
-        e.g. ``ros-industrial/abb``.
+        e.g. `ros-industrial/abb`.
     support_package : str
         Name of the support package containing URDF, Meshes
-        and additional assets, e.g. 'abb_irb4400_support'
+        and additional assets, e.g. `abb_irb4400_support`
     branch : str
-        Branch name, defaults to ``main``.
+        Branch name, defaults to `main`.
     relative_path : str
         Relative path of the support package within the repository.
         If the repository itself is the support package, set
-        ``relative_path`` to ``'.'``.  Defaults to ``support_package``
+        `relative_path` to `'.'`.  Defaults to `support_package`
     """
 
     HOST = "https://raw.githubusercontent.com"
 
-    def __init__(self, repository, support_package, branch="main", relative_path=None):
+    def __init__(self, repository: str, support_package: str, branch: str = "main", relative_path: Optional[str] = None) -> None:
         super(GithubPackageMeshLoader, self).__init__()
         self.repository = repository
         self.support_package = support_package
@@ -40,19 +41,18 @@ class GithubPackageMeshLoader(AbstractMeshLoader):
         self.schema_prefix = "package://" + self.support_package + "/"
         self.relative_path = support_package if relative_path is None else relative_path
 
-    def build_url(self, file):
+    def build_url(self, file: str) -> str:
         """Returns the corresponding url of the file.
 
         Parameters
         ----------
-        file : str
+        file
             File name. Following convention, the file should reside
-            inside a ``urdf`` folder.
+            inside a `urdf` folder.
 
         Returns
         -------
-        str
-            The file's url.
+        The file's url.
         """
         relative_path_component = None if self.relative_path == "." else self.relative_path
         url_components = [
@@ -64,50 +64,49 @@ class GithubPackageMeshLoader(AbstractMeshLoader):
         ]
         return "/".join(filter(None, url_components))
 
-    def load_urdf(self, file):
+    def load_urdf(self, file: str):
         """Load a URDF file from a Github support package repository.
 
         Parameters
         ----------
-        file : str
+        file
             File name. Following convention, the file should reside
-            inside a ``urdf`` folder.
+            inside a `urdf` folder.
         """
         url = self.build_url("urdf/{}".format(file))
         return urlopen(url)
 
-    def can_load_mesh(self, url):
+    def can_load_mesh(self, url: str) -> bool:
         """Determine whether this loader can load a given mesh URL.
 
         Parameters
         ----------
-        url : str
+        url
             Mesh URL.
 
         Returns
         -------
         bool
-            ``True`` if the URL uses the ``package://` scheme and the package name
-            matches the specified in the constructor, otherwise ``False``.
+            `True` if the URL uses the `package://` scheme and the package name
+            matches the specified in the constructor, otherwise `False`.
         """
         return url.startswith(self.schema_prefix)
 
-    def load_meshes(self, url, precision=None):
+    def load_meshes(self, url: str, precision: Optional[int] = None) -> list[Mesh]:
         """Load meshes from the given URL.
 
         A single mesh file can contain multiple meshes depending on the format.
 
         Parameters
         ----------
-        url : str
+        url
             Mesh URL
-        precision: int, optional
+        precision
             The precision for parsing geometric data.
 
         Returns
         -------
-        list[:class:`~compas.datastructures.Mesh`]
-            List of meshes.
+        List of meshes.
         """
         _prefix, path = url.split(self.schema_prefix)
         url = self.build_url(path)
