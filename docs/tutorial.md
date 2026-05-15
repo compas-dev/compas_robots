@@ -222,6 +222,29 @@ We can load a robot model from a URDF file, `compas_robots` provides some built-
     scene.draw()
     ```
 
+=== "COMPAS Viewer"
+
+    ```python
+    import math
+    from compas_viewer import Viewer
+    from compas_robots import RobotModel
+
+    model = RobotModel.ur5e(load_geometry=True)
+
+    config = model.zero_configuration()
+    config["shoulder_pan_joint"] = 0.0
+    config["shoulder_lift_joint"] = -math.pi / 2
+    config["elbow_joint"] = math.pi / 2
+    config["wrist_1_joint"] = -math.pi / 2
+    config["wrist_2_joint"] = -math.pi / 2
+    config["wrist_3_joint"] = 0.0
+
+    viewer = Viewer()
+    scene_object = viewer.scene.add(model)
+    scene_object.update(config)
+    viewer.show()
+    ```
+
 A `Configuration` is just a mapping from joint names to joint values. Joint values
 are in radians for revolute joints, meters for prismatic ones. The UR5e has six
 configurable joints; we start from `model.zero_configuration()` (all
@@ -245,9 +268,54 @@ scene.draw()
 
 This `update()` call is the building block for everything dynamic:
 visualizing a planned trajectory, animating a sequence of poses, or
-driving an interactive control surface. For a full animation walkthrough
-built on this same pattern, see [Animating a robot](examples.md#animating-a-robot)
-in the Examples.
+driving an interactive control surface.
+
+## Animating a robot
+
+Once a scene knows how to draw a robot, animating it is just calling
+`update()` with a different configuration for each frame. There are two
+common ways to do this in Blender, depending on whether you want the
+motion baked into the timeline or driven live.
+
+Both examples below pick two random configurations as the start and end
+of the motion and linearly interpolate between them. Every run picks a
+different pair of poses, so try them a few times to see a variety of
+motions. The arm occasionally clips through itself because
+`random_configuration()` samples uniformly within joint limits and
+doesn't check for self-collision, but the animation pattern is the same
+regardless of where the configurations come from.
+
+=== "Keyframe baking in Blender"
+
+    Bake one keyframe per frame onto Blender's timeline. After the script
+    finishes, the animation lives in the `.blend` file and can be scrubbed,
+    looped, or rendered to a video, no script needs to be running.
+
+    ```python
+    --8<-- "docs/files/animate_ur5e_keyframes.py"
+    ```
+
+=== "Using a timer in Blender"
+
+    If you want the motion to happen *now*, while a script is running,
+    without modifying the timeline, use `bpy.app.timers`. Each tick runs
+    `update()` with a freshly interpolated configuration, and Blender
+    repaints the viewport between ticks.
+
+    ```python
+    --8<-- "docs/files/animate_ur5e_timer.py"
+    ```
+
+=== "Using a self-updating component in Grasshopper"
+
+    In Grasshopper, you can use `compas_ghpython.timer.update_component` to
+    re-trigger a GhPython component after a specified interval. The example
+    below updates the component every ~33 ms (approximately 30 fps) while
+    the motion is in progress.
+
+    ```python
+    --8<-- "docs/files/animate_ur5e_grasshopper.py"
+    ```
 
 ## Building robot models
 
@@ -422,9 +490,11 @@ joint was added, it makes sense that the axis of rotation would also need to be 
 Here, the joint will rotate about the joint origin's x-axis.
 
 Adding a bit more geometry and a few links with fixed joints and we arrive at a rough
-model of the classic drinking bird toy.
+model of the classic drinking bird toy, showing how to build a robot model programmatically by combining multiple links and joints:
 
-See [Drinking bird](examples.md#drinking-bird) in the Examples for a complete code snippet to build this model.
+```python
+--8<-- "docs/files/drinking_bird.py"
+```
 
 ![The drinking bird toy.](files/drinking_bird.png)
 
