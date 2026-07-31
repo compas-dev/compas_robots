@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+
 ### Changed
+
+### Fixed
+
+* `Joint._create` no longer rotates `current_axis` once more every time it runs. It transformed the axis in place instead of recomputing it from `axis`, so re-initializing the transformation tree of a model that has joints (e.g. after its structure changed) left the joint axes wrong — 90 degrees out per extra call for a joint whose origin is rotated by 90 degrees. Models built or loaded in one pass were unaffected, which is why this went unnoticed.
 
 ### Removed
 
