@@ -23,3 +23,14 @@ def test_mesh_import_namespaced_collada():
     assert meshes[0].number_of_faces() == 2598
     assert meshes[1].number_of_vertices() == 1158
     assert meshes[1].number_of_faces() == 2240
+
+
+def test_mesh_import_collada_ignores_non_surface_geometry_and_loads_lambert_material():
+    filename = os.path.join(os.path.dirname(__file__), "fixtures", "surfaces_lines_and_empty_geometry.dae")
+
+    meshes = mesh_import(filename, filename)
+
+    assert len(meshes) == 1
+    assert meshes[0].number_of_vertices() == 3
+    assert meshes[0].number_of_faces() == 1
+    assert meshes[0].attributes["mesh_color.diffuse"] == [1.0, 0.0, 0.0, 1.0]
