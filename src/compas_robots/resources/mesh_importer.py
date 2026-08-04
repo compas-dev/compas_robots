@@ -95,15 +95,18 @@ def _meshes_from_collada(filename, precision):
                 M = M[0:4], M[4:8], M[8:12], M[12:16]
                 transform = Transformation.from_matrix(M)
 
-        # primitive elements can be any combination of:
-        # lines, linestrips, polygons, polylist, triangles, trifans, tristrips
-        # The current implementation only supports triangles and polylist of triangular meshes
+        # Primitive elements can be any combination of:
+        # lines, linestrips, polygons, polylist, triangles, trifans, tristrips.
+        # The current implementation only supports triangles and polylist surface meshes.
+        # Other primitives and empty geometry nodes are ignored because this importer returns
+        # face-based Mesh objects. Raise only if the complete file has no supported surfaces.
         primitive_element_sets = []
         primitive_element_sets.extend(mesh_xml.findall(tag("triangles")))
         primitive_element_sets.extend(mesh_xml.findall(tag("polylist")))
 
         if len(primitive_element_sets) == 0:
-            raise Exception("No primitive elements found (currently only triangles and polylist are supported)")
+            LOGGER.debug("Skipping Collada geometry %s because it contains no supported surface primitives", mesh_id)
+            continue
 
         for primitive_element_set in primitive_element_sets:
             primitive_tag = _xml_local_name(primitive_element_set.tag)
@@ -124,12 +127,20 @@ def _meshes_from_collada(filename, precision):
                     if instance_effect is not None:
                         instance_effect_id = instance_effect.attrib["url"][1:]
                         effect = effects.find('{}[@id="{}"]'.format(tag("effect"), instance_effect_id))
-                        phong = effect.find("{}/{}/{}".format(tag("profile_COMMON"), tag("technique"), tag("phong")))
-                        colors = phong.findall(".//{}".format(tag("color")))
-                        for color_node in colors:
-                            rgba = [float(i) for i in color_node.text.split()]
-                            if "sid" in color_node.attrib:
-                                mesh_colors["mesh_color.{}".format(color_node.attrib["sid"])] = rgba
+                        technique = effect.find("{}/{}".format(tag("profile_COMMON"), tag("technique")))
+                        shader = None
+
+                        for shader_name in ("phong", "lambert", "blinn", "constant"):
+                            shader = technique.find(tag(shader_name))
+                            if shader is not None:
+                                break
+
+                        if shader is not None:
+                            colors = shader.findall(".//{}".format(tag("color")))
+                            for color_node in colors:
+                                rgba = [float(i) for i in color_node.text.split()]
+                                if "sid" in color_node.attrib:
+                                    mesh_colors["mesh_color.{}".format(color_node.attrib["sid"])] = rgba
                 except Exception:
                     LOGGER.exception("Exception while loading materials, all materials of mesh file %s will be ignored ", filename)
 
@@ -190,5 +201,8 @@ def _meshes_from_collada(filename, precision):
                 mesh.transform(transform)
 
             meshes.append(mesh)
+
+    if not meshes:
+        raise Exception("No supported surface primitives found (currently only triangles and polylist are supported)")
 
     return meshes
