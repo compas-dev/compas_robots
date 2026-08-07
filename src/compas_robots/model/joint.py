@@ -599,6 +599,10 @@ class Joint(Data):
 
         """
         self.current_origin = self.origin.transformed(transformation)
+        # Recomputed from `axis` rather than transformed in place, so that
+        # re-initializing the tree (e.g. after the model structure changed)
+        # yields the same result instead of rotating the axis once more.
+        self.current_axis = self.axis.copy()
         self.current_axis.transform(self.current_transformation)
 
     def calculate_revolute_transformation(self, position: float) -> Rotation:

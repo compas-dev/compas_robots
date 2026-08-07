@@ -9,7 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* New `ToolModel.reframe_base` method, and a matching `base_frame` argument on the constructor: state that the robot's flange takes hold of the tool at a given frame rather than at the origin, and the tool is re-expressed accordingly. It lets a tool be modelled wherever is convenient (a mesh drawn in a CAD document, say) while stating separately where the robot mounts it — previously the geometry had to be modelled in the tool's base frame, since that frame was hardcoded to the origin. Works for tools with joints as well: the geometry of the base link, the joints leaving it, and the TCF all follow, so a gripper keeps articulating around the correct axes. The geometry is not baked, the frame is folded into the `origin` of the link and joint elements, the same mechanism URDF uses.
+
 ### Changed
+
+### Fixed
+
+* `Joint._create` no longer rotates `current_axis` once more every time it runs. It transformed the axis in place instead of recomputing it from `axis`, so re-initializing the transformation tree of a model that has joints (e.g. after its structure changed) left the joint axes wrong — 90 degrees out per extra call for a joint whose origin is rotated by 90 degrees. Models built or loaded in one pass were unaffected, which is why this went unnoticed.
 
 ### Removed
 

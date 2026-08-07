@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import itertools
 from typing import TYPE_CHECKING
 
 from compas.geometry import Frame
@@ -16,6 +17,32 @@ if TYPE_CHECKING:
 
 class ToolModel(RobotModel):
     """Represents a tool to be attached to the robot's flange.
+    Typical modeling convention for the tool geometry should follow: 
+    - Origin (of the tool geometry) coincide with the center of the robot tool flange.
+    - XY plane (of the tool geometry) coplanar with the robot tool flange. 
+    - Z-axis-positive (of the tool geometry) pointing from robot flange towards the tool's mounting flange.
+
+    Parameters
+    ----------
+    visual
+        The visual mesh of the tool.
+    frame_in_tool0_frame
+        The frame of the tool tip (TCF), see `base_frame` for the
+        coordinate system it is expressed in.
+    collision
+        The collision mesh of the tool. Defaults to the visual mesh.
+    name
+        The name of the tool. Defaults to ``'attached_tool'``.
+    connected_to
+        The name of the `Link` to which the tool is attached. Defaults to `None`.
+    base_frame
+        The frame of the tool geometry that mounts (will coincide) with the robot's flange.
+        Only to be defined if the tool geometry is not modelled according to the typical convention
+        (flange on XY plane and Z-axis-positive pointing from robot flange towards the tool).
+        Expressed in the coordinate system the geometry was modelled in. 
+
+        Defaults to `None`, meaning the geometry is already modelled in the tool's
+        base frame, i.e. the flange sits at its origin.
 
     Attributes
     ----------
@@ -33,6 +60,14 @@ class ToolModel(RobotModel):
     >>> frame = Frame([0.14, 0, 0], [0, 1, 0], [0, 0, 1])
     >>> tool = ToolModel(mesh, frame)
 
+    A tool modelled along the Z axis of the document it was drawn in, mounted so
+    that the Z axis of the drawing points away from the robot:
+
+    >>> base_frame = Frame([0, 0, 0], [0, 0, 1], [1, 0, 0])
+    >>> tool = ToolModel(mesh, Frame([0, 0, 0.14], [0, 1, 0], [1, 0, 0]), base_frame=base_frame)
+    >>> tool.frame.point
+    Point(x=0.140, y=0.000, z=0.000)
+
     """
 
     def __init__(
@@ -42,6 +77,7 @@ class ToolModel(RobotModel):
         collision=None,
         name="attached_tool",
         connected_to=None,
+        base_frame=None,
     ):
         super(ToolModel, self).__init__(name)
         self.frame = frame_in_tool0_frame
@@ -53,6 +89,64 @@ class ToolModel(RobotModel):
 
             self._rebuild_tree()
             self._create(self.root, Transformation())
+
+        if base_frame:
+            self.reframe_base(base_frame)
+
+    def reframe_base(self, base_frame: Frame) -> None:
+        """Re-express the tool relative to the frame the robot's flange takes hold of it at.
+
+        Everything the tool is made of — its geometry, its TCF, and the joints
+        leaving its base link — is currently expressed relative to the tool's base
+        frame. This states that the flange actually sits at `base_frame` instead of
+        at the origin, and re-expresses all of it accordingly.
+
+        Use it to model a tool wherever is convenient (a mesh drawn in a CAD document,
+        say) and declare separately where the robot takes hold of it, rather than
+        having to model it in its own base frame.
+
+        Nothing is baked into the geometry: the frame is folded into the `origin` of
+        the base link's visual and collision elements, and of the joints attached to
+        it, which is the same mechanism URDF uses. Calling this again re-frames the
+        tool again, relative to its current base.
+
+        Parameters
+        ----------
+        base_frame
+            The frame at which the robot's flange takes hold of the tool, expressed
+            in the tool's current coordinate system.
+
+        Examples
+        --------
+        >>> import compas
+        >>> from compas.datastructures import Mesh
+        >>> from compas.geometry import Frame
+        >>> mesh = Mesh.from_stl(compas.get("cone.stl"))
+        >>> tool = ToolModel(mesh, Frame([0, 0, 0.14], [0, 1, 0], [1, 0, 0]))
+        >>> tool.reframe_base(Frame([0, 0, 0], [0, 0, 1], [1, 0, 0]))
+        >>> tool.frame.point
+        Point(x=0.140, y=0.000, z=0.000)
+
+        """
+        transformation = Transformation.from_frame(base_frame).inverted()
+
+        self.frame = base_frame.to_local_coordinates(self.frame)
+
+        if self.root:
+            # The geometry of the base link, and the joints hanging off it, are placed
+            # relative to the base link's frame, which is what is being moved here.
+            for item in itertools.chain(self.root.visual, self.root.collision, self.root.joints):
+                item.origin = self._reframed_origin(item.origin, transformation)
+
+            self._rebuild_tree()
+            self._create(self.root, Transformation())
+
+    @staticmethod
+    def _reframed_origin(origin: Optional[Frame], transformation: Transformation) -> Frame:
+        """Compose `transformation` onto an origin that may not be set yet (i.e. identity)."""
+        if not origin:
+            return Frame.from_transformation(transformation)
+        return Frame.from_transformation(transformation * Transformation.from_frame(origin))
 
     @classmethod
     def from_robot_model(cls, robot: RobotModel, frame_in_tool0_frame: Frame, connected_to: Optional[str] = None) -> ToolModel:
