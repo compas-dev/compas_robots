@@ -32,10 +32,10 @@ class ToolModel(RobotModel):
     connected_to
         The name of the `Link` to which the tool is attached. Defaults to `None`.
     base_frame
-        The frame at which the tool mounts onto the robot's flange, expressed in
-        the coordinate system the geometry was modelled in. Shorthand for calling
-        [reframe_base][compas_robots.ToolModel.reframe_base] right after
-        construction, see there for details.
+        The frame of the tool geometry that mounts (will coincide) with the robot's flange.
+        Only to be defined if the tool geometry is not modelled according to the typical convention
+        (flange on XY plane and Z-axis-positive pointing from robot flange towards the tool).
+        Expressed in the coordinate system the geometry was modelled in. 
 
         Defaults to `None`, meaning the geometry is already modelled in the tool's
         base frame, i.e. the flange sits at its origin.
