@@ -17,6 +17,10 @@ if TYPE_CHECKING:
 
 class ToolModel(RobotModel):
     """Represents a tool to be attached to the robot's flange.
+    Typical modeling convention for the tool geometry should follow: 
+    - Origin (of the tool geometry) coincide with the center of the robot tool flange.
+    - XY plane (of the tool geometry) coplanar with the robot tool flange. 
+    - Z-axis-positive (of the tool geometry) pointing from robot flange towards the tool's mounting flange.
 
     Parameters
     ----------
