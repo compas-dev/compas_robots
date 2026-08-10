@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <library_effects>
+    <effect id="red-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <lambert>
+            <diffuse>
+              <color sid="diffuse">1 0 0 1</color>
+            </diffuse>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="red-material">
+      <instance_effect url="#red-effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="surface">
+      <mesh>
+        <source id="surface-positions">
+          <float_array id="surface-positions-array" count="9">0 0 0 1 0 0 0 1 0</float_array>
+        </source>
+        <vertices id="surface-vertices">
+          <input semantic="POSITION" source="#surface-positions"/>
+        </vertices>
+        <triangles material="red-material" count="1">
+          <input semantic="VERTEX" source="#surface-vertices" offset="0"/>
+          <p>0 1 2</p>
+        </triangles>
+      </mesh>
+    </geometry>
+    <geometry id="lines-only">
+      <mesh>
+        <source id="line-positions">
+          <float_array id="line-positions-array" count="6">0 0 0 1 0 0</float_array>
+        </source>
+        <vertices id="line-vertices">
+          <input semantic="POSITION" source="#line-positions"/>
+        </vertices>
+        <lines count="1">
+          <input semantic="VERTEX" source="#line-vertices" offset="0"/>
+          <p>0 1</p>
+        </lines>
+      </mesh>
+    </geometry>
+    <geometry id="empty">
+      <mesh>
+        <source id="empty-positions">
+          <float_array id="empty-positions-array" count="0"/>
+        </source>
+        <vertices id="empty-vertices">
+          <input semantic="POSITION" source="#empty-positions"/>
+        </vertices>
+      </mesh>
+    </geometry>
+  </library_geometries>
+</COLLADA>
