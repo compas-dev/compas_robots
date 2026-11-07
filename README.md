@@ -1,6 +1,6 @@
 # COMPAS Robots
 
-[![Made with COMPAS](https://compas.dev/badge.svg)](https://compas.dev)
+[![Made with COMPAS](https://compas.dev/badge.svg)](https://compas.dev/mission-control/#compas_robots)
  [![PyPI](https://img.shields.io/pypi/v/compas_robots)](https://pypi.org/project/compas_robots/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
