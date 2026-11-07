@@ -17,9 +17,9 @@ if TYPE_CHECKING:
 
 class ToolModel(RobotModel):
     """Represents a tool to be attached to the robot's flange.
-    Typical modeling convention for the tool geometry should follow: 
+    Typical modeling convention for the tool geometry should follow:
     - Origin (of the tool geometry) coincide with the center of the robot tool flange.
-    - XY plane (of the tool geometry) coplanar with the robot tool flange. 
+    - XY plane (of the tool geometry) coplanar with the robot tool flange.
     - Z-axis-positive (of the tool geometry) pointing from robot flange towards the tool's mounting flange.
 
     Parameters
@@ -39,7 +39,7 @@ class ToolModel(RobotModel):
         The frame of the tool geometry that mounts (will coincide) with the robot's flange.
         Only to be defined if the tool geometry is not modelled according to the typical convention
         (flange on XY plane and Z-axis-positive pointing from robot flange towards the tool).
-        Expressed in the coordinate system the geometry was modelled in. 
+        Expressed in the coordinate system the geometry was modelled in.
 
         Defaults to `None`, meaning the geometry is already modelled in the tool's
         base frame, i.e. the flange sits at its origin.
